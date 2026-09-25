@@ -29,7 +29,7 @@ def detect_nonstandard_residues(
     findings = []
     for residue in structure.residues:
         sources = _detection_sources(residue, standard, annotations)
-        rule = _matching_rule(residue, rules, sources)
+        rule = _matching_rule(residue, rules, (sources, annotations.get(residue.id)))
         if rule is not None:
             findings.append(_finding(residue, rule, (sources, annotations.get(residue.id))))
     return findings
@@ -47,7 +47,10 @@ def _detection_sources(
     return tuple(sources)
 
 
-def _matching_rule(residue: Residue, rules: tuple[Rule, ...], sources: tuple) -> Rule | None:
+def _matching_rule(
+    residue: Residue, rules: tuple[Rule, ...], sources_annotation: tuple
+) -> Rule | None:
+    sources, annotation = sources_annotation
     for rule in rules:
         matcher = rule.matcher
         if matcher["kind"] == "component_id" and (
@@ -55,15 +58,25 @@ def _matching_rule(residue: Residue, rules: tuple[Rule, ...], sources: tuple) ->
             and residue.residue_class.value in matcher["residue_classes"]
         ):
             return rule
-        if matcher["kind"] == GENERIC_NONSTANDARD_KIND and _generic_match(matcher, sources):
+        if matcher["kind"] == GENERIC_NONSTANDARD_KIND and _generic_match(
+            matcher, (sources, annotation)
+        ):
             return rule
     return None
 
 
-def _generic_match(matcher: dict, sources: tuple[str, ...]) -> bool:
-    if not matcher["use_modification_annotations"]:
+def _generic_match(matcher: dict, sources_annotation: tuple) -> bool:
+    sources, annotation = sources_annotation
+    if not matcher["use_modification_annotations"] or (
+        matcher["skip_annotations_on_parent_residue"] and is_attachment_site(annotation)
+    ):
         sources = tuple(s for s in sources if s != "modification_annotation")
     return bool(sources)
+
+
+def is_attachment_site(annotation: ModifiedResidue | None) -> bool:
+    """An annotation whose component is its own parent marks a site, not a new residue."""
+    return annotation is not None and annotation.res_name == annotation.parent_res_name
 
 
 def modeled_form(residue: Residue, matcher: dict) -> str:
@@ -104,6 +117,7 @@ def _finding(
                 "modification_record",
                 "pdbx_struct_mod_residue",
                 {
+                    "residue": residue.id.label(),
                     "res_name": annotation.res_name,
                     "parent_comp_id": annotation.parent_res_name,
                     "details": annotation.details,

@@ -51,7 +51,7 @@ STANDARD = {
     "VAL",
 }
 COMPONENT_RULES = {
-    "FGS": "nonstandard_residues.formylglycine",
+    "ALS": "nonstandard_residues.formylglycine",
     "DDZ": "nonstandard_residues.formylglycine",
 }
 GROUP_CONN_TYPES = {"covale", "covale_base", "covale_phosphate", "covale_sugar"}
@@ -111,6 +111,11 @@ def link_label(link: dict, index: int) -> str:
     )
 
 
+def atom_element(found: dict, residue: str, atom_name: str) -> str | None:
+    atoms = found.get(residue, {}).get("atoms", [])
+    return next((a["type_symbol"].upper() for a in atoms if a["label_atom_id"] == atom_name), None)
+
+
 def metals(block, found) -> list[dict]:
     links = rows(block, "_struct_conn.")
     expected = []
@@ -131,6 +136,9 @@ def metals(block, found) -> list[dict]:
                         {
                             "residue": link_label(link, j),
                             "atom": link[f"ptnr{j}_label_atom_id"],
+                            "element": atom_element(
+                                found, link_label(link, j), link[f"ptnr{j}_label_atom_id"]
+                            ),
                             "distance_angstrom": float(link["pdbx_dist_value"]),
                         }
                     )
@@ -141,9 +149,12 @@ def metals(block, found) -> list[dict]:
 
 
 def nonstandard(block, found) -> list[dict]:
+    # An annotation whose component is its own parent (glycosylated ASN) marks an
+    # attachment site, not a non-standard residue.
     annotated = {
         label(m["auth_asym_id"], m["auth_seq_id"], m.get("PDB_ins_code"))
         for m in rows(block, "_pdbx_struct_mod_residue.")
+        if m.get("auth_comp_id") != m.get("parent_comp_id")
     }
     expected = []
     for key, res in found.items():

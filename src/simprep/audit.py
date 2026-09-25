@@ -66,12 +66,8 @@ def record_counts(structure: Structure, findings: list[Finding]) -> list[dict]:
     flagged = frozenset(
         rid for f in findings for rid in (*f.claims, *(r for r, _ in f.locus.extent))
     )
-    referenced_links = {
-        item["fields"]["id"]
-        for f in findings
-        for item in f.evidence
-        if item["type"] == "source_record" and item["category"] == "struct_conn"
-    }
+    links = _referenced(findings, "struct_conn", "id")
+    annotations = _referenced(findings, "pdbx_struct_mod_residue", "residue")
     rows = [_residue_row(structure, flagged, cls) for cls in ResidueClass]
     rows.append(
         _row("atom records", [r.id in flagged for r in structure.residues for _ in r.atoms])
@@ -82,10 +78,24 @@ def record_counts(structure: Structure, findings: list[Finding]) -> list[dict]:
             [u.residue in flagged for u in structure.unobserved_residues if u.is_polymer],
         )
     )
+    rows.append(_row("struct_conn records", [link.conn_id in links for link in structure.links]))
     rows.append(
-        _row("struct_conn records", [link.conn_id in referenced_links for link in structure.links])
+        _row(
+            "pdbx_struct_mod_residue records",
+            [mod.residue.label() in annotations for mod in structure.modified_residues],
+        )
     )
     return rows
+
+
+def _referenced(findings: list[Finding], category: str, field: str) -> set:
+    """Values of ``field`` in every source record of ``category`` cited by a finding."""
+    return {
+        item["fields"][field]
+        for finding in findings
+        for item in finding.evidence
+        if item["type"] == "source_record" and item["category"] == category
+    }
 
 
 def _residue_row(structure: Structure, flagged: frozenset[ResidueId], cls: ResidueClass) -> dict:

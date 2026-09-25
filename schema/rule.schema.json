@@ -377,7 +377,8 @@
       "required": [
         "kind",
         "standard_residues",
-        "use_modification_annotations"
+        "use_modification_annotations",
+        "skip_annotations_on_parent_residue"
       ],
       "properties": {
         "kind": {
@@ -387,6 +388,10 @@
           "$ref": "#/$defs/names"
         },
         "use_modification_annotations": {
+          "type": "boolean"
+        },
+        "skip_annotations_on_parent_residue": {
+          "description": "Ignore modification annotations whose component equals the parent component (attachment sites such as glycosylated ASN).",
           "type": "boolean"
         }
       }

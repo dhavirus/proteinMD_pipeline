@@ -1,5 +1,5 @@
 from simprep.audit import run_audit
-from simprep.structure.model import ResidueId
+from simprep.structure.model import ModifiedResidue, ResidueId
 from tests.unit import builders as b
 
 ASN = ResidueId("A", 80)
@@ -18,7 +18,8 @@ def glycosylated():
         b.link("covale1", "covale", [(ASN, "ASN", "ND2"), (NAG1, "NAG", "C1")], 1.45),
         b.link("covale2", "covale", [(NAG1, "NAG", "O4"), (NAG2, "NAG", "C1")], 1.44),
     ]
-    return b.structure([asn, nag1, nag2, so4], links)
+    site = ModifiedResidue(ASN, "ASN", "ASN", "GLYCOSYLATION SITE")
+    return b.structure([asn, nag1, nag2, so4], links, modified_residues=(site,))
 
 
 def test_glycan_tree_is_one_blocking_group_with_attachment(ruleset):
@@ -30,6 +31,8 @@ def test_glycan_tree_is_one_blocking_group_with_attachment(ruleset):
     assert glycan.evidence_value("components") == "NAG-NAG"
     attachments = [e for e in glycan.evidence if e["key"] == "attachment"]
     assert [a["fields"]["id"] for a in attachments] == ["covale1"]
+    sites = [e for e in glycan.evidence if e["key"] == "attachment_site_annotation"]
+    assert sites[0]["fields"]["details"] == "GLYCOSYLATION SITE"
 
 
 def cys_pair(link_type="disulf", atoms=("SG", "SG")):

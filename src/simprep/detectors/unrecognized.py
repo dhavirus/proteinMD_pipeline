@@ -107,6 +107,8 @@ def _group_finding(structure: Structure, group: tuple[Residue, ...], rule: Rule)
         ev_label("decision_required", "expert decision required"),
     ]
     evidence += [_link_record("attachment", link) for link in attachments]
+    evidence += [_link_record("internal_link", link) for link in internal]
+    evidence += _site_annotations(structure, attachments, ids)
     return Finding(
         id=f"unrecognized/group/{first.id.label()}",
         rule=rule,
@@ -117,6 +119,30 @@ def _group_finding(structure: Structure, group: tuple[Residue, ...], rule: Rule)
         evidence=tuple(evidence),
         claims=frozenset(ids),
     )
+
+
+def _site_annotations(structure: Structure, attachments: list[Link], ids: set) -> list[dict]:
+    """Modification records on the residues this group attaches to (e.g. glycosylation)."""
+    sites = {
+        p.residue
+        for link in attachments
+        for p in (link.partner1, link.partner2)
+        if p.residue not in ids
+    }
+    return [
+        ev_source_record(
+            "attachment_site_annotation",
+            "pdbx_struct_mod_residue",
+            {
+                "residue": mod.residue.label(),
+                "res_name": mod.res_name,
+                "parent_comp_id": mod.parent_res_name,
+                "details": mod.details,
+            },
+        )
+        for mod in structure.modified_residues
+        if mod.residue in sites
+    ]
 
 
 def _is_unexplained(structure: Structure, link: Link, rule_grouped: tuple) -> bool:

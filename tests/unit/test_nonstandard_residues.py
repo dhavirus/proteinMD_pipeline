@@ -62,12 +62,19 @@ def test_nonstandard_by_annotation_and_parent_recorded(ruleset):
     assert record["fields"]["parent_comp_id"] == "MET"
 
 
-def test_annotation_alone_flags_standard_named_residue(ruleset):
-    annotation = ModifiedResidue(ResidueId("A", 4), "ALA", "ALA", "odd annotation")
+def test_annotation_alone_flags_residue(ruleset):
+    annotation = ModifiedResidue(ResidueId("A", 4), "ALA", "SER", "odd annotation")
     finding = detect_nonstandard_residues(
         b.structure([ala(4)], modified_residues=(annotation,)), ruleset, b.config()
     )[0]
     assert finding.evidence_value("detected_by") == "modification_annotation"
+
+
+def test_attachment_site_annotation_is_not_a_nonstandard_residue(ruleset):
+    annotation = ModifiedResidue(ResidueId("A", 4), "ASN", "ASN", "GLYCOSYLATION SITE")
+    asn = b.residue("A", 4, "ASN", b.P, [b.atom("ND2", "N", (0, 0, 0))])
+    site = b.structure([asn], modified_residues=(annotation,))
+    assert detect_nonstandard_residues(site, ruleset, b.config()) == []
 
 
 def test_standard_residues_and_ligands_not_flagged(ruleset):

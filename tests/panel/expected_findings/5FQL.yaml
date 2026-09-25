@@ -1,0 +1,110 @@
+pdb_id: 5FQL
+file: 5FQL.cif.gz
+reviewed: false
+derived_by: 'tests/panel/derive_expected.py: raw mmCIF categories (atom_site, entity, struct_conn, pdbx_struct_mod_residue,
+  pdbx_unobs_or_zero_occ_residues); no simprep code'
+families:
+  metals:
+  - id: metals/A:1551
+    rule_id: metals.calcium
+    annotated_ligands:
+    - residue: A:45
+      atom: OD1
+      element: O
+      distance_angstrom: 2.374
+    - residue: A:46
+      atom: OD1
+      element: O
+      distance_angstrom: 2.295
+    - residue: A:84
+      atom: OS1
+      element: O
+      distance_angstrom: 2.323
+    - residue: A:84
+      atom: S
+      element: S
+      distance_angstrom: 2.897
+    - residue: A:84
+      atom: OS4
+      element: O
+      distance_angstrom: 2.47
+    - residue: A:334
+      atom: OD2
+      element: O
+      distance_angstrom: 2.324
+    - residue: A:335
+      atom: NE2
+      element: N
+      distance_angstrom: 2.293
+  nonstandard_residues:
+  - id: nonstandard_residues/A:84
+    rule_id: nonstandard_residues.formylglycine
+  altlocs:
+  - id: altlocs/A:294
+  - id: altlocs/A:421
+  missing_residues:
+  - id: missing_residues/A:26-33
+    rule_id: missing_residues.n_terminal
+    gap_length: 8
+  - id: missing_residues/A:444-453
+    rule_id: missing_residues.internal
+    gap_length: 10
+  unrecognized:
+  - id: unrecognized/group/B:1
+    components: NAG-NAG-FUC
+  - id: unrecognized/group/C:1
+    components: NAG-NAG-FUC
+  - id: unrecognized/group/D:1
+    components: NAG-NAG
+  - id: unrecognized/group/E:1
+    components: NAG-NAG-FUC
+  - id: unrecognized/group/F:1
+    components: NAG-NAG
+  - id: unrecognized/group/A:1558
+    components: NAG
+  - id: unrecognized/group/A:1559
+    components: NAG
+  - id: unrecognized/group/A:1567
+    components: CL
+  - id: unrecognized/group/A:1568
+    components: CL
+  - id: unrecognized/group/A:1569
+    components: CL
+publication_checks:
+- source: 'Ca coordinated by one N and five O: D45, D46, D334 side chains, two sulfate O of FGS84, H335
+    NE'
+  finding_id: metals/A:1551
+  shell_residues:
+  - A:45
+  - A:46
+  - A:84
+  - A:334
+  - A:335
+  evidence:
+    coordination_number: 6
+    geometry: octahedral
+    protein_donors: 4
+    nonstandard_polymer_residue_donors: 2
+- source: Covalent sulfate-ester intermediate (FGly sulfate) at residue 84 (file component ALS)
+  finding_id: nonstandard_residues/A:84
+  evidence:
+    modeled_form: sulfate_ester
+- source: Lack of interpretable density prevented modelling of loop 444-453
+  finding_id: missing_residues/A:444-453
+  evidence:
+    gap_length: 10
+    position: internal
+- source: Disulfides C171-C184 and C422-C432 (standard chemistry, no unexplained-link finding)
+  absent:
+  - unrecognized/link/disulf1
+  - unrecognized/link/disulf2
+- source: 'Paper: eight putative N-glycosylation sites, at least one NAG built at each. The file has NAG
+    attached to seven asparagines (struct_conn covale3-covale9); open question in PANEL.md.'
+  glycans_attached_to:
+  - A:115
+  - A:144
+  - A:246
+  - A:280
+  - A:325
+  - A:513
+  - A:537

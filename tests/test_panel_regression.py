@@ -87,11 +87,13 @@ def test_annotated_metal_ligands_within_cutoff_are_in_shell(expected):
     findings = by_id(audit(expected["file"]))
     for entry in expected["families"]["metals"]:
         finding = findings[entry["id"]]
-        cutoff = next(i["value"] for i in finding["evidence"] if i["key"] == "coordination_cutoff")
+        rule = next(r for r in load_ruleset().rules if r.rule_id == entry["rule_id"])
+        cutoff = rule.matcher["coordination_cutoff_angstrom"]
+        donors = set(rule.matcher["donor_elements"])
         within = {
             (lig["residue"], lig["atom"])
             for lig in entry["annotated_ligands"]
-            if lig["distance_angstrom"] <= cutoff
+            if lig["distance_angstrom"] <= cutoff and lig["element"] in donors
         }
         assert within <= shell_atoms(finding), entry["id"]
 
@@ -113,15 +115,31 @@ PUBLICATION = [
 def test_publication_checks(expected):
     findings = by_id(audit(expected["file"]))
     for check in expected["publication_checks"]:
-        if "count" in check:
-            prefix = check["count"]["id_prefix"]
-            matching = [f for f in findings if f.startswith(prefix)]
-            assert len(matching) >= check["count"]["min"], check["source"]
-            continue
-        finding = findings[check["finding_id"]]
-        if "shell_residues" in check:
-            residues = {residue for residue, _ in shell_atoms(finding)}
-            assert set(check["shell_residues"]) <= residues, check["source"]
-        for key, value in check.get("evidence", {}).items():
-            actual = next(i.get("value") for i in finding["evidence"] if i["key"] == key)
-            assert actual == value, (check["finding_id"], key)
+        if "absent" in check:
+            assert not set(check["absent"]) & set(findings), check["source"]
+        elif "glycans_attached_to" in check:
+            assert set(check["glycans_attached_to"]) == attachment_residues(findings)
+        else:
+            check_finding(findings[check["finding_id"]], check)
+
+
+def attachment_residues(findings: dict[str, dict]) -> set[str]:
+    """Polymer residues that unrecognized groups are covalently attached to."""
+    return {
+        f"{atom['chain']}:{atom['seq_num']}{atom['ins_code']}"
+        for finding in findings.values()
+        if finding["rule_id"] == "unrecognized.chemistry_group"
+        for item in finding["evidence"]
+        if item["key"] == "attachment"
+        for atom in item["atoms"]
+        if atom["res_name"] == "ASN"
+    }
+
+
+def check_finding(finding: dict, check: dict) -> None:
+    if "shell_residues" in check:
+        residues = {residue for residue, _ in shell_atoms(finding)}
+        assert set(check["shell_residues"]) == residues, check["source"]
+    for key, value in check.get("evidence", {}).items():
+        actual = next(i.get("value") for i in finding["evidence"] if i["key"] == key)
+        assert actual == value, (finding["id"], key)
