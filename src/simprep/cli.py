@@ -9,6 +9,7 @@ from pathlib import Path
 
 from simprep.audit import ReportContext, build_findings_report, run_audit
 from simprep.config import default_config
+from simprep.knowledge import load_ruleset
 from simprep.manifest import (
     attach_snapshot,
     check_input,
@@ -21,7 +22,6 @@ from simprep.manifest.manifest import sha256_text
 from simprep.paths import KNOWLEDGE_DIR
 from simprep.provenance import sha256_file, simprep_provenance, utc_now
 from simprep.report import render_report
-from simprep.rules import load_ruleset
 from simprep.schemas import validate
 from simprep.structure.parse import read_structure
 

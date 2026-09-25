@@ -1,0 +1,9 @@
+{
+  "name": "simprep-pyodide-spike",
+  "private": true,
+  "description": "ADR-0002 spike: run the simprep detector core under Pyodide (Node).",
+  "type": "module",
+  "devDependencies": {
+    "pyodide": "314.0.7"
+  }
+}

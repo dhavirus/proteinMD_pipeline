@@ -1,6 +1,6 @@
 import pytest
 
-from simprep.rules import load_ruleset
+from simprep.knowledge import load_ruleset
 
 
 @pytest.fixture(scope="session")

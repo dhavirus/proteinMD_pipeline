@@ -9,10 +9,11 @@ from pathlib import Path
 from jsonschema import Draft202012Validator
 from referencing import Registry, Resource
 
+from simprep import SCHEMA_VERSION
 from simprep.paths import SCHEMA_DIR, require_dir
 
 SCHEMA_NAMES = ("finding", "rule", "manifest", "findings_report")
-SCHEMA_VERSION = "0.1.0"
+__all__ = ["SCHEMA_NAMES", "SCHEMA_VERSION", "validate", "validation_errors"]
 
 
 class SchemaValidationError(ValueError):

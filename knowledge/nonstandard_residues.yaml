@@ -29,6 +29,84 @@ x-generic-options: &generic_options
       - Creates new termini that themselves need a capping decision.
 
 rules:
+  - rule_id: nonstandard_residues.formylglycine
+    family: nonstandard_residues
+    version: 0.1.0
+    title: Formylglycine (sulfatase catalytic residue)
+    priority: 10
+    matcher:
+      kind: component_id
+      # FGS: FGly sulfate ester, the form deposited in 5FQL (Demydchuk et al. 2017).
+      # DDZ: 3,3-dihydroxy-alanine, the aldehyde-hydrate (gem-diol) form, named in the
+      # same paper. No component ID for the free aldehyde is listed until verified.
+      comp_ids: [FGS, DDZ]
+      residue_classes: [polymer]
+      modeled_forms:
+        - {form: sulfate_ester, comp_ids: [FGS], required_atoms: []}
+        - {form: gem_diol, comp_ids: [DDZ], required_atoms: []}
+    base_severity: blocking
+    options:
+      - id: model_gem_diol
+        label: Model FGly as the aldehyde hydrate (gem-diol, FGH)
+        cost_hint: medium
+        trade_offs:
+          - The species proposed to perform the nucleophilic attack in the
+            transesterification-elimination mechanism (Demydchuk et al. 2017).
+          - Needs a parameterized non-standard residue; replaces the deposited sulfate
+            ester, so the covalent sulfate is removed (record that decision too).
+      - id: model_aldehyde
+        label: Model FGly as the free aldehyde
+        cost_hint: medium
+        trade_offs:
+          - The form produced by FGE and regenerated after sulfate elimination.
+          - Not the catalytically active hydrate; needs its own parameters.
+      - id: keep_sulfate_ester
+        label: Keep the deposited FGly sulfate ester (covalent intermediate)
+        cost_hint: medium
+        trade_offs:
+          - Matches the deposited coordinates and the Ca2+ coordination by sulfate
+            oxygens.
+          - Simulates an intermediate, not the resting enzyme; the authors note the
+            density could alternatively be a phosphate ester.
+      - id: revert_to_parent
+        label: Revert to cysteine (the unmodified precursor)
+        cost_hint: low
+        requires_explicit_choice: true
+        trade_offs:
+          - Standard parameters.
+          - Removes the catalytic chemistry; only defensible for questions that do not
+            involve the active site.
+    recommended_option:
+      default: model_gem_diol
+      conditions:
+        - name: deposited_as_gem_diol
+          when:
+            evidence:
+              modeled_form: [gem_diol]
+          option: model_gem_diol
+          reason: Deposited as the hydrate; keep it.
+    rationale: >-
+      Eukaryotic sulfatases carry C-alpha-formylglycine, post-translationally formed from
+      a cysteine, as the catalytic residue. Its hydration / esterification state (free
+      aldehyde, gem-diol hydrate, or sulfate/phosphate ester intermediate) changes the
+      active site's chemistry and the metal coordination, so it is an explicit decision
+      and never a silent default.
+    references:
+      - citation: >-
+          Demydchuk M, Hill CH, Zhou A, et al. Insights into Hunter syndrome from the
+          structure of iduronate-2-sulfatase. Nat Commun. 2017;8:15786.
+        doi: 10.1038/ncomms15786
+        pmid: "28593992"
+      - citation: >-
+          Dierks T, Schmidt B, Borissenko LV, et al. Multiple sulfatase deficiency is
+          caused by mutations in the gene encoding the human C(alpha)-formylglycine
+          generating enzyme. Cell. 2003;113(4):435-444.
+        doi: 10.1016/s0092-8674(03)00347-7
+        pmid: "12757705"
+    verify_flags:
+      - "[VERIFY] Component IDs FGS and DDZ are taken from Demydchuk et al. 2017 (FGS84 residue label; 'Protein Data Bank code DDZ: 3,3-dihydroxy-alanine'); check both against the wwPDB Chemical Component Dictionary and the 5FQL file."
+      - "[VERIFY] No component ID for free formylglycine aldehyde is included; add one only after checking the CCD."
+      - "[VERIFY] Recommending the gem-diol follows the paper's statement that FGly acts catalytically as the aldehyde hydrate; whether that is the right state for a given free-energy question is a study decision."
   - rule_id: nonstandard_residues.generic
     family: nonstandard_residues
     version: 0.1.0

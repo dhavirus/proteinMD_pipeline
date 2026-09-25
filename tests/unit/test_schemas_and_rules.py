@@ -8,8 +8,9 @@ import pytest
 import yaml
 from jsonschema import Draft202012Validator
 
+from simprep.knowledge import load_rule_file
 from simprep.paths import KNOWLEDGE_DIR, SCHEMA_DIR
-from simprep.rules import RuleConsistencyError, check_rule, load_rule_file
+from simprep.rules import RuleConsistencyError, check_rule
 from simprep.schemas import SCHEMA_NAMES, SCHEMA_VERSION, load_schema, validation_errors
 
 EXAMPLES = SCHEMA_DIR / "examples"

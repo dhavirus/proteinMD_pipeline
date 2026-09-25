@@ -7,12 +7,12 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
+from simprep import SCHEMA_VERSION
 from simprep.config import AuditConfig
 from simprep.detectors import load_detectors
 from simprep.detectors.unrecognized import detect_unrecognized
 from simprep.findings import Finding
 from simprep.rules import RuleSet
-from simprep.schemas import SCHEMA_VERSION
 from simprep.severity import apply_context
 from simprep.structure.model import ResidueClass, ResidueId, Structure
 
