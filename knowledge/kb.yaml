@@ -1,0 +1,8 @@
+# Knowledge-base manifest. Bump kb_version whenever any rule file changes.
+kb_version: 0.1.0
+rule_files:
+  - metals.yaml
+  - nonstandard_residues.yaml
+  - altlocs.yaml
+  - missing_residues.yaml
+  - unrecognized.yaml

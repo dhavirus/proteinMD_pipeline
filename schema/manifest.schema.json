@@ -1,0 +1,126 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:simprep:schema:manifest",
+  "x-schema-version": "0.1.0",
+  "title": "simprep system manifest",
+  "description": "Every decision about one simulation system, with rationale and provenance. v0.1 covers the audit stage; later stages add properties.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "created_at", "input", "knowledge_base", "simprep", "regions",
+    "severity_escalation", "findings_snapshot", "decisions"
+  ],
+  "properties": {
+    "schema_version": {"const": "0.1.0"},
+    "created_at": {"type": "string", "format": "date-time"},
+    "input": {"$ref": "#/$defs/input"},
+    "knowledge_base": {"$ref": "#/$defs/knowledge_base"},
+    "simprep": {"$ref": "#/$defs/simprep"},
+    "regions": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/region"}
+    },
+    "severity_escalation": {"$ref": "#/$defs/severity_escalation"},
+    "findings_snapshot": {
+      "oneOf": [
+        {"type": "null"},
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["generated_at", "findings_sha256", "findings"],
+          "properties": {
+            "generated_at": {"type": "string", "format": "date-time"},
+            "findings_sha256": {"$ref": "#/$defs/sha256"},
+            "findings": {"type": "array", "items": {"$ref": "urn:simprep:schema:finding"}}
+          }
+        }
+      ]
+    },
+    "decisions": {"type": "array", "items": {"$ref": "#/$defs/decision"}}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "input": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256", "format"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "format": {"enum": ["mmcif", "pdb"]}
+      }
+    },
+    "knowledge_base": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["version", "sha256"],
+      "properties": {
+        "version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "simprep": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["version", "git_commit"],
+      "properties": {
+        "version": {"type": "string", "minLength": 1},
+        "git_commit": {
+          "description": "null when simprep does not run from a git checkout.",
+          "type": ["string", "null"],
+          "pattern": "^[0-9a-f]{40}(-dirty)?$"
+        }
+      }
+    },
+    "region": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "description", "residues"],
+      "properties": {
+        "name": {"type": "string", "pattern": "^[A-Za-z0-9_-]+$"},
+        "description": {"type": "string", "minLength": 1},
+        "residues": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "urn:simprep:schema:finding#/$defs/residue_ref"}
+        }
+      }
+    },
+    "severity_escalation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["thresholds"],
+      "properties": {
+        "thresholds": {
+          "description": "A finding whose anchors lie within max_distance_angstrom (heavy atom to heavy atom) of a region is raised by raise_levels. The tightest matching threshold applies; a finding inside a region counts as distance 0.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["max_distance_angstrom", "raise_levels"],
+            "properties": {
+              "max_distance_angstrom": {"type": "number", "minimum": 0},
+              "raise_levels": {"type": "integer", "minimum": 0, "maximum": 2}
+            }
+          }
+        }
+      }
+    },
+    "decision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["finding_id", "option_id", "rationale", "decided_by", "timestamp"],
+      "properties": {
+        "finding_id": {"type": "string", "minLength": 1},
+        "option_id": {"type": "string", "minLength": 1},
+        "parameters": {
+          "description": "Option-specific choices, e.g. which altloc to keep.",
+          "type": "object"
+        },
+        "rationale": {"type": "string", "minLength": 1},
+        "decided_by": {"type": "string", "minLength": 1},
+        "timestamp": {"type": "string", "format": "date-time"}
+      }
+    }
+  }
+}

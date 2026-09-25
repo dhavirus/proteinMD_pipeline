@@ -1,0 +1,29 @@
+# Example only: 'XYZ' is a placeholder, not a real chemical component ID.
+schema_version: 0.1.0
+family: nonstandard_residues
+rules:
+  - rule_id: nonstandard_residues.example_component
+    family: nonstandard_residues
+    version: 0.1.0
+    title: Example component rule
+    priority: 10
+    matcher:
+      kind: component_id
+      comp_ids: [XYZ]
+      residue_classes: [polymer]
+    base_severity: warn
+    options:
+      - id: route_to_topology_builder
+        label: Build a topology
+        cost_hint: medium
+        trade_offs: [Keeps the deposited chemistry.]
+    recommended_option:
+      default: route_to_topology_builder
+      conditions:
+        - name: in_region
+          when: {region_proximity: [inside]}
+          option: route_to_topology_builder
+          reason: Example condition.
+    rationale: Example.
+    references: []
+    verify_flags: []

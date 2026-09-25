@@ -1,0 +1,252 @@
+schema_version: 0.1.0
+family: metals
+description: >-
+  Metal ions: coordination shell, geometry descriptor, and a structural / catalytic /
+  ambiguous classification from stated criteria. Treatment options are the standard
+  metal models for classical MD. The classification is a triage aid for the human,
+  not a functional assignment.
+
+# Shared blocks (YAML anchors) -------------------------------------------------------
+x-geometry: &geometry
+  "2": [linear]
+  "3": [trigonal_planar]
+  "4": [tetrahedral, square_planar]
+  "5": [trigonal_bipyramidal, square_pyramidal]
+  "6": [octahedral]
+  "7": [pentagonal_bipyramidal]
+
+x-options: &options
+  - id: nonbonded_12_6
+    label: Nonbonded 12-6 LJ ion model
+    cost_hint: low
+    trade_offs:
+      - Cheapest and fully transferable; ligands may exchange freely.
+      - For divalent ions a single 12-6 parameter set cannot reproduce hydration free
+        energy, ion-oxygen distance and coordination number at once (Li & Merz 2014),
+        so the first shell may rearrange or collapse during sampling.
+  - id: nonbonded_12_6_4
+    label: Nonbonded 12-6-4 LJ-type ion model
+    cost_hint: low
+    trade_offs:
+      - Adds an ion-induced-dipole (1/r^4) term; reproduces hydration free energy,
+        ion-oxygen distance and coordination number for +2 ions (Li & Merz 2014).
+      - Modest overhead; needs C4 terms for each ion/atom-type pair; does not treat
+        charge transfer explicitly.
+  - id: bonded_mcpb
+    label: Bonded model (MCPB.py-style)
+    cost_hint: high
+    trade_offs:
+      - Keeps the crystallographic coordination geometry by construction.
+      - Needs QM calculations for force constants and charges (Li & Merz 2016); ligand
+        exchange is impossible, which biases any landscape where site rearrangement
+        matters; must be rebuilt if a variant changes a ligand.
+  - id: restrained
+    label: Nonbonded ion plus distance restraints to crystal ligands
+    cost_hint: low
+    trade_offs:
+      - Cheap way to hold the site together without QM parameterization.
+      - Restraints add a bias to every free energy computed; the restraint set must be
+        recorded and identical across WT and variants to keep comparisons fair.
+
+x-references: &references
+  - citation: >-
+      Harding MM. Small revisions to predicted distances around metal sites in proteins.
+      Acta Crystallogr D Biol Crystallogr. 2006;62(Pt 6):678-682.
+    doi: 10.1107/S0907444906014594
+    pmid: "16699196"
+  - citation: >-
+      Li P, Merz KM Jr. Taking into account the ion-induced dipole interaction in the
+      nonbonded model of ions. J Chem Theory Comput. 2014;10(1):289-297.
+    doi: 10.1021/ct400751u
+    pmid: "24659926"
+  - citation: >-
+      Li P, Merz KM Jr. MCPB.py: a Python based metal center parameter builder.
+      J Chem Inf Model. 2016;56(4):599-604.
+    doi: 10.1021/acs.jcim.5b00674
+    pmid: "26913476"
+
+x-recommendation: &recommendation
+  default: nonbonded_12_6_4
+  conditions:
+    - name: catalytic_site_in_region
+      when:
+        region_proximity: [inside, near]
+        evidence:
+          classification: [likely_catalytic]
+      option: bonded_mcpb
+      reason: >-
+        A likely catalytic site inside or next to a region of interest: preserving its
+        coordination geometry matters more than the parameterization cost.
+    - name: site_in_region
+      when:
+        region_proximity: [inside, near]
+      option: nonbonded_12_6_4
+      reason: >-
+        Near a region of interest but not classified catalytic: 12-6-4 keeps the first
+        shell more realistic than 12-6 without fixing the geometry.
+    - name: far_from_regions
+      when:
+        region_proximity: [far]
+      option: nonbonded_12_6
+      reason: Far from every region of interest; the cheapest model suffices.
+
+x-rationale: &rationale >-
+  A metal site cannot be simulated without choosing an ion model, and the choice changes
+  the site's behaviour. The coordination shell (donor atoms within the cutoff), a
+  geometry descriptor (RMS deviation of L-M-L angles from ideal polyhedra) and the
+  classification are reported as evidence. Classification criteria, in order: the
+  shell contains a non-standard polymer residue or a non-polymer ligand -> likely
+  catalytic; an open site (few protein donors plus water) -> likely catalytic; at least
+  the structural minimum of protein donors -> likely structural; otherwise ambiguous.
+
+rules:
+  - rule_id: metals.zinc
+    family: metals
+    version: 0.1.0
+    title: Zinc site
+    priority: 10
+    matcher:
+      kind: metal_element
+      elements: [ZN]
+      donor_elements: [N, O, S]
+      coordination_cutoff_angstrom: 2.8
+      geometry_candidates: *geometry
+      classification:
+        catalytic_if_shell_contains: [nonstandard_polymer_residue, nonpolymer_ligand]
+        open_site: {max_protein_donors: 3, min_water_donors: 1}
+        structural_min_protein_donors: 4
+    base_severity: warn
+    options: *options
+    recommended_option: *recommendation
+    rationale: *rationale
+    references:
+      - citation: >-
+          Harding MM. Small revisions to predicted distances around metal sites in proteins.
+          Acta Crystallogr D Biol Crystallogr. 2006;62(Pt 6):678-682.
+        doi: 10.1107/S0907444906014594
+        pmid: "16699196"
+      - citation: >-
+          Li P, Merz KM Jr. Taking into account the ion-induced dipole interaction in the
+          nonbonded model of ions. J Chem Theory Comput. 2014;10(1):289-297.
+        doi: 10.1021/ct400751u
+        pmid: "24659926"
+      - citation: >-
+          Li P, Merz KM Jr. MCPB.py: a Python based metal center parameter builder.
+          J Chem Inf Model. 2016;56(4):599-604.
+        doi: 10.1021/acs.jcim.5b00674
+        pmid: "26913476"
+      - citation: >-
+          Vallee BL, Auld DS. Zinc coordination, function, and structure of zinc enzymes
+          and other proteins. Biochemistry. 1990;29(24):5647-5659.
+        doi: 10.1021/bi00476a001
+        pmid: "2200508"
+    verify_flags:
+      - "[VERIFY] 2.8 A shell cutoff: chosen as a margin above Zn-N/O/S target distances (about 2.0-2.3 A) tabulated by Harding 2006; target values not re-read from the full text in this session."
+      - "[VERIFY] Open-site criterion (3 protein donors + >=1 water = catalytic; 4 protein donors = structural) follows the classification described by Vallee & Auld 1990; full text not re-read in this session."
+
+  - rule_id: metals.calcium
+    family: metals
+    version: 0.1.0
+    title: Calcium site
+    priority: 10
+    matcher:
+      kind: metal_element
+      elements: [CA]
+      donor_elements: [O, N]
+      coordination_cutoff_angstrom: 3.0
+      geometry_candidates: *geometry
+      classification:
+        catalytic_if_shell_contains: [nonstandard_polymer_residue, nonpolymer_ligand]
+        open_site: null
+        structural_min_protein_donors: 5
+    base_severity: warn
+    options: *options
+    recommended_option: *recommendation
+    rationale: *rationale
+    references: *references
+    verify_flags:
+      - "[VERIFY] 3.0 A shell cutoff: margin above Ca-O target distances (about 2.4 A, with wide scatter) in Harding 2006; not re-read from the full text in this session."
+      - "[VERIFY] structural_min_protein_donors = 5 is a working heuristic, not a literature value; no open-site criterion is applied to Ca."
+
+  - rule_id: metals.magnesium
+    family: metals
+    version: 0.1.0
+    title: Magnesium site
+    priority: 10
+    matcher:
+      kind: metal_element
+      elements: [MG]
+      donor_elements: [O, N]
+      coordination_cutoff_angstrom: 2.6
+      geometry_candidates: *geometry
+      classification:
+        catalytic_if_shell_contains: [nonstandard_polymer_residue, nonpolymer_ligand]
+        open_site: null
+        structural_min_protein_donors: 4
+    base_severity: warn
+    options: *options
+    recommended_option: *recommendation
+    rationale: *rationale
+    references: *references
+    verify_flags:
+      - "[VERIFY] 2.6 A shell cutoff: margin above Mg-O target distances (about 2.1 A) in Harding 2006; not re-read from the full text in this session."
+      - "[VERIFY] structural_min_protein_donors = 4 is a working heuristic, not a literature value."
+
+  - rule_id: metals.transition
+    family: metals
+    version: 0.1.0
+    title: First-row transition metal / cadmium site
+    priority: 10
+    matcher:
+      kind: metal_element
+      elements: [MN, FE, CO, NI, CU, CD]
+      donor_elements: [N, O, S]
+      coordination_cutoff_angstrom: 2.8
+      geometry_candidates: *geometry
+      classification:
+        catalytic_if_shell_contains: [nonstandard_polymer_residue, nonpolymer_ligand]
+        open_site: {max_protein_donors: 3, min_water_donors: 1}
+        structural_min_protein_donors: 4
+    base_severity: warn
+    options: *options
+    recommended_option: *recommendation
+    rationale: *rationale
+    references: *references
+    verify_flags:
+      - "[VERIFY] 2.8 A shell cutoff is a margin above Harding 2006 target distances for Mn/Fe/Co/Cu (about 2.0-2.3 A); Ni and Cd are not tabulated there and need their own check."
+      - "[VERIFY] Applying the zinc open-site heuristic to other transition metals is an extrapolation, not a literature result; redox-active sites (Fe, Cu) additionally need an oxidation-state decision not yet modelled."
+
+  - rule_id: metals.alkali
+    family: metals
+    version: 0.1.0
+    title: Sodium / potassium site
+    priority: 10
+    matcher:
+      kind: metal_element
+      elements: [NA, K]
+      donor_elements: [O]
+      coordination_cutoff_angstrom: 3.2
+      geometry_candidates: *geometry
+      classification:
+        catalytic_if_shell_contains: [nonstandard_polymer_residue, nonpolymer_ligand]
+        open_site: null
+        structural_min_protein_donors: 4
+    base_severity: warn
+    options: *options
+    recommended_option:
+      default: nonbonded_12_6
+      conditions:
+        - name: site_in_region
+          when:
+            region_proximity: [inside, near]
+          option: restrained
+          reason: >-
+            A site-bound monovalent ion near a region of interest may be a water or a
+            crystallization artefact; keep it in place explicitly until judged.
+    rationale: >-
+      Na+/K+ assignments in crystal structures are often ambiguous (vs water or other
+      ions). Report the shell so the human can judge whether the ion is real and bound.
+    references: *references
+    verify_flags:
+      - "[VERIFY] 3.2 A shell cutoff: margin above Na-O / K-O target distances (about 2.4 / 2.8 A) in Harding 2006; not re-read from the full text in this session."
+      - "[VERIFY] Li & Merz 2014 parameterized +2 ions only; 12-6-4 parameters for Na+/K+ come from other work not checked in this session."

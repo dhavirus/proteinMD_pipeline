@@ -1,0 +1,15 @@
+schema_version: 0.1.0
+family: altlocs
+rules:
+  - rule_id: altlocs.example
+    family: altlocs
+    version: 0.1.0
+    title: Rule without a matcher
+    priority: 0
+    base_severity: info
+    options:
+      - {id: highest_occupancy, label: Keep A, cost_hint: low, trade_offs: [Simple.]}
+    recommended_option: {default: highest_occupancy, conditions: []}
+    rationale: Example.
+    references: []
+    verify_flags: []

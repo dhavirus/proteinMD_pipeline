@@ -1,0 +1,52 @@
+schema_version: 0.1.0
+family: nonstandard_residues
+description: >-
+  Residues inside polymer chains that are not one of the 20 standard amino acids,
+  found from residue names and from the file's modified-residue annotations.
+  Specific rules (higher priority) claim a residue before the generic rule.
+
+x-generic-options: &generic_options
+  - id: route_to_topology_builder
+    label: Build a topology for the residue as deposited
+    cost_hint: medium
+    trade_offs:
+      - Keeps the deposited chemistry.
+      - Needs parameters (existing library or new derivation) and a check of the
+        protonation / hydration state.
+  - id: revert_to_parent
+    label: Replace with the parent standard residue
+    cost_hint: low
+    requires_explicit_choice: true
+    trade_offs:
+      - Standard parameters, no derivation work.
+      - Changes the chemistry; only defensible when the modification is irrelevant to
+        the question (e.g. a crystallization aid). Never applied by default.
+  - id: exclude_segment
+    label: Exclude the residue (and break the chain there)
+    cost_hint: low
+    trade_offs:
+      - Removes the problem at the cost of a chain break and a missing residue.
+      - Creates new termini that themselves need a capping decision.
+
+rules:
+  - rule_id: nonstandard_residues.generic
+    family: nonstandard_residues
+    version: 0.1.0
+    title: Non-standard polymer residue
+    priority: 0
+    matcher:
+      kind: nonstandard_polymer_residue
+      standard_residues: [ALA, ARG, ASN, ASP, CYS, GLN, GLU, GLY, HIS, ILE,
+                          LEU, LYS, MET, PHE, PRO, SER, THR, TRP, TYR, VAL]
+      use_modification_annotations: true
+    base_severity: warn
+    options: *generic_options
+    recommended_option:
+      default: route_to_topology_builder
+      conditions: []
+    rationale: >-
+      A polymer residue outside the 20 standard amino acids has no parameters in a
+      standard protein force field. The deposited chemistry is kept by default;
+      reverting to the parent residue is offered only as an explicit choice.
+    references: []
+    verify_flags: []

@@ -1,0 +1,566 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:simprep:schema:finding",
+  "x-schema-version": "0.1.0",
+  "title": "simprep finding",
+  "description": "One target-dependent feature detected in a structure, with evidence, treatment options and a recommended default. Emitted by a detector; never decides anything.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "rule_id",
+    "rule_family",
+    "title",
+    "base_severity",
+    "effective_severity",
+    "severity_context",
+    "locus",
+    "anchor_residues",
+    "evidence",
+    "options",
+    "recommended_option",
+    "recommendation_basis",
+    "rationale",
+    "references",
+    "verify_flags"
+  ],
+  "properties": {
+    "id": {
+      "description": "Stable identifier derived from family and locus, used as the key of decisions.",
+      "type": "string",
+      "pattern": "^[a-z_]+/[A-Za-z0-9_./:+-]+$"
+    },
+    "rule_id": {
+      "$ref": "#/$defs/rule_id"
+    },
+    "rule_family": {
+      "$ref": "#/$defs/family"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "base_severity": {
+      "$ref": "#/$defs/severity"
+    },
+    "effective_severity": {
+      "$ref": "#/$defs/severity"
+    },
+    "severity_context": {
+      "$ref": "#/$defs/severity_context"
+    },
+    "locus": {
+      "$ref": "#/$defs/locus"
+    },
+    "anchor_residues": {
+      "description": "Observed residues whose heavy atoms locate the finding in space (used for region distances). Empty only when nothing observed can locate it.",
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/residue_ref"
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/evidence_item"
+      }
+    },
+    "options": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/option"
+      }
+    },
+    "recommended_option": {
+      "type": "string",
+      "minLength": 1
+    },
+    "recommendation_basis": {
+      "description": "Which rule condition selected the recommended option ('default' if none matched).",
+      "type": "string",
+      "minLength": 1
+    },
+    "rationale": {
+      "type": "string",
+      "minLength": 1
+    },
+    "references": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/reference"
+      }
+    },
+    "verify_flags": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  },
+  "$defs": {
+    "rule_id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_]*(\\.[a-z0-9_]+)+$"
+    },
+    "family": {
+      "enum": [
+        "metals",
+        "nonstandard_residues",
+        "altlocs",
+        "missing_residues",
+        "unrecognized"
+      ]
+    },
+    "severity": {
+      "enum": [
+        "info",
+        "warn",
+        "blocking"
+      ]
+    },
+    "proximity": {
+      "enum": [
+        "no_regions",
+        "inside",
+        "near",
+        "far"
+      ]
+    },
+    "cost_hint": {
+      "enum": [
+        "low",
+        "medium",
+        "high"
+      ]
+    },
+    "severity_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "proximity",
+        "nearest_region",
+        "min_distance_angstrom",
+        "raise_levels"
+      ],
+      "properties": {
+        "proximity": {
+          "$ref": "#/$defs/proximity"
+        },
+        "nearest_region": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "min_distance_angstrom": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "raise_levels": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "residue_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "chain",
+        "seq_num",
+        "ins_code"
+      ],
+      "properties": {
+        "chain": {
+          "type": "string",
+          "minLength": 1
+        },
+        "seq_num": {
+          "type": "integer"
+        },
+        "ins_code": {
+          "type": "string",
+          "maxLength": 1
+        },
+        "res_name": {
+          "type": "string"
+        }
+      }
+    },
+    "atom_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "chain",
+        "seq_num",
+        "ins_code",
+        "res_name",
+        "atom_name",
+        "altloc"
+      ],
+      "properties": {
+        "chain": {
+          "type": "string",
+          "minLength": 1
+        },
+        "seq_num": {
+          "type": "integer"
+        },
+        "ins_code": {
+          "type": "string",
+          "maxLength": 1
+        },
+        "res_name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "atom_name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "altloc": {
+          "type": "string",
+          "maxLength": 1
+        }
+      }
+    },
+    "locus": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "chain",
+        "seq_num",
+        "ins_code",
+        "res_name",
+        "atom_names",
+        "extent"
+      ],
+      "properties": {
+        "chain": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "seq_num": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "ins_code": {
+          "type": "string",
+          "maxLength": 1
+        },
+        "res_name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "atom_names": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "extent": {
+          "description": "All residues the finding covers (may include unobserved residues).",
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/residue_ref"
+          }
+        }
+      }
+    },
+    "reference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "citation"
+      ],
+      "properties": {
+        "citation": {
+          "type": "string",
+          "minLength": 1
+        },
+        "doi": {
+          "type": "string",
+          "pattern": "^10\\."
+        },
+        "pmid": {
+          "type": "string",
+          "pattern": "^[0-9]+$"
+        },
+        "note": {
+          "type": "string"
+        }
+      }
+    },
+    "option": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "label",
+        "trade_offs",
+        "cost_hint"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]*$"
+        },
+        "label": {
+          "type": "string",
+          "minLength": 1
+        },
+        "trade_offs": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "cost_hint": {
+          "$ref": "#/$defs/cost_hint"
+        },
+        "requires_explicit_choice": {
+          "description": "Never recommended by default; only applied when a human selects it.",
+          "type": "boolean"
+        }
+      }
+    },
+    "evidence_item": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/evidence_distance"
+        },
+        {
+          "$ref": "#/$defs/evidence_angle"
+        },
+        {
+          "$ref": "#/$defs/evidence_occupancy"
+        },
+        {
+          "$ref": "#/$defs/evidence_b_factor"
+        },
+        {
+          "$ref": "#/$defs/evidence_count"
+        },
+        {
+          "$ref": "#/$defs/evidence_number"
+        },
+        {
+          "$ref": "#/$defs/evidence_label"
+        },
+        {
+          "$ref": "#/$defs/evidence_source_record"
+        },
+        {
+          "$ref": "#/$defs/evidence_flag"
+        }
+      ]
+    },
+    "evidence_base": {
+      "type": "object",
+      "required": [
+        "key",
+        "type"
+      ],
+      "properties": {
+        "key": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]*$"
+        },
+        "note": {
+          "type": "string"
+        },
+        "atoms": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/atom_ref"
+          }
+        }
+      }
+    },
+    "evidence_distance": {
+      "$ref": "#/$defs/evidence_base",
+      "unevaluatedProperties": false,
+      "properties": {
+        "type": {
+          "const": "distance"
+        },
+        "value": {
+          "type": "number",
+          "minimum": 0
+        },
+        "unit": {
+          "const": "angstrom"
+        }
+      },
+      "required": [
+        "value",
+        "unit"
+      ]
+    },
+    "evidence_angle": {
+      "$ref": "#/$defs/evidence_base",
+      "unevaluatedProperties": false,
+      "properties": {
+        "type": {
+          "const": "angle"
+        },
+        "value": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 180
+        },
+        "unit": {
+          "const": "degree"
+        }
+      },
+      "required": [
+        "value",
+        "unit"
+      ]
+    },
+    "evidence_occupancy": {
+      "$ref": "#/$defs/evidence_base",
+      "unevaluatedProperties": false,
+      "properties": {
+        "type": {
+          "const": "occupancy"
+        },
+        "value": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        }
+      },
+      "required": [
+        "value"
+      ]
+    },
+    "evidence_b_factor": {
+      "$ref": "#/$defs/evidence_base",
+      "unevaluatedProperties": false,
+      "properties": {
+        "type": {
+          "const": "b_factor"
+        },
+        "value": {
+          "type": "number"
+        },
+        "unit": {
+          "const": "angstrom_squared"
+        }
+      },
+      "required": [
+        "value",
+        "unit"
+      ]
+    },
+    "evidence_count": {
+      "$ref": "#/$defs/evidence_base",
+      "unevaluatedProperties": false,
+      "properties": {
+        "type": {
+          "const": "count"
+        },
+        "value": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "value"
+      ]
+    },
+    "evidence_number": {
+      "$ref": "#/$defs/evidence_base",
+      "unevaluatedProperties": false,
+      "properties": {
+        "type": {
+          "const": "number"
+        },
+        "value": {
+          "type": "number"
+        },
+        "unit": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "value",
+        "unit"
+      ]
+    },
+    "evidence_label": {
+      "$ref": "#/$defs/evidence_base",
+      "unevaluatedProperties": false,
+      "properties": {
+        "type": {
+          "const": "label"
+        },
+        "value": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "value"
+      ]
+    },
+    "evidence_source_record": {
+      "$ref": "#/$defs/evidence_base",
+      "unevaluatedProperties": false,
+      "properties": {
+        "type": {
+          "const": "source_record"
+        },
+        "category": {
+          "type": "string",
+          "minLength": 1
+        },
+        "fields": {
+          "type": "object",
+          "additionalProperties": {
+            "type": [
+              "string",
+              "number",
+              "null"
+            ]
+          }
+        }
+      },
+      "required": [
+        "category",
+        "fields"
+      ]
+    },
+    "evidence_flag": {
+      "$ref": "#/$defs/evidence_base",
+      "unevaluatedProperties": false,
+      "properties": {
+        "type": {
+          "const": "flag"
+        },
+        "value": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "value"
+      ]
+    }
+  }
+}

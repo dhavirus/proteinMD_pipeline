@@ -1,0 +1,140 @@
+schema_version: 0.1.0
+family: missing_residues
+description: >-
+  Polymer residues listed as unobserved in the file's annotations
+  (pdbx_unobs_or_zero_occ_residues with occupancy_flag 1), grouped into consecutive runs
+  and classified as N-terminal, C-terminal or internal by entity sequence position.
+
+x-terminal-options: &terminal_options
+  - id: cap_termini
+    label: Cap the first/last observed residue (neutral ACE/NME-style caps)
+    cost_hint: low
+    trade_offs:
+      - Avoids an artificial charged terminus where the real chain continues.
+      - The missing tail's interactions are absent.
+  - id: truncate
+    label: Truncate at the observed residue with a charged terminus
+    cost_hint: low
+    trade_offs:
+      - Simplest; standard termini parameters.
+      - Introduces a charge the real protein does not have at that position.
+  - id: model_loop
+    label: Model the missing tail
+    cost_hint: medium
+    trade_offs:
+      - Restores the full sequence.
+      - Modelled tails are unconstrained by density and may dominate conformational
+        sampling if they are long and disordered.
+
+rules:
+  - rule_id: missing_residues.internal
+    family: missing_residues
+    version: 0.1.0
+    title: Internal gap (unobserved residues between observed ones)
+    priority: 0
+    matcher:
+      kind: unobserved_run
+      position: internal
+      peptide_rise_angstrom: 3.8
+    base_severity: warn
+    options:
+      - id: model_loop
+        label: Model the missing loop
+        cost_hint: medium
+        trade_offs:
+          - Restores chain connectivity.
+          - The modelled loop is a hypothesis; its conformation is unconstrained by
+            density and may bias sampling nearby.
+      - id: truncate
+        label: Leave the gap as a chain break, capping both sides
+        cost_hint: low
+        trade_offs:
+          - No invented coordinates.
+          - Two artificial termini; the flanking segments can drift apart.
+    recommended_option:
+      default: model_loop
+      conditions:
+        - name: not_bridgeable
+          when:
+            evidence:
+              bridgeable: [false]
+          option: truncate
+          reason: >-
+            The flanking CA-CA distance exceeds what the missing residues can span;
+            check numbering before modelling anything.
+    rationale: >-
+      An internal gap leaves two artificial chain ends. Evidence gives the gap length
+      and the flanking CA-CA distance, compared with the maximum span of the missing
+      residues (3.8 A per peptide unit, the approximate trans CA-CA distance).
+    references: []
+    verify_flags:
+      - "[VERIFY] 3.8 A CA-CA distance per residue is the textbook trans-peptide value; no citation attached in this session."
+
+  - rule_id: missing_residues.n_terminal
+    family: missing_residues
+    version: 0.1.0
+    title: Unobserved N-terminal residues
+    priority: 0
+    matcher:
+      kind: unobserved_run
+      position: n_terminal
+      peptide_rise_angstrom: 3.8
+    base_severity: info
+    options: *terminal_options
+    recommended_option:
+      default: cap_termini
+      conditions: []
+    rationale: >-
+      Unobserved N-terminal residues (often tags, signal peptides or disordered tails).
+    references: []
+    verify_flags: []
+
+  - rule_id: missing_residues.c_terminal
+    family: missing_residues
+    version: 0.1.0
+    title: Unobserved C-terminal residues
+    priority: 0
+    matcher:
+      kind: unobserved_run
+      position: c_terminal
+      peptide_rise_angstrom: 3.8
+    base_severity: info
+    options: *terminal_options
+    recommended_option:
+      default: cap_termini
+      conditions: []
+    rationale: Unobserved C-terminal residues (often tags or disordered tails).
+    references: []
+    verify_flags: []
+
+  - rule_id: missing_residues.whole_chain
+    family: missing_residues
+    version: 0.1.0
+    title: Polymer chain with no observed residues
+    priority: 0
+    matcher:
+      kind: unobserved_run
+      position: whole_chain
+      peptide_rise_angstrom: 3.8
+    base_severity: blocking
+    options:
+      - id: exclude_chain
+        label: Leave the chain out
+        cost_hint: low
+        trade_offs:
+          - Nothing to model; the chain is absent from the system.
+          - Any role of that chain in the question is lost.
+      - id: model_loop
+        label: Model the whole chain
+        cost_hint: high
+        trade_offs:
+          - Restores the chain.
+          - Entirely modelled coordinates, no experimental support.
+    recommended_option:
+      default: exclude_chain
+      conditions: []
+    rationale: >-
+      A polymer chain listed only in the unobserved-residue annotation has no
+      coordinates at all.
+    references: []
+    verify_flags: []

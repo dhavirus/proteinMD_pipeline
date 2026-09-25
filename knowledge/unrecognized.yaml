@@ -1,0 +1,79 @@
+schema_version: 0.1.0
+family: unrecognized
+description: >-
+  Anything no rule claims. Unknown chemistry is a hard stop: these findings are always
+  blocking and carry no default treatment beyond "expert decision required".
+
+x-options: &options
+  - id: expert_review
+    label: Expert decision required
+    cost_hint: medium
+    trade_offs:
+      - Nothing proceeds until a human decides how to treat the chemistry.
+  - id: add_rule
+    label: Add a knowledge-base rule for this chemistry, then re-audit
+    cost_hint: medium
+    trade_offs:
+      - Makes the treatment reusable and documented.
+      - Requires a rule with sources and a panel structure that exercises it.
+  - id: exclude
+    label: Exclude from the system (recorded decision)
+    cost_hint: low
+    trade_offs:
+      - Removes the unknown chemistry.
+      - Anything it contributes (contacts, charge, covalent attachment) is lost.
+  - id: parameterize_manually
+    label: Keep and parameterize outside the rule system
+    cost_hint: high
+    trade_offs:
+      - Keeps the deposited chemistry.
+      - The treatment is not captured by a rule, so it must be fully described in the
+        decision rationale.
+
+x-recommendation: &recommendation
+  default: expert_review
+  conditions: []
+
+rules:
+  - rule_id: unrecognized.chemistry_group
+    family: unrecognized
+    version: 0.1.0
+    title: Unrecognized chemistry
+    priority: 0
+    matcher:
+      kind: unclaimed_group
+      residue_classes: [polymer, nonpolymer, branched]
+      group_by_conn_types: [covale, covale_base, covale_phosphate, covale_sugar]
+    base_severity: blocking
+    options: *options
+    recommended_option: *recommendation
+    rationale: >-
+      Residues that no rule claims: ligands, glycans, ions without a rule, and polymer
+      residues outside the standard set that no non-standard rule matched. Residues joined by annotated covalent connections are reported as one
+      group, together with their attachment to the polymer.
+    references: []
+    verify_flags: []
+
+  - rule_id: unrecognized.covalent_link
+    family: unrecognized
+    version: 0.1.0
+    title: Unexplained covalent connection
+    priority: 0
+    matcher:
+      kind: unexplained_link
+      conn_types: [covale, covale_base, covale_phosphate, covale_sugar, disulf]
+      recognized_links:
+        - {conn_type: disulf, res_names: [CYS, CYS], atom_names: [SG, SG]}
+        - conn_type: covale
+          res_names: ["*", "*"]
+          atom_names: [C, N]
+          residue_classes: [polymer, polymer]
+    base_severity: blocking
+    options: *options
+    recommended_option: *recommendation
+    rationale: >-
+      An annotated covalent connection that is neither standard polymer chemistry
+      (disulfide, peptide bond of a claimed non-standard residue) nor part of a reported
+      unrecognized group.
+    references: []
+    verify_flags: []

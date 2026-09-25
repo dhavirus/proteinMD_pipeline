@@ -1,0 +1,927 @@
+{
+  "schema_version": "0.1.0",
+  "created_at": "2026-09-25T01:36:52Z",
+  "input": {
+    "format": "mmcif",
+    "path": "tests/panel/mini.cif",
+    "sha256": "abc"
+  },
+  "knowledge_base": {
+    "sha256": "6b37909d3e36cae3047f297acc8e6166bc7cb2ffcac3dce2c36c9c1f8f716f52",
+    "version": "0.1.0"
+  },
+  "simprep": {
+    "git_commit": "0000000000000000000000000000000000000000",
+    "version": "0.1.0"
+  },
+  "regions": [
+    {
+      "name": "zinc_site",
+      "description": "Catalytic zinc and its first shell",
+      "residues": [
+        {
+          "chain": "A",
+          "seq_num": 901,
+          "ins_code": ""
+        },
+        {
+          "chain": "A",
+          "seq_num": 2,
+          "ins_code": ""
+        }
+      ]
+    }
+  ],
+  "severity_escalation": {
+    "thresholds": [
+      {
+        "max_distance_angstrom": 6.0,
+        "raise_levels": 2
+      },
+      {
+        "max_distance_angstrom": 12.0,
+        "raise_levels": 1
+      }
+    ]
+  },
+  "findings_snapshot": {
+    "generated_at": "2026-09-25T01:36:52Z",
+    "findings_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+    "findings": [
+      {
+        "anchor_residues": [
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 901
+          }
+        ],
+        "base_severity": "warn",
+        "effective_severity": "warn",
+        "evidence": [
+          {
+            "key": "metal_occupancy",
+            "type": "occupancy",
+            "value": 1.0
+          },
+          {
+            "key": "metal_b_factor",
+            "type": "b_factor",
+            "unit": "angstrom_squared",
+            "value": 20.0
+          },
+          {
+            "key": "coordination_cutoff",
+            "type": "number",
+            "unit": "angstrom",
+            "value": 2.8
+          },
+          {
+            "key": "coordination_number",
+            "type": "count",
+            "value": 4
+          },
+          {
+            "key": "protein_donors",
+            "type": "count",
+            "value": 3
+          },
+          {
+            "key": "water_donors",
+            "type": "count",
+            "value": 1
+          },
+          {
+            "key": "nonstandard_polymer_residue_donors",
+            "type": "count",
+            "value": 0
+          },
+          {
+            "key": "nonpolymer_ligand_donors",
+            "type": "count",
+            "value": 0
+          },
+          {
+            "key": "mean_ligand_distance",
+            "type": "number",
+            "unit": "angstrom",
+            "value": 2.051
+          },
+          {
+            "key": "geometry",
+            "type": "label",
+            "value": "tetrahedral"
+          },
+          {
+            "key": "geometry_rms_angle_deviation",
+            "type": "number",
+            "unit": "degree",
+            "value": 0.0
+          },
+          {
+            "key": "classification",
+            "note": "open site: 3 protein donors, 1 water donors",
+            "type": "label",
+            "value": "likely_catalytic"
+          },
+          {
+            "atoms": [
+              {
+                "altloc": "",
+                "atom_name": "ZN",
+                "chain": "A",
+                "ins_code": "",
+                "res_name": "ZN",
+                "seq_num": 901
+              },
+              {
+                "altloc": "",
+                "atom_name": "NE2",
+                "chain": "A",
+                "ins_code": "",
+                "res_name": "HIS",
+                "seq_num": 2
+              }
+            ],
+            "key": "ligand_distance",
+            "note": "protein",
+            "type": "distance",
+            "unit": "angstrom",
+            "value": 2.051
+          },
+          {
+            "atoms": [
+              {
+                "altloc": "",
+                "atom_name": "ZN",
+                "chain": "A",
+                "ins_code": "",
+                "res_name": "ZN",
+                "seq_num": 901
+              },
+              {
+                "altloc": "",
+                "atom_name": "NE2",
+                "chain": "A",
+                "ins_code": "",
+                "res_name": "HIS",
+                "seq_num": 4
+              }
+            ],
+            "key": "ligand_distance",
+            "note": "protein",
+            "type": "distance",
+            "unit": "angstrom",
+            "value": 2.051
+          },
+          {
+            "atoms": [
+              {
+                "altloc": "",
+                "atom_name": "ZN",
+                "chain": "A",
+                "ins_code": "",
+                "res_name": "ZN",
+                "seq_num": 901
+              },
+              {
+                "altloc": "",
+                "atom_name": "NE2",
+                "chain": "A",
+                "ins_code": "",
+                "res_name": "HIS",
+                "seq_num": 8
+              }
+            ],
+            "key": "ligand_distance",
+            "note": "protein",
+            "type": "distance",
+            "unit": "angstrom",
+            "value": 2.051
+          },
+          {
+            "atoms": [
+              {
+                "altloc": "",
+                "atom_name": "ZN",
+                "chain": "A",
+                "ins_code": "",
+                "res_name": "ZN",
+                "seq_num": 901
+              },
+              {
+                "altloc": "",
+                "atom_name": "O",
+                "chain": "A",
+                "ins_code": "",
+                "res_name": "HOH",
+                "seq_num": 1001
+              }
+            ],
+            "key": "ligand_distance",
+            "note": "water",
+            "type": "distance",
+            "unit": "angstrom",
+            "value": 2.051
+          },
+          {
+            "atoms": [
+              {
+                "altloc": "",
+                "atom_name": "ZN",
+                "chain": "A",
+                "ins_code": "",
+                "res_name": "ZN",
+                "seq_num": 901
+              },
+              {
+                "altloc": "",
+                "atom_name": "NE2",
+                "chain": "A",
+                "ins_code": "",
+                "res_name": "HIS",
+                "seq_num": 2
+              }
+            ],
+            "category": "struct_conn",
+            "fields": {
+              "conn_type": "metalc",
+              "distance_angstrom": 2.05,
+              "id": "metalc1"
+            },
+            "key": "annotated_metal_link",
+            "type": "source_record"
+          }
+        ],
+        "id": "metals/A:901",
+        "locus": {
+          "atom_names": [
+            "ZN"
+          ],
+          "chain": "A",
+          "extent": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "res_name": "ZN",
+              "seq_num": 901
+            }
+          ],
+          "ins_code": "",
+          "res_name": "ZN",
+          "seq_num": 901
+        },
+        "options": [
+          {
+            "cost_hint": "low",
+            "id": "nonbonded_12_6",
+            "label": "Nonbonded 12-6 LJ ion model",
+            "trade_offs": [
+              "Cheapest and fully transferable; ligands may exchange freely.",
+              "For divalent ions a single 12-6 parameter set cannot reproduce hydration free energy, ion-oxygen distance and coordination number at once (Li & Merz 2014), so the first shell may rearrange or collapse during sampling."
+            ]
+          },
+          {
+            "cost_hint": "low",
+            "id": "nonbonded_12_6_4",
+            "label": "Nonbonded 12-6-4 LJ-type ion model",
+            "trade_offs": [
+              "Adds an ion-induced-dipole (1/r^4) term; reproduces hydration free energy, ion-oxygen distance and coordination number for +2 ions (Li & Merz 2014).",
+              "Modest overhead; needs C4 terms for each ion/atom-type pair; does not treat charge transfer explicitly."
+            ]
+          },
+          {
+            "cost_hint": "high",
+            "id": "bonded_mcpb",
+            "label": "Bonded model (MCPB.py-style)",
+            "trade_offs": [
+              "Keeps the crystallographic coordination geometry by construction.",
+              "Needs QM calculations for force constants and charges (Li & Merz 2016); ligand exchange is impossible, which biases any landscape where site rearrangement matters; must be rebuilt if a variant changes a ligand."
+            ]
+          },
+          {
+            "cost_hint": "low",
+            "id": "restrained",
+            "label": "Nonbonded ion plus distance restraints to crystal ligands",
+            "trade_offs": [
+              "Cheap way to hold the site together without QM parameterization.",
+              "Restraints add a bias to every free energy computed; the restraint set must be recorded and identical across WT and variants to keep comparisons fair."
+            ]
+          }
+        ],
+        "rationale": "A metal site cannot be simulated without choosing an ion model, and the choice changes the site's behaviour. The coordination shell (donor atoms within the cutoff), a geometry descriptor (RMS deviation of L-M-L angles from ideal polyhedra) and the classification are reported as evidence. Classification criteria, in order: the shell contains a non-standard polymer residue or a non-polymer ligand -> likely catalytic; an open site (few protein donors plus water) -> likely catalytic; at least the structural minimum of protein donors -> likely structural; otherwise ambiguous.",
+        "recommendation_basis": "default",
+        "recommended_option": "nonbonded_12_6_4",
+        "references": [
+          {
+            "citation": "Harding MM. Small revisions to predicted distances around metal sites in proteins. Acta Crystallogr D Biol Crystallogr. 2006;62(Pt 6):678-682.",
+            "doi": "10.1107/S0907444906014594",
+            "pmid": "16699196"
+          },
+          {
+            "citation": "Li P, Merz KM Jr. Taking into account the ion-induced dipole interaction in the nonbonded model of ions. J Chem Theory Comput. 2014;10(1):289-297.",
+            "doi": "10.1021/ct400751u",
+            "pmid": "24659926"
+          },
+          {
+            "citation": "Li P, Merz KM Jr. MCPB.py: a Python based metal center parameter builder. J Chem Inf Model. 2016;56(4):599-604.",
+            "doi": "10.1021/acs.jcim.5b00674",
+            "pmid": "26913476"
+          },
+          {
+            "citation": "Vallee BL, Auld DS. Zinc coordination, function, and structure of zinc enzymes and other proteins. Biochemistry. 1990;29(24):5647-5659.",
+            "doi": "10.1021/bi00476a001",
+            "pmid": "2200508"
+          }
+        ],
+        "rule_family": "metals",
+        "rule_id": "metals.zinc",
+        "severity_context": {
+          "min_distance_angstrom": null,
+          "nearest_region": null,
+          "proximity": "no_regions",
+          "raise_levels": 0
+        },
+        "title": "ZN site A:901: likely_catalytic, coordination number 4",
+        "verify_flags": [
+          "[VERIFY] 2.8 A shell cutoff: chosen as a margin above Zn-N/O/S target distances (about 2.0-2.3 A) tabulated by Harding 2006; target values not re-read from the full text in this session.",
+          "[VERIFY] Open-site criterion (3 protein donors + >=1 water = catalytic; 4 protein donors = structural) follows the classification described by Vallee & Auld 1990; full text not re-read in this session."
+        ]
+      },
+      {
+        "anchor_residues": [
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 3
+          }
+        ],
+        "base_severity": "warn",
+        "effective_severity": "warn",
+        "evidence": [
+          {
+            "key": "detected_by",
+            "type": "label",
+            "value": "residue_name,modification_annotation"
+          },
+          {
+            "key": "atom_records",
+            "type": "count",
+            "value": 2
+          },
+          {
+            "key": "atom_names",
+            "type": "label",
+            "value": "CA SE"
+          },
+          {
+            "key": "mean_occupancy",
+            "type": "occupancy",
+            "value": 1.0
+          },
+          {
+            "key": "mean_b_factor",
+            "type": "b_factor",
+            "unit": "angstrom_squared",
+            "value": 20.0
+          },
+          {
+            "category": "pdbx_struct_mod_residue",
+            "fields": {
+              "details": "SELENOMETHIONINE",
+              "parent_comp_id": "MET",
+              "res_name": "MSE"
+            },
+            "key": "modification_record",
+            "type": "source_record"
+          }
+        ],
+        "id": "nonstandard_residues/A:3",
+        "locus": {
+          "atom_names": [],
+          "chain": "A",
+          "extent": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "res_name": "MSE",
+              "seq_num": 3
+            }
+          ],
+          "ins_code": "",
+          "res_name": "MSE",
+          "seq_num": 3
+        },
+        "options": [
+          {
+            "cost_hint": "medium",
+            "id": "route_to_topology_builder",
+            "label": "Build a topology for the residue as deposited",
+            "trade_offs": [
+              "Keeps the deposited chemistry.",
+              "Needs parameters (existing library or new derivation) and a check of the protonation / hydration state."
+            ]
+          },
+          {
+            "cost_hint": "low",
+            "id": "revert_to_parent",
+            "label": "Replace with the parent standard residue",
+            "requires_explicit_choice": true,
+            "trade_offs": [
+              "Standard parameters, no derivation work.",
+              "Changes the chemistry; only defensible when the modification is irrelevant to the question (e.g. a crystallization aid). Never applied by default."
+            ]
+          },
+          {
+            "cost_hint": "low",
+            "id": "exclude_segment",
+            "label": "Exclude the residue (and break the chain there)",
+            "trade_offs": [
+              "Removes the problem at the cost of a chain break and a missing residue.",
+              "Creates new termini that themselves need a capping decision."
+            ]
+          }
+        ],
+        "rationale": "A polymer residue outside the 20 standard amino acids has no parameters in a standard protein force field. The deposited chemistry is kept by default; reverting to the parent residue is offered only as an explicit choice.",
+        "recommendation_basis": "default",
+        "recommended_option": "route_to_topology_builder",
+        "references": [],
+        "rule_family": "nonstandard_residues",
+        "rule_id": "nonstandard_residues.generic",
+        "severity_context": {
+          "min_distance_angstrom": null,
+          "nearest_region": null,
+          "proximity": "no_regions",
+          "raise_levels": 0
+        },
+        "title": "Non-standard polymer residue: MSE A:3",
+        "verify_flags": []
+      },
+      {
+        "anchor_residues": [
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 1002
+          }
+        ],
+        "base_severity": "info",
+        "effective_severity": "info",
+        "evidence": [
+          {
+            "key": "residues_with_altlocs",
+            "type": "count",
+            "value": 1
+          },
+          {
+            "key": "residues",
+            "type": "label",
+            "value": "HOHA:1002"
+          },
+          {
+            "atoms": [],
+            "key": "largest_spread",
+            "note": "over all listed residues",
+            "type": "distance",
+            "unit": "angstrom",
+            "value": 0.6
+          }
+        ],
+        "id": "altlocs/water",
+        "locus": {
+          "atom_names": [],
+          "chain": null,
+          "extent": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "res_name": "HOH",
+              "seq_num": 1002
+            }
+          ],
+          "ins_code": "",
+          "res_name": null,
+          "seq_num": null
+        },
+        "options": [
+          {
+            "cost_hint": "low",
+            "id": "highest_occupancy",
+            "label": "Keep the highest-occupancy altloc",
+            "trade_offs": [
+              "Simple and reproducible; ties are broken by altloc identifier (A before B).",
+              "Discards the minor state, which may be the functionally relevant one."
+            ]
+          },
+          {
+            "cost_hint": "low",
+            "id": "specific_altloc",
+            "label": "Keep a specific altloc (named in the decision)",
+            "trade_offs": [
+              "Lets the human choose the state relevant to the question.",
+              "Mixing altloc letters across residues can create clashes when the letters were not refined as a consistent set; check neighbours."
+            ]
+          },
+          {
+            "cost_hint": "high",
+            "id": "keep_ensemble",
+            "label": "Keep each altloc as a separate system (ensemble)",
+            "trade_offs": [
+              "Samples both deposited states; the difference becomes part of the result.",
+              "Multiplies the number of systems to prepare and simulate."
+            ]
+          }
+        ],
+        "rationale": "Crystallographic waters with altlocs are reported together; a single decision normally covers all of them.",
+        "recommendation_basis": "default",
+        "recommended_option": "highest_occupancy",
+        "references": [],
+        "rule_family": "altlocs",
+        "rule_id": "altlocs.water",
+        "severity_context": {
+          "min_distance_angstrom": null,
+          "nearest_region": null,
+          "proximity": "no_regions",
+          "raise_levels": 0
+        },
+        "title": "Waters with alternative locations: 1 residues",
+        "verify_flags": []
+      },
+      {
+        "anchor_residues": [
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 2
+          }
+        ],
+        "base_severity": "info",
+        "effective_severity": "info",
+        "evidence": [
+          {
+            "key": "position",
+            "type": "label",
+            "value": "n_terminal"
+          },
+          {
+            "key": "gap_length",
+            "type": "count",
+            "value": 1
+          },
+          {
+            "key": "missing_sequence",
+            "type": "label",
+            "value": "GLY"
+          },
+          {
+            "category": "pdbx_unobs_or_zero_occ_residues",
+            "fields": {
+              "first": "A:1",
+              "first_label_seq": 1,
+              "last": "A:1",
+              "last_label_seq": 1
+            },
+            "key": "unobserved_record",
+            "type": "source_record"
+          },
+          {
+            "key": "flank_after",
+            "type": "label",
+            "value": "HISA:2"
+          }
+        ],
+        "id": "missing_residues/A:1-1",
+        "locus": {
+          "atom_names": [],
+          "chain": "A",
+          "extent": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "res_name": "GLY",
+              "seq_num": 1
+            }
+          ],
+          "ins_code": "",
+          "res_name": "GLY",
+          "seq_num": 1
+        },
+        "options": [
+          {
+            "cost_hint": "low",
+            "id": "cap_termini",
+            "label": "Cap the first/last observed residue (neutral ACE/NME-style caps)",
+            "trade_offs": [
+              "Avoids an artificial charged terminus where the real chain continues.",
+              "The missing tail's interactions are absent."
+            ]
+          },
+          {
+            "cost_hint": "low",
+            "id": "truncate",
+            "label": "Truncate at the observed residue with a charged terminus",
+            "trade_offs": [
+              "Simplest; standard termini parameters.",
+              "Introduces a charge the real protein does not have at that position."
+            ]
+          },
+          {
+            "cost_hint": "medium",
+            "id": "model_loop",
+            "label": "Model the missing tail",
+            "trade_offs": [
+              "Restores the full sequence.",
+              "Modelled tails are unconstrained by density and may dominate conformational sampling if they are long and disordered."
+            ]
+          }
+        ],
+        "rationale": "Unobserved N-terminal residues (often tags, signal peptides or disordered tails).",
+        "recommendation_basis": "default",
+        "recommended_option": "cap_termini",
+        "references": [],
+        "rule_family": "missing_residues",
+        "rule_id": "missing_residues.n_terminal",
+        "severity_context": {
+          "min_distance_angstrom": null,
+          "nearest_region": null,
+          "proximity": "no_regions",
+          "raise_levels": 0
+        },
+        "title": "Unobserved N-terminal residues: A:1-1 (1 residues)",
+        "verify_flags": []
+      },
+      {
+        "anchor_residues": [
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 4
+          },
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 6
+          }
+        ],
+        "base_severity": "warn",
+        "effective_severity": "warn",
+        "evidence": [
+          {
+            "key": "position",
+            "type": "label",
+            "value": "internal"
+          },
+          {
+            "key": "gap_length",
+            "type": "count",
+            "value": 1
+          },
+          {
+            "key": "missing_sequence",
+            "type": "label",
+            "value": "GLY"
+          },
+          {
+            "category": "pdbx_unobs_or_zero_occ_residues",
+            "fields": {
+              "first": "A:5",
+              "first_label_seq": 5,
+              "last": "A:5",
+              "last_label_seq": 5
+            },
+            "key": "unobserved_record",
+            "type": "source_record"
+          },
+          {
+            "key": "flank_before",
+            "type": "label",
+            "value": "HISA:4"
+          },
+          {
+            "key": "flank_after",
+            "type": "label",
+            "value": "GLYA:6"
+          },
+          {
+            "atoms": [
+              {
+                "altloc": "",
+                "atom_name": "CA",
+                "chain": "A",
+                "ins_code": "",
+                "res_name": "HIS",
+                "seq_num": 4
+              },
+              {
+                "altloc": "",
+                "atom_name": "CA",
+                "chain": "A",
+                "ins_code": "",
+                "res_name": "GLY",
+                "seq_num": 6
+              }
+            ],
+            "key": "flank_ca_distance",
+            "type": "distance",
+            "unit": "angstrom",
+            "value": 5.162
+          },
+          {
+            "key": "max_bridgeable_span",
+            "note": "3.8 A x (gap length + 1)",
+            "type": "number",
+            "unit": "angstrom",
+            "value": 7.6
+          },
+          {
+            "key": "bridgeable",
+            "type": "flag",
+            "value": true
+          }
+        ],
+        "id": "missing_residues/A:5-5",
+        "locus": {
+          "atom_names": [],
+          "chain": "A",
+          "extent": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "res_name": "GLY",
+              "seq_num": 5
+            }
+          ],
+          "ins_code": "",
+          "res_name": "GLY",
+          "seq_num": 5
+        },
+        "options": [
+          {
+            "cost_hint": "medium",
+            "id": "model_loop",
+            "label": "Model the missing loop",
+            "trade_offs": [
+              "Restores chain connectivity.",
+              "The modelled loop is a hypothesis; its conformation is unconstrained by density and may bias sampling nearby."
+            ]
+          },
+          {
+            "cost_hint": "low",
+            "id": "truncate",
+            "label": "Leave the gap as a chain break, capping both sides",
+            "trade_offs": [
+              "No invented coordinates.",
+              "Two artificial termini; the flanking segments can drift apart."
+            ]
+          }
+        ],
+        "rationale": "An internal gap leaves two artificial chain ends. Evidence gives the gap length and the flanking CA-CA distance, compared with the maximum span of the missing residues (3.8 A per peptide unit, the approximate trans CA-CA distance).",
+        "recommendation_basis": "default",
+        "recommended_option": "model_loop",
+        "references": [],
+        "rule_family": "missing_residues",
+        "rule_id": "missing_residues.internal",
+        "severity_context": {
+          "min_distance_angstrom": null,
+          "nearest_region": null,
+          "proximity": "no_regions",
+          "raise_levels": 0
+        },
+        "title": "Internal gap (unobserved residues between observed ones): A:5-5 (1 residues)",
+        "verify_flags": [
+          "[VERIFY] 3.8 A CA-CA distance per residue is the textbook trans-peptide value; no citation attached in this session."
+        ]
+      },
+      {
+        "anchor_residues": [
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 902
+          }
+        ],
+        "base_severity": "blocking",
+        "effective_severity": "blocking",
+        "evidence": [
+          {
+            "key": "components",
+            "type": "label",
+            "value": "SO4"
+          },
+          {
+            "key": "residue_classes",
+            "type": "label",
+            "value": "nonpolymer"
+          },
+          {
+            "key": "residues",
+            "type": "count",
+            "value": 1
+          },
+          {
+            "key": "atom_records",
+            "type": "count",
+            "value": 1
+          },
+          {
+            "key": "internal_links",
+            "type": "count",
+            "value": 0
+          },
+          {
+            "key": "mean_occupancy",
+            "type": "occupancy",
+            "value": 1.0
+          },
+          {
+            "key": "mean_b_factor",
+            "type": "b_factor",
+            "unit": "angstrom_squared",
+            "value": 20.0
+          },
+          {
+            "key": "decision_required",
+            "type": "label",
+            "value": "expert decision required"
+          }
+        ],
+        "id": "unrecognized/group/A:902",
+        "locus": {
+          "atom_names": [],
+          "chain": "A",
+          "extent": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "res_name": "SO4",
+              "seq_num": 902
+            }
+          ],
+          "ins_code": "",
+          "res_name": "SO4",
+          "seq_num": 902
+        },
+        "options": [
+          {
+            "cost_hint": "medium",
+            "id": "expert_review",
+            "label": "Expert decision required",
+            "trade_offs": [
+              "Nothing proceeds until a human decides how to treat the chemistry."
+            ]
+          },
+          {
+            "cost_hint": "medium",
+            "id": "add_rule",
+            "label": "Add a knowledge-base rule for this chemistry, then re-audit",
+            "trade_offs": [
+              "Makes the treatment reusable and documented.",
+              "Requires a rule with sources and a panel structure that exercises it."
+            ]
+          },
+          {
+            "cost_hint": "low",
+            "id": "exclude",
+            "label": "Exclude from the system (recorded decision)",
+            "trade_offs": [
+              "Removes the unknown chemistry.",
+              "Anything it contributes (contacts, charge, covalent attachment) is lost."
+            ]
+          },
+          {
+            "cost_hint": "high",
+            "id": "parameterize_manually",
+            "label": "Keep and parameterize outside the rule system",
+            "trade_offs": [
+              "Keeps the deposited chemistry.",
+              "The treatment is not captured by a rule, so it must be fully described in the decision rationale."
+            ]
+          }
+        ],
+        "rationale": "Residues that no rule claims: ligands, glycans, ions without a rule, and polymer residues outside the standard set that no non-standard rule matched. Residues joined by annotated covalent connections are reported as one group, together with their attachment to the polymer.",
+        "recommendation_basis": "default",
+        "recommended_option": "expert_review",
+        "references": [],
+        "rule_family": "unrecognized",
+        "rule_id": "unrecognized.chemistry_group",
+        "severity_context": {
+          "min_distance_angstrom": null,
+          "nearest_region": null,
+          "proximity": "no_regions",
+          "raise_levels": 0
+        },
+        "title": "Unrecognized chemistry: SO4 at A:902",
+        "verify_flags": []
+      }
+    ]
+  },
+  "decisions": [
+    {
+      "finding_id": "metals/A:901",
+      "option_id": "bonded_mcpb",
+      "rationale": "Catalytic site inside the region of interest; keep geometry.",
+      "decided_by": "example",
+      "timestamp": "2026-09-25T01:36:52Z"
+    }
+  ]
+}
