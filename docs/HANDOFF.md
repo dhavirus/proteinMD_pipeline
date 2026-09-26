@@ -9,8 +9,8 @@ Written at the end of the cloud session so work can continue from a local checko
 |---|---|
 | `main` | `0fc1f0e`: TASK-001 to TASK-006 merged (PRs #1-#6), CI green |
 | branch `claude/quirky-mayer-t7x0sl` | `main` + the accepted TASK-007 spec + this file + `spikes/task007_loop/` (not merged yet) |
-| branch `task-007-modelling` | TASK-007 implemented (local, not pushed yet): `simprep model`, ADR-0007 |
-| next task | review TASK-007 (ADR-0007 is `proposed`), then TASK-008 chemistry |
+| branch `task-007-modelling` | TASK-007 implemented, PR #8 (CI green): `simprep model`, ADR-0007 accepted |
+| next task | merge PR #8, then TASK-008 chemistry |
 
 Done so far:
 

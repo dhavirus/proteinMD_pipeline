@@ -1,6 +1,7 @@
 # ADR-0007: Loop modelling v0.1: PDBFixer placement, restrained sterics-only minimization
 
-- Status: proposed (TASK-007; for the maintainer's review)
+- Status: accepted (TASK-007; maintainer, 2026-09-26: the restraint + sterics-only
+  protocol is accepted, implicit solvent not pursued; test time of about 8 minutes kept)
 - Date: 2026-09-26
 
 ## Context
