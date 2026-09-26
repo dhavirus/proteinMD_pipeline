@@ -48,13 +48,29 @@ record accounting) and `prep_report.md`. See ADR-0004.
 On Colab, `notebooks/01_prep.ipynb` wraps the same function with the run layout from
 `CLAUDE.md` (`modules/prep_module.py`).
 
+## Modelling
+
+Internal gaps decided `model_loop` are built by `simprep model STRUCTURE --manifest M
+--out DIR` (wild type alone) and in-process by `simprep variants`, so every variant
+carries the same loop: prep (select) -> model (add) -> variants (build) -> relax.
+PDBFixer 1.12.0 places the residues (seeded, Reference platform), OpenMM minimizes the
+loop and its restrained flanks (trans-peptide and L-chirality restraints, sterics only),
+and the peptide geometry and contacts are checked; a failing check stops the stage
+(`modelling.junction_geometry`, exit 3). Outputs: `wt/` (the prepared wild type),
+`wt_modelled/` (modelled atoms at occupancy 0.00), `model_record.json` (every modelled
+residue and atom, its source, geometry, accounting, work order) and `model_report.md`.
+Protocol defaults: `knowledge/modelling.yaml` (override in the manifest's `modelling`).
+`truncate` means charged termini, listed for the topology stage. A build takes about two
+minutes. See ADR-0007.
+
 ## Variants
 
 List variants in the manifest (`"variants"`, or the review page's variant editor, e.g.
 `A:468 R>Q`), then run `simprep variants STRUCTURE --manifest M --out DIR`. The first run
 writes `DIR/manifest.json` with every side-chain rotamer candidate as a `variant_build`
 finding (exit 3); decide them on the review page, then run again with that manifest to
-get `wt/`, one directory per variant, `variant_record.json` and `variant_report.md`.
+get `wt/` (plus `wt_modelled/` when gaps are modelled), one directory per variant,
+`variant_record.json` and `variant_report.md`.
 Side chains are built from cited rotamer data in `knowledge/side_chains.yaml`; clashes
 flag and do not stop a build. Each variant and a matched wild type are then relaxed around
 the site with OpenMM (`pip install -e '.[relax]'`; protocol in the manifest's `relaxation`,

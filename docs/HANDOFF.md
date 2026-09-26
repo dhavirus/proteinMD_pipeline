@@ -9,7 +9,8 @@ Written at the end of the cloud session so work can continue from a local checko
 |---|---|
 | `main` | `0fc1f0e`: TASK-001 to TASK-006 merged (PRs #1-#6), CI green |
 | branch `claude/quirky-mayer-t7x0sl` | `main` + the accepted TASK-007 spec + this file + `spikes/task007_loop/` (not merged yet) |
-| next task | **TASK-007 modelling**, spec accepted: `docs/tasks/TASK-007-modelling.md` |
+| branch `task-007-modelling` | TASK-007 implemented (local, not pushed yet): `simprep model`, ADR-0007 |
+| next task | review TASK-007 (ADR-0007 is `proposed`), then TASK-008 chemistry |
 
 Done so far:
 
@@ -21,6 +22,7 @@ Done so far:
 | 004 | `simprep prep`: apply decisions (select, remove, record), work order, record accounting | 0004 |
 | 005 | `simprep variants`: rotamer candidates as findings, WT vs R468Q/R468W builds | 0005 |
 | 006 | relaxation (OpenMM, Reference platform, byte-identical) of variants + matched WT | 0006 |
+| 007 | loop modelling: PDBFixer placement + restrained sterics-only minimization, `wt_modelled/`, `truncate` = charged termini | 0007 |
 
 ## Local setup
 
@@ -53,7 +55,7 @@ The panel structures are committed (`tests/panel/*.cif.gz`); no test needs the n
 4. PR with: what was done, what was not and why, open questions, `[VERIFY]` items. CI green
    before the PR.
 
-## Next: TASK-007 (modelling), first steps
+## TASK-007 (modelling): the plan it followed (done, see ADR-0007)
 
 - Step 1 (decision 2): make PDBFixer loop building deterministic. Start from
   `spikes/task007_loop/` (script + findings). If byte-identical output cannot be
