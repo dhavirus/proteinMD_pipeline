@@ -6,8 +6,8 @@ prepared wild-type (WT) system and a work order. The comparative study CLAUDE.md
 prepared WT in every record except the mutated residue, with the new side chain built,
 checked and documented.
 
-Status: **draft** for maintainer review. Items marked (Q) are open questions (end of
-file). Do not start implementation until they are answered or accepted as defaults.
+Status: **accepted** (maintainer, 2026-09-26: defaults accepted for every open
+question; the resolved decisions are listed at the end of this file).
 
 ## What the committed 5FQL file says (measured in this session)
 
@@ -37,7 +37,7 @@ output (`applyMutations`, missing atoms restricted to residue 468):
 PDBFixer places a template side chain; it does not search rotamers, and here it
 produced an impossible Trp. It also leaves the new residue without hydrogens while the
 rest of 5FQL keeps its deposited ones. So v0.1 needs (a) rotamer candidates, (b) a clash
-check that turns bad placements into findings, and (c) an explicit hydrogen policy (Q2).
+check that turns bad placements into findings, and (c) an explicit hydrogen policy (decision 2).
 
 ## Scope in one sentence
 
@@ -63,14 +63,14 @@ neighbours (that would make WT and variant differ in more than the mutation).
 ### 2. Knowledge base: side-chain data as rules-are-data
 - `knowledge/side_chains.yaml` (new schema): per residue type, the atoms, ideal internal
   coordinates (bond lengths, angles, dihedral references) and the rotamers (chi means +
-  labels) with the source cited (Q1). v0.1 ships **GLN and TRP** only (CLAUDE.md: no
+  labels) with the source cited (decision 1). v0.1 ships **GLN and TRP** only (CLAUDE.md: no
   feature a panel structure or IDS does not exercise); other targets are refused with
   "add side-chain data". Numbers not verified in this session carry `[VERIFY]`.
 - `knowledge/variant_build.yaml`: rule family `variant_build`, e.g.
   `variant_build.steric_clash` (base severity blocking) with the clash criterion as data
-  (Q3), options `choose_rotamer` (apply; parameter `rotamer`), `expert_review`
+  (decision 3), options `choose_rotamer` (apply; parameter `rotamer`), `expert_review`
   (unresolved), and a recommendation condition "fewest clashes, then library
-  probability" (Q4).
+  probability" (decision 4).
 
 ### 3. `src/simprep/variants/` (pure core, thin I/O)
 - `build.py`: pure; place side-chain atoms from the WT backbone (N, CA, C, CB kept) with
@@ -98,11 +98,11 @@ neighbours (that would make WT and variant differ in more than the mutation).
 
 ### 5. Front end (small)
 - The review page shows `variant_build` findings like any other family (FAMILY_LABELS,
-  3D view of the candidate's clashing atoms), and edits the `variants` list (Q5).
+  3D view of the candidate's clashing atoms), and edits the `variants` list (decision 5).
 
 ### 6. Colab
 - `notebooks/02_variants.ipynb` + `modules/variants_module.py`, same conventions as
-  TASK-004 (one run directory holds `wt/` and every variant). (Q6)
+  TASK-004 (one run directory holds `wt/` and every variant). (decision 6)
 
 ### 7. Tests (offline)
 - Builder geometry checked against **deposited** data, not against itself: rebuild every
@@ -135,32 +135,29 @@ insertions/deletions, multi-chain assembly, MD. Any claim about what R468Q or R4
 to IDS (stability, activity, disease severity) belongs to the study, with its own
 citations, not to this task.
 
-## Open questions for the maintainer
-1. **Rotamer / geometry source (default: in-house NeRF builder + a cited rotamer
-   library in `knowledge/side_chains.yaml`).** Candidates: the penultimate rotamer
-   library (Lovell et al. 2000) or the Dunbrack backbone-independent library for chi
-   values, and Engh & Huber ideal geometry; both `[VERIFY]` until read and cited with
-   DOIs. Alternatives: PDBFixer as the builder (spike: no rotamer control, Trp through the
-   backbone), or an external packer (FASPR / SCWRL4: repack neighbours, licence and
-   binary distribution questions). Needs an ADR either way (TASK-004 decision 2).
-2. **Hydrogens (default: remove all hydrogens in the variant's mutated residue and add a
-   work-order item "protonation: A:468 has no hydrogens"; WT keeps its deposited H, and
-   the protonation stage later treats every system alike).** Alternative: strip all
-   deposited hydrogens in prep for every system (a TASK-004 behaviour change, one new
-   decision per structure), or place ideal hydrogens (a modelling step prep v0.1 avoided).
-3. **Clash criterion (default: heavy-atom distance below the sum of van der Waals radii
-   minus 0.4 A, radii from a cited table, `[VERIFY]`).** Alternative: fixed cutoffs per
-   element pair. Bonded neighbours (1-2, 1-3, and the backbone of the residue itself) are
-   never clashes.
-4. **Recommendation (default: fewest clashes, ties by library probability; if every
+## Resolved decisions (maintainer, 2026-09-26)
+1. **Builder and data**: an in-house NeRF builder (pure Python) places side chains from
+   ideal internal coordinates and rotamer chi values stored in
+   `knowledge/side_chains.yaml`, GLN and TRP only in v0.1. Candidate sources are the
+   penultimate rotamer library (Lovell et al. 2000) or the Dunbrack
+   backbone-independent library for chi values, and Engh & Huber for ideal geometry;
+   every number stays `[VERIFY]` until its source is read in a session and cited with a
+   DOI. PDBFixer and external packers (FASPR, SCWRL4) are not used. The choice is
+   recorded in an ADR (TASK-004 decision 2).
+2. **Hydrogens**: the mutated residue of each variant carries no hydrogens (the WT side
+   chain's hydrogens are excluded with it), and each variant's work order gains
+   "protonation: A:468 has no hydrogens". WT keeps its deposited hydrogens; the
+   protonation stage later treats every system alike.
+3. **Clash criterion**: a heavy-atom pair is a clash when its distance is below the sum
+   of the two van der Waals radii minus 0.4 A; radii from a cited table, `[VERIFY]`
+   until read. Bonded neighbours (1-2, 1-3) and the residue's own backbone are never
+   clashes.
+4. **Recommendation**: fewest clashes, ties broken by library probability. If every
    candidate clashes, the recommendation is `expert_review` and the finding stays
-   blocking).** Is "every candidate clashes" a hard stop for v0.1 (default yes), or
-   accepted with a recorded rationale and relaxation deferred to the MD stage?
-5. **Front-end variant editing (default: yes, a small list editor; mutations are
-   typed as `A:468 R>Q` and validated against the loaded structure).** Or edit the
-   manifest JSON by hand for v0.1.
-6. **Colab (default: a separate notebook 02 that runs WT + variants in one run).** Or
-   extend notebook 01.
-7. **Naming**: variant names default to `R468Q`-style from the author numbering, with the
-   UniProt position recorded alongside (identical for 5FQL). Keep, or name by UniProt
-   position when they differ?
+   blocking: a hard stop in v0.1 (no acceptance with a rationale, no relaxation here).
+5. **Front end**: the review page gets a small variant-list editor; mutations are typed
+   as `A:468 R>Q` and validated against the loaded structure.
+6. **Colab**: a separate `notebooks/02_variants.ipynb` runs WT and all variants in one
+   run directory.
+7. **Naming**: variant names use the author numbering (`R468Q`); the UniProt position
+   from `_struct_ref_seq` is recorded alongside (identical for 5FQL).
