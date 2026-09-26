@@ -1,4 +1,4 @@
-"""Command line: ``simprep audit`` and ``simprep manifest init``."""
+"""Command line: ``simprep audit``, ``simprep manifest init|status`` and ``simprep prep``."""
 
 from __future__ import annotations
 
@@ -21,7 +21,9 @@ from simprep.manifest import (
 from simprep.manifest.manifest import sha256_text
 from simprep.manifest.status import decision_status, render_status
 from simprep.paths import KNOWLEDGE_DIR
-from simprep.provenance import sha256_file, simprep_provenance, utc_now
+from simprep.prep.run import RECORD_FILE, PrepRequest, run_prep
+from simprep.prep.run import REPORT_FILE as PREP_REPORT_FILE
+from simprep.provenance import input_info, sha256_file, simprep_provenance, utc_now
 from simprep.report import render_report
 from simprep.schemas import validate
 from simprep.structure.parse import read_structure
@@ -29,18 +31,6 @@ from simprep.structure.parse import read_structure
 FINDINGS_FILE = "findings.json"
 REPORT_FILE = "report.md"
 MANIFEST_FILE = "manifest.json"
-
-
-FORMAT_BY_EXTENSION = {".cif": "mmcif", ".mmcif": "mmcif", ".pdb": "pdb", ".ent": "pdb"}
-
-
-def input_info(path: Path) -> dict:
-    """Path, SHA-256 and format (from the extension, ignoring a trailing .gz)."""
-    suffixes = [s.lower() for s in path.suffixes if s.lower() != ".gz"]
-    fmt = FORMAT_BY_EXTENSION.get(suffixes[-1] if suffixes else "")
-    if fmt is None:
-        raise ValueError(f"{path}: unsupported extension; expected .cif/.mmcif/.pdb/.ent[.gz]")
-    return {"path": str(path), "sha256": sha256_file(path), "format": fmt}
 
 
 def audit(args: argparse.Namespace) -> int:
@@ -97,6 +87,19 @@ def manifest_status(args: argparse.Namespace) -> int:
     return EXIT_BLOCKING_UNDECIDED if status.blocking_undecided else 0
 
 
+def prep(args: argparse.Namespace) -> int:
+    """Apply a fully decided manifest: prepared system file(s) + prep record + report."""
+    record = run_prep(PrepRequest(args.file, args.manifest, args.out, args.knowledge))
+    for system in record["systems"]:
+        files = ", ".join(f["path"] for f in system["files"])
+        print(f"{system['name']}: {files}")
+    print(
+        f"{len(record['work_order'])} work-order items -> "
+        f"{args.out / RECORD_FILE}, {args.out / PREP_REPORT_FILE}"
+    )
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="simprep")
     parser.add_argument(
@@ -126,6 +129,13 @@ def build_parser() -> argparse.ArgumentParser:
     status_parser.add_argument("manifest", type=Path)
     status_parser.add_argument("--structure", type=Path, help="check the input file's SHA-256")
     status_parser.set_defaults(handler=manifest_status)
+    prep_parser = commands.add_parser(
+        "prep", help="apply a decided manifest -> system file(s) + prep_record.json"
+    )
+    prep_parser.add_argument("file", type=Path)
+    prep_parser.add_argument("--manifest", type=Path, required=True)
+    prep_parser.add_argument("--out", type=Path, required=True, help="output directory")
+    prep_parser.set_defaults(handler=prep)
     return parser
 
 
