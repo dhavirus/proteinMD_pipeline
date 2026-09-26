@@ -1,0 +1,52 @@
+# Variant fixture (TASK-005) for 5FQL: WT vs R468Q vs R468W, built on the prep fixture
+# decisions (prep_fixtures/5FQL.yaml). Expected outcomes are written by hand from the
+# file's records and from placements made independently of simprep's builder; they are
+# not derived from simprep variants output. reviewed: false until the maintainer reviews.
+structure: 5FQL.cif.gz
+prep_fixture: 5FQL.yaml
+reviewed: false
+variants:
+  - name: R468Q
+    mutations: [{chain: A, seq_num: 468, ins_code: "", from: ARG, to: GLN}]
+    rationale: IDS study variant (CLAUDE.md)
+    references: []
+  - name: R468W
+    mutations: [{chain: A, seq_num: 468, ins_code: "", from: ARG, to: TRP}]
+    rationale: IDS study variant (CLAUDE.md)
+    references: []
+expected:
+  site:
+    residue: "A:468"
+    res_name: ARG
+    # 5FQL _struct_ref_seq: pdbx_auth_seq_align_beg 26 = db_align_beg 26, UNP P22304,
+    # auth 26-550 = UniProt 26-550, so author 468 is UniProt 468.
+    uniprot: {accession: P22304, position: 468}
+  R468W:
+    # Independent placements that all clash: PDBFixer 1.12.0 put the ring through the
+    # Ser470 backbone (CH2 - C 1.02 A; coordinates below), and a 10-degree grid over
+    # chi1/chi2 made in the TASK-005 session left at least 0.74 A of heavy-atom overlap.
+    all_candidates_clash: true
+    recommended_option: expert_review
+  R468Q:
+    # Gln is shorter than the deposited Arg; the PDBFixer 1.12.0 placement (below) has
+    # no heavy-atom contact closer than OE1 - Val262 O 2.49 A (a polar pair).
+    all_candidates_clash: false
+    recommended_option: choose_rotamer
+# Side chains beyond CB placed by PDBFixer 1.12.0 / OpenMM 8.6.1 (applyMutations +
+# addMissingAtoms restricted to A:468) on the prep fixture's WT system, TASK-005 spike.
+pdbfixer_placements:
+  TRP:
+    CG: [6.144, 28.531, 114.645]
+    CD1: [5.970, 29.998, 114.878]
+    NE1: [4.681, 29.552, 114.994]
+    CE2: [3.341, 29.709, 115.187]
+    CZ2: [1.874, 29.447, 115.352]
+    CH2: [0.941, 28.411, 115.300]
+    CZ3: [1.663, 27.351, 114.983]
+    CE3: [3.072, 27.591, 114.861]
+    CD2: [4.292, 28.527, 114.897]
+  GLN:
+    CG: [6.144, 28.531, 114.645]
+    CD: [6.568, 28.892, 116.061]
+    OE1: [6.706, 29.988, 115.733]
+    NE2: [5.593, 29.289, 116.111]

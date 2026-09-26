@@ -8,12 +8,9 @@ from pathlib import Path
 
 from simprep.canonical import sha256_canonical
 from simprep.config import AuditConfig, region_from_dict, thresholds_from_dict
+from simprep.errors import ManifestError
 from simprep.rules import RuleSet
 from simprep.schemas import SCHEMA_VERSION, validate
-
-
-class ManifestError(ValueError):
-    """The manifest is inconsistent with its input file or its own findings."""
 
 
 def pretty_json(document: object) -> str:
@@ -75,16 +72,21 @@ def config_from_manifest(manifest: dict, manifest_sha256: str) -> AuditConfig:
 
 
 def check_snapshot(manifest: dict) -> None:
-    """The snapshot's findings must hash to its recorded ``findings_sha256`` (RFC 8785)."""
-    snapshot = manifest["findings_snapshot"]
-    if snapshot is None:
-        return
-    actual = sha256_canonical(snapshot["findings"])
-    if actual != snapshot["findings_sha256"]:
-        raise ManifestError(
-            f"findings snapshot was modified: recorded SHA-256 {snapshot['findings_sha256']}, "
-            f"actual {actual}. Re-run `simprep audit --manifest` to refresh the snapshot."
-        )
+    """Each snapshot's findings must hash to its recorded ``findings_sha256`` (RFC 8785)."""
+    remedies = {
+        "findings_snapshot": "simprep audit --manifest",
+        "variant_snapshot": "simprep variants",
+    }
+    for key, command in remedies.items():
+        snapshot = manifest.get(key)
+        if snapshot is None:
+            continue
+        actual = sha256_canonical(snapshot["findings"])
+        if actual != snapshot["findings_sha256"]:
+            raise ManifestError(
+                f"{key} was modified: recorded SHA-256 {snapshot['findings_sha256']}, "
+                f"actual {actual}. Re-run `{command}` to refresh it."
+            )
 
 
 def check_decisions(manifest: dict) -> None:
@@ -98,7 +100,9 @@ def check_decisions(manifest: dict) -> None:
         return
     if snapshot is None:
         raise ManifestError("manifest has decisions but no findings snapshot to decide on")
-    options = {f["id"]: {o["id"] for o in f["options"]} for f in snapshot["findings"]}
+    variant_snapshot = manifest.get("variant_snapshot") or {"findings": []}
+    findings = snapshot["findings"] + variant_snapshot["findings"]
+    options = {f["id"]: {o["id"] for o in f["options"]} for f in findings}
     problems = decision_problems(manifest["decisions"], options)
     if problems:
         raise ManifestError(
@@ -132,6 +136,22 @@ def attach_snapshot(manifest: dict, report: dict) -> dict:
         **manifest,
         "findings_snapshot": {
             "generated_at": report["generated_at"],
+            "findings_sha256": sha256_canonical(findings),
+            "findings": findings,
+        },
+    }
+    validate(updated, "manifest")
+    check_decisions(updated)
+    return updated
+
+
+def attach_variant_snapshot(manifest: dict, findings: list[dict], generated_at: str) -> dict:
+    """Copy of ``manifest`` carrying variant_build ``findings`` for its current variants."""
+    updated = {
+        **manifest,
+        "variant_snapshot": {
+            "generated_at": generated_at,
+            "variants_sha256": sha256_canonical(manifest.get("variants", [])),
             "findings_sha256": sha256_canonical(findings),
             "findings": findings,
         },

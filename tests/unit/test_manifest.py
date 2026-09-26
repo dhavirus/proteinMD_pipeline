@@ -3,8 +3,8 @@ import json
 
 import pytest
 
+from simprep.decisions import decision_status, render_status
 from simprep.manifest import ManifestError, check_decisions, check_input, check_snapshot
-from simprep.manifest.status import decision_status, render_status
 from simprep.paths import SCHEMA_DIR
 
 EXAMPLE = SCHEMA_DIR / "examples" / "manifest" / "valid_with_decision.json"

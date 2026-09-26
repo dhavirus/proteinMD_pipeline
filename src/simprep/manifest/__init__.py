@@ -3,6 +3,7 @@
 from simprep.manifest.manifest import (
     ManifestError,
     attach_snapshot,
+    attach_variant_snapshot,
     check_decisions,
     check_input,
     check_snapshot,
@@ -15,6 +16,7 @@ from simprep.manifest.manifest import (
 __all__ = [
     "ManifestError",
     "attach_snapshot",
+    "attach_variant_snapshot",
     "check_decisions",
     "check_snapshot",
     "check_input",

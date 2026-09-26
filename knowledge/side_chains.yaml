@@ -1,0 +1,61 @@
+# Side-chain building data for variants (TASK-005 decision 1). Only residue types a
+# study exercises ship here (CLAUDE.md): GLN and TRP for IDS R468Q / R468W.
+#
+# Internal coordinates: ideal bond lengths and angles after Engh & Huber 1991.
+# Rotamers: modal chi values and frequencies of the penultimate rotamer library
+# (Lovell et al. 2000). Neither table was re-read in this session (see verify_flags);
+# tests/unit/test_side_chains.py rebuilds every deposited GLN and TRP of the panel from
+# its own chi angles and checks the result against the deposited coordinates, which
+# catches a wrong bond length or angle regardless of its source.
+schema_version: 0.1.0
+references:
+  - citation: "Lovell SC, Word JM, Richardson JS, Richardson DC. The penultimate rotamer library. Proteins 2000;40:389-408."
+    doi: "10.1002/1097-0134(20000815)40:3<389::AID-PROT50>3.0.CO;2-2"
+    pmid: "10861930"
+    note: "Rotamer modes and frequencies; the abstract (read in this session via PubMed) recommends flipping Asn/Gln/His planar terminal groups when required by overlaps or H-bonding."
+  - citation: "Word JM, Lovell SC, Richardson JS, Richardson DC. Asparagine and glutamine: using hydrogen atom contacts in the choice of side-chain amide orientation. J Mol Biol 1999;285:1735-47."
+    doi: "10.1006/jmbi.1998.2401"
+    pmid: "9917408"
+    note: "About 20 % of Asn/Gln amides in high-quality structures need a 180-degree flip (abstract, read in this session); why GLN candidates include flipped amides."
+  - citation: "Engh RA, Huber R. Accurate bond and angle parameters for X-ray protein structure refinement. Acta Crystallogr A 1991;47:392-400."
+    note: "Ideal bond lengths and angles; not in PubMed, not read in this session."
+verify_flags:
+  - "[VERIFY] Bond lengths and angles below are Engh & Huber 1991 values recalled, not re-read from the paper in this session; checked only against deposited panel side chains (test_side_chains.py)."
+  - "[VERIFY] Rotamer modal chi values and frequencies are the Lovell et al. 2000 table recalled, not re-read (full text not in PMC); frequencies only order ties in the recommendation."
+residues:
+  GLN:
+    flip_chi: 3
+    atoms:
+      - {name: CG, element: C, refs: [N, CA, CB], bond_angstrom: 1.520, angle_degree: 114.1, dihedral: {chi: 1}}
+      - {name: CD, element: C, refs: [CA, CB, CG], bond_angstrom: 1.516, angle_degree: 112.6, dihedral: {chi: 2}}
+      - {name: OE1, element: O, refs: [CB, CG, CD], bond_angstrom: 1.231, angle_degree: 121.6, dihedral: {chi: 3}}
+      - {name: NE2, element: N, refs: [CB, CG, CD], bond_angstrom: 1.328, angle_degree: 116.4, dihedral: {chi: 3, offset_degree: 180}}
+    rotamers:
+      - {id: pt20, chi_degree: [62, 180, 20], frequency_percent: 4}
+      - {id: pm0, chi_degree: [70, -75, 0], frequency_percent: 1}
+      - {id: tp-100, chi_degree: [-177, 65, -100], frequency_percent: 2}
+      - {id: tp60, chi_degree: [-177, 65, 60], frequency_percent: 2}
+      - {id: tt0, chi_degree: [-177, 180, 0], frequency_percent: 16}
+      - {id: mp0, chi_degree: [-65, 85, 0], frequency_percent: 3}
+      - {id: mt-30, chi_degree: [-67, 180, -25], frequency_percent: 38}
+      - {id: mm-40, chi_degree: [-65, -65, -40], frequency_percent: 16}
+      - {id: mm100, chi_degree: [-65, -65, 100], frequency_percent: 4}
+  TRP:
+    atoms:
+      - {name: CG, element: C, refs: [N, CA, CB], bond_angstrom: 1.498, angle_degree: 113.6, dihedral: {chi: 1}}
+      - {name: CD1, element: C, refs: [CA, CB, CG], bond_angstrom: 1.365, angle_degree: 126.9, dihedral: {chi: 2}}
+      - {name: CD2, element: C, refs: [CA, CB, CG], bond_angstrom: 1.433, angle_degree: 126.8, dihedral: {chi: 2, offset_degree: 180}}
+      - {name: NE1, element: N, refs: [CB, CG, CD1], bond_angstrom: 1.374, angle_degree: 110.2, dihedral: 180}
+      - {name: CE2, element: C, refs: [CB, CG, CD2], bond_angstrom: 1.409, angle_degree: 107.2, dihedral: 180}
+      - {name: CE3, element: C, refs: [CB, CG, CD2], bond_angstrom: 1.398, angle_degree: 133.9, dihedral: 0}
+      - {name: CZ2, element: C, refs: [CG, CD2, CE2], bond_angstrom: 1.394, angle_degree: 122.4, dihedral: 180}
+      - {name: CZ3, element: C, refs: [CG, CD2, CE3], bond_angstrom: 1.382, angle_degree: 118.6, dihedral: 180}
+      - {name: CH2, element: C, refs: [CD2, CE2, CZ2], bond_angstrom: 1.368, angle_degree: 117.5, dihedral: 0}
+    rotamers:
+      - {id: p-90, chi_degree: [62, -90], frequency_percent: 11}
+      - {id: p90, chi_degree: [62, 90], frequency_percent: 7}
+      - {id: t-105, chi_degree: [-177, -105], frequency_percent: 16}
+      - {id: t90, chi_degree: [-177, 90], frequency_percent: 13}
+      - {id: m-90, chi_degree: [-65, -90], frequency_percent: 11}
+      - {id: m0, chi_degree: [-65, -5], frequency_percent: 6}
+      - {id: m95, chi_degree: [-65, 95], frequency_percent: 34}

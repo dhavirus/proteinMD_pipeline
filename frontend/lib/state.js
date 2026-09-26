@@ -4,11 +4,13 @@ import { sameRegions } from "./regions.js";
 
 /**
  * report: a validated findings.json; manifest: a validated manifest or null.
- * Decisions from the manifest whose finding is not in this report are kept aside as
- * orphans, shown to the user and never exported silently.
+ * The manifest's variant_build findings (variant_snapshot) are reviewed alongside the
+ * audit findings. Decisions whose finding is in neither are kept aside as orphans,
+ * shown to the user and never exported silently.
  */
 export function createState(report, manifest = null) {
-  const ids = new Set(report.findings.map((f) => f.id));
+  const variantFindings = manifest?.variant_snapshot?.findings || [];
+  const ids = new Set([...report.findings, ...variantFindings].map((f) => f.id));
   const decisions = {};
   const orphans = [];
   for (const decision of manifest ? manifest.decisions : []) {
@@ -21,6 +23,8 @@ export function createState(report, manifest = null) {
     decisions,
     orphans,
     regions: manifest ? manifest.regions : report.audit_config.regions,
+    variantFindings,
+    variants: manifest?.variants || [],
     selectedId: report.findings[0] ? report.findings[0].id : null,
     filter: { severities: null, family: null, undecidedOnly: false },
   };
@@ -39,6 +43,16 @@ export function removeDecision(state, findingId) {
 }
 
 export const setRegions = (state, regions) => ({ ...state, regions });
+export const setVariants = (state, variants) => ({ ...state, variants });
+
+/** Audit findings followed by the variant_build findings of the loaded manifest. */
+export const allFindings = (state) => [...state.report.findings, ...state.variantFindings];
+
+/** The variants were edited since the loaded variant_snapshot was computed. */
+export function variantsAreStale(state) {
+  const loaded = state.baseManifest?.variants || [];
+  return JSON.stringify(loaded) !== JSON.stringify(state.variants);
+}
 export const dropOrphans = (state) => ({ ...state, orphans: [] });
 
 /** Severities in the report were computed for other regions than the ones now set. */
@@ -49,15 +63,15 @@ export function severityIsStale(state) {
 /** Findings with a final decision (an "expert review" decision leaves a finding open). */
 export function decidedIds(state) {
   return new Set(
-    state.report.findings
+    allFindings(state)
       .filter((f) => state.decisions[f.id] && isFinal(f, state.decisions[f.id].option_id))
       .map((f) => f.id),
   );
 }
 
-/** Restore a saved draft (decisions + regions) for the same input file. */
+/** Restore a saved draft (decisions, regions, variants) for the same input file. */
 export function applyDraft(state, draft) {
-  const ids = new Set(state.report.findings.map((f) => f.id));
+  const ids = new Set(allFindings(state).map((f) => f.id));
   const decisions = Object.fromEntries(Object.entries(draft.decisions).filter(([id]) => ids.has(id)));
-  return { ...state, decisions, regions: draft.regions };
+  return { ...state, decisions, regions: draft.regions, variants: draft.variants || state.variants };
 }

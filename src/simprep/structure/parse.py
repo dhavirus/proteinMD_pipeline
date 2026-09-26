@@ -14,6 +14,7 @@ from simprep.structure.model import (
     Residue,
     ResidueClass,
     ResidueId,
+    SequenceReference,
     Structure,
     UnobservedResidue,
 )
@@ -23,6 +24,8 @@ MOD_RESIDUE = "_pdbx_struct_mod_residue."
 UNOBSERVED = "_pdbx_unobs_or_zero_occ_residues."
 CRYSTAL_GROW = "_exptl_crystal_grow."
 POLY_SEQ = "_entity_poly_seq."
+STRUCT_REF = "_struct_ref."
+STRUCT_REF_SEQ = "_struct_ref_seq."
 ANNOTATION_CATEGORIES = (STRUCT_CONN, MOD_RESIDUE, UNOBSERVED, POLY_SEQ)
 UNOBSERVED_OCCUPANCY_FLAG = "1"  # mmCIF: 1 = unobserved, 0 = zero occupancy
 
@@ -63,7 +66,38 @@ def read_structure(path: Path) -> Structure:
         ),
         crystallization_details=_crystallization_details(block),
         polymer_sequences=_polymer_sequences(gemmi_structure),
+        sequence_references=_sequence_references(block),
     )
+
+
+def _sequence_references(block: gemmi.cif.Block) -> tuple[SequenceReference, ...]:
+    """struct_ref_seq alignments with their database (struct_ref); rows lacking author or
+    database ranges are skipped (they cannot map a position)."""
+    databases = {row["id"]: row for row in _rows(block, STRUCT_REF)}
+    references = []
+    for row in _rows(block, STRUCT_REF_SEQ):
+        database = databases.get(row.get("ref_id"), {})
+        fields = (
+            row.get("pdbx_auth_seq_align_beg"),
+            row.get("pdbx_auth_seq_align_end"),
+            row.get("db_align_beg"),
+            row.get("pdbx_strand_id"),
+        )
+        if None in fields or not database.get("db_name"):
+            continue
+        references.append(
+            SequenceReference(
+                chain=row["pdbx_strand_id"],
+                db_name=database["db_name"],
+                db_accession=row.get("pdbx_db_accession")
+                or database.get("pdbx_db_accession")
+                or "",
+                auth_begin=int(fields[0]),
+                auth_end=int(fields[1]),
+                db_begin=int(fields[2]),
+            )
+        )
+    return tuple(references)
 
 
 def _polymer_sequences(gemmi_structure: gemmi.Structure) -> tuple[tuple[str, tuple[str, ...]], ...]:

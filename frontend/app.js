@@ -1,16 +1,19 @@
 // simprep review page: wires the pure logic in lib/ to the DOM, Mol* and ajv.
 // All state lives in one immutable object (lib/state.js); every change re-renders.
 import { decisionProblems, isFinal, isoSeconds, makeDecision, OPTION_PARAMETERS } from "./lib/decisions.js";
+import { residueNames } from "./lib/atom_site.js";
 import {
-  altlocChoices, FAMILY_LABELS, formatAtom, formatEvidenceValue, groupFindings, SEVERITIES, severityCounts,
+  altlocChoices, FAMILY_LABELS, formatAtom, formatEvidenceValue, groupFindings, rotamerChoices, SEVERITIES,
+  severityCounts,
 } from "./lib/findings.js";
 import { buildManifest, manifestMismatch } from "./lib/manifest.js";
 import { regionFromDraft } from "./lib/regions.js";
 import { formatResidueList } from "./lib/residues.js";
 import {
-  applyDraft, createState, decidedIds, dropOrphans, recordDecision, removeDecision, select, setFilter, setRegions,
-  severityIsStale,
+  allFindings, applyDraft, createState, decidedIds, dropOrphans, recordDecision, removeDecision, select, setFilter,
+  setRegions, setVariants, severityIsStale, variantsAreStale,
 } from "./lib/state.js";
+import { formatMutation, variantFromDraft } from "./lib/variants.js";
 import { clearDraft, loadDraft, saveDraft } from "./ui/draft.js";
 import { download, fetchBytes, parseJson, readBytes, readStructure } from "./ui/io.js";
 import { createValidator } from "./ui/validate.js";
@@ -25,6 +28,7 @@ const DEMO = {
 const $ = (id) => document.getElementById(id);
 let state = null;
 let structure = null;
+let residues = new Map();
 let view = null;
 let validatorPromise = null;
 let editingRegion = null;
@@ -79,6 +83,7 @@ class DocumentError extends Error {
 
 async function start(documents) {
   structure = documents.opened;
+  residues = residueNames(structure.text, structure.format);
   // A loaded manifest is the record: an older browser draft is offered, never applied
   // over it (and not overwritten until the user chooses). Without a manifest the draft
   // is the only copy of earlier work, so it is restored.
@@ -159,7 +164,7 @@ async function onLoadDemo() {
 
 // ---------------------------------------------------------------- rendering
 
-const currentFinding = () => state.report.findings.find((f) => f.id === state.selectedId) || null;
+const currentFinding = () => allFindings(state).find((f) => f.id === state.selectedId) || null;
 
 function update(next, { redraw = false } = {}) {
   state = next;
@@ -175,11 +180,12 @@ function render() {
   renderList();
   renderDetail();
   renderRegions();
+  renderVariants();
   renderExport();
 }
 
 function renderSummary() {
-  const findings = state.report.findings;
+  const findings = allFindings(state);
   const counts = severityCounts(findings);
   const final = decidedIds(state);
   const decided = final.size;
@@ -213,6 +219,12 @@ function renderNotices() {
       "Regions changed: the severities shown were computed for the previous regions. Export the manifest and run ",
       el("span", { class: "mono", text: "simprep audit STRUCTURE --manifest manifest.json" }), " to update them."));
   }
+  if (variantsAreStale(state)) {
+    notices.push(el("div", { class: "notice stale" },
+      "Variants changed: their rotamer candidates are not computed yet. Export the manifest and run ",
+      el("span", { class: "mono", text: "simprep variants STRUCTURE --manifest manifest.json --out DIR" }),
+      ", then open the manifest it writes to decide the side chains."));
+  }
   if (state.orphans.length) {
     notices.push(el("div", { class: "notice orphans" },
       `${state.orphans.length} decision(s) in the manifest refer to findings that are not in this audit and will not be exported: `,
@@ -237,7 +249,7 @@ function renderFilters() {
 }
 
 function renderList() {
-  const groups = groupFindings(state.report.findings, { ...state.filter, decidedIds: decidedIds(state) });
+  const groups = groupFindings(allFindings(state), { ...state.filter, decidedIds: decidedIds(state) });
   const nodes = groups.flatMap((group) => [
     el("h3", { text: `${group.label} · ${group.items.length}` }),
     ...group.items.map(findingRow),
@@ -344,7 +356,7 @@ function optionChoice(finding, option, saved) {
     el("ul", {}, ...option.trade_offs.map((t) => el("li", { text: t }))));
 }
 
-/** Extra inputs for the chosen option: explicit-choice confirmation, altloc parameter. */
+/** Extra inputs for the chosen option: explicit-choice confirmation, altloc or rotamer. */
 function renderDecisionExtra(form, finding, saved) {
   const optionId = form.querySelector('input[name="option"]:checked')?.value;
   const option = finding.options.find((o) => o.id === optionId);
@@ -358,7 +370,8 @@ function renderDecisionExtra(form, finding, saved) {
   if (option && !isFinal(finding, optionId)) {
     nodes.push(el("p", { class: "msg", text: `"${option.label}" records that the decision is still open: the finding stays undecided, and prep will not run until it gets a final decision.` }));
   }
-  if (OPTION_PARAMETERS[optionId]) nodes.push(...altlocInput(finding, saved));
+  if (OPTION_PARAMETERS[optionId] === "altloc") nodes.push(...altlocInput(finding, saved));
+  if (OPTION_PARAMETERS[optionId] === "rotamer") nodes.push(...rotamerInput(finding, saved));
   extra.replaceChildren(...nodes);
 }
 
@@ -372,6 +385,14 @@ function altlocInput(finding, saved) {
   return [el("label", { class: "field", for: "decision-altloc", text: "Altloc to keep" }), input];
 }
 
+function rotamerInput(finding, saved) {
+  const current = saved?.parameters?.rotamer || "";
+  const label = (c) => `${c.id} · ${c.clashCount} clash${c.clashCount === 1 ? "" : "es"} · library ${c.frequency} %`;
+  return [el("label", { class: "field", for: "decision-rotamer", text: "Rotamer to build (clashing ones are refused)" }),
+    el("select", { id: "decision-rotamer" }, el("option", { value: "", text: "Choose…" }),
+      ...rotamerChoices(finding).map((c) => el("option", { value: c.id, text: label(c), selected: c.id === current })))];
+}
+
 const lastDecider = () => Object.values(state.decisions).at(-1)?.decided_by || "";
 
 function onSaveDecision(event, finding) {
@@ -382,7 +403,10 @@ function onSaveDecision(event, finding) {
     rationale: form.querySelector("#decision-rationale").value,
     decided_by: form.querySelector("#decision-by").value,
     confirmed_explicit: form.querySelector("#decision-confirm")?.checked || false,
-    parameters: { altloc: form.querySelector("#decision-altloc")?.value || "" },
+    parameters: {
+      altloc: form.querySelector("#decision-altloc")?.value || "",
+      rotamer: form.querySelector("#decision-rotamer")?.value || "",
+    },
   };
   const problems = decisionProblems(finding, draft);
   if (problems.length) {
@@ -455,6 +479,48 @@ function onSaveRegion(event, otherNames) {
   const kept = state.regions.filter((r) => r !== editingRegion);
   editingRegion = null;
   update(setRegions(state, [...kept, region]), { redraw: true });
+}
+
+// ---------------------------------------------------------------- variants
+
+function renderVariants() {
+  const form = el("form", { class: "form", id: "variant-form", onsubmit: onAddVariant },
+    el("label", { class: "field", for: "variant-mutations", text: "Mutations (chain:number from>to; several separated by commas)" }),
+    el("input", { type: "text", id: "variant-mutations", placeholder: "A:468 R>Q" }),
+    el("label", { class: "field", for: "variant-rationale", text: "Rationale" }),
+    el("input", { type: "text", id: "variant-rationale", placeholder: "Disease variant compared with WT" }),
+    el("div", { class: "form-row" }, el("button", { class: "btn primary", type: "submit", text: "Add variant" })),
+    el("ul", { class: "errors", id: "variant-errors" }));
+  $("variants").replaceChildren(
+    el("h2", { id: "variants-title", text: "Variants" }),
+    el("p", { class: "msg" }, "Built from the prepared wild type by ", el("span", { class: "mono", text: "simprep variants" }),
+      ", which proposes side-chain rotamers as findings to decide here."),
+    ...state.variants.map(variantItem),
+    form);
+}
+
+function variantItem(variant) {
+  return el("div", { class: "region" },
+    el("div", { class: "form-row" }, el("b", { class: "mono", text: variant.name }),
+      el("span", { class: "controls" },
+        el("button", { class: "btn danger", type: "button", text: "Delete",
+          onclick: () => update(setVariants(state, state.variants.filter((v) => v !== variant))) }))),
+    el("span", { class: "mono note", text: variant.mutations.map(formatMutation).join(", ") }),
+    el("span", { class: "msg", text: variant.rationale }));
+}
+
+function onAddVariant(event) {
+  event.preventDefault();
+  const form = event.currentTarget;
+  const { variant, errors } = variantFromDraft({
+    mutations: form.querySelector("#variant-mutations").value,
+    rationale: form.querySelector("#variant-rationale").value,
+  }, residues, state.variants.map((v) => v.name));
+  if (errors.length) {
+    form.querySelector("#variant-errors").replaceChildren(...errors.map((e) => el("li", { text: e })));
+    return;
+  }
+  update(setVariants(state, [...state.variants, variant]));
 }
 
 // ---------------------------------------------------------------- export

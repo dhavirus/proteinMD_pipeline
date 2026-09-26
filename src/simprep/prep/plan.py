@@ -10,7 +10,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 
-from simprep.manifest.status import decision_status
+from simprep.decisions import decision_status
 from simprep.rules import RuleSet
 from simprep.structure.model import Link, LinkPartner, Residue, ResidueId, Structure
 
@@ -71,7 +71,7 @@ class PrepPlan:
 def build_plan(structure: Structure, manifest: dict, ruleset: RuleSet) -> PrepPlan:
     """The prep plan for ``structure`` under ``manifest``; raises PrepError listing every
     reason it cannot be applied (undecided blocking findings, conflicts, missing data)."""
-    status = decision_status(manifest)
+    status = decision_status(manifest, include_variants=False)
     if status.blocking_undecided or status.unresolved_decisions:
         raise PrepError(_gate_message(status))
     findings = {f["id"]: f for f in manifest["findings_snapshot"]["findings"]}

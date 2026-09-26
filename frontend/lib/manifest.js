@@ -1,20 +1,23 @@
 // Assemble manifest.json (manifest.schema.json) from the loaded documents and the state.
 import { sha256Canonical } from "./canonical.js";
+import { allFindings } from "./state.js";
 
 export const SCHEMA_VERSION = "0.1.0";
 
 /**
  * The manifest to export: the loaded manifest (or a new one from findings.json
- * provenance), with the current regions, decisions and a snapshot of these findings.
- * Orphaned decisions are not exported; the UI lists them before export.
+ * provenance), with the current regions, decisions, variants and a snapshot of these
+ * findings. The loaded variant_snapshot is kept as is: simprep variants refreshes it
+ * when the variants changed. Orphaned decisions are not exported; the UI lists them.
  */
 export async function buildManifest(state, createdAt) {
   const { report, baseManifest } = state;
   const base = baseManifest || newManifest(report, createdAt);
-  const order = new Map(report.findings.map((f, index) => [f.id, index]));
+  const order = new Map(allFindings(state).map((f, index) => [f.id, index]));
   const decisions = Object.values(state.decisions).sort((a, b) => order.get(a.finding_id) - order.get(b.finding_id));
   return {
     ...base,
+    ...(state.variants.length || base.variants ? { variants: state.variants } : {}),
     regions: state.regions,
     findings_snapshot: {
       generated_at: report.generated_at,

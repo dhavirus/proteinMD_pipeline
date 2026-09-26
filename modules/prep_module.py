@@ -15,6 +15,7 @@ from __future__ import annotations
 import json
 import random
 import shutil
+from collections.abc import Callable
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from pathlib import Path
@@ -36,10 +37,21 @@ class RunResult:
     run_dir: Path
     run_id: str
     skipped: bool
+    status: str = "complete"
 
 
-def run_prep_job(config: dict, now: datetime | None = None) -> RunResult:
-    """Run (or resume) one prep run described by the notebook's config dict."""
+@dataclass(frozen=True)
+class Stage:
+    """A back-end stage: ``run`` writes into a work directory and returns a status
+    ("complete" or another word, e.g. "needs_decisions"); ``complete`` tells whether a
+    run directory already holds its verified outputs."""
+
+    run: Callable[[PrepRequest], str]
+    complete: Callable[[Path], bool]
+
+
+def run_stage(config: dict, stage: Stage, now: datetime | None = None) -> RunResult:
+    """Run (or resume) one stage run described by the notebook's config dict."""
     missing = [key for key in REQUIRED_KEYS if key not in config]
     if missing:
         raise RunConfigError(f"config is missing {', '.join(missing)}")
@@ -47,13 +59,23 @@ def run_prep_job(config: dict, now: datetime | None = None) -> RunResult:
     run_dir = Path(config["run_dir"]) if config.get("run_dir") else new_run_dir(config, now)
     run_id = run_dir.name
     _write_or_check_config(run_dir, config)
-    if outputs_complete(run_dir):
+    if stage.complete(run_dir):
         return RunResult(run_dir, run_id, skipped=True)
     work_dir = Path(config["work_root"]) / run_id
     shutil.rmtree(work_dir, ignore_errors=True)
-    run_prep(PrepRequest(Path(config["structure"]), Path(config["manifest"]), work_dir))
+    status = stage.run(PrepRequest(Path(config["structure"]), Path(config["manifest"]), work_dir))
     shutil.copytree(work_dir, run_dir, dirs_exist_ok=True)
-    return RunResult(run_dir, run_id, skipped=False)
+    return RunResult(run_dir, run_id, skipped=False, status=status)
+
+
+def _prep(request: PrepRequest) -> str:
+    run_prep(request)
+    return "complete"
+
+
+def run_prep_job(config: dict, now: datetime | None = None) -> RunResult:
+    """Run (or resume) one prep run described by the notebook's config dict."""
+    return run_stage(config, Stage(_prep, outputs_complete), now)
 
 
 def new_run_dir(config: dict, now: datetime | None = None) -> Path:
@@ -91,8 +113,12 @@ def outputs_complete(run_dir: Path) -> bool:
     if not record_path.exists():
         return False
     record = json.loads(record_path.read_text())
-    files = [f for system in record["systems"] for f in system["files"]]
+    return files_match(run_dir, [f for system in record["systems"] for f in system["files"]])
+
+
+def files_match(directory: Path, files: list[dict]) -> bool:
+    """Every file ({path, sha256}, path relative to ``directory``) exists with that hash."""
     return all(
-        (run_dir / f["path"]).exists() and sha256_file(run_dir / f["path"]) == f["sha256"]
+        (directory / f["path"]).exists() and sha256_file(directory / f["path"]) == f["sha256"]
         for f in files
     )

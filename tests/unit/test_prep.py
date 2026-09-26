@@ -12,6 +12,8 @@ from simprep.prep.apply import apply_plan
 from simprep.prep.plan import OPERATIONS, PrepError, build_plan
 from simprep.prep.record import system_counts
 from simprep.structure.model import ResidueId
+from simprep.variants.findings import FAMILY as VARIANT_FAMILY
+from simprep.variants.run import APPLIED_OPTIONS
 from tests.unit.builders import BR, P, W, atom, link, residue, structure
 
 A1, A2, A3, L1, L2 = (ResidueId("A", n) for n in (1, 2, 3, 901, 902))
@@ -279,12 +281,17 @@ def test_snapshot_without_prep_action_is_refused(ruleset):
         plan_for([old], [("lig", "exclude", None)], ruleset)
 
 
-def test_every_apply_option_in_the_knowledge_base_has_an_operation():
-    apply_options = {
+def apply_options(prep_families: bool) -> set[str]:
+    return {
         option["id"]
         for path in KNOWLEDGE_DIR.glob("*.yaml")
         for rule in (yaml.safe_load(Path(path).read_text()) or {}).get("rules", [])
+        if (rule["family"] != VARIANT_FAMILY) == prep_families
         for option in rule["options"]
         if option.get("prep_action") == "apply"
     }
-    assert apply_options and apply_options <= set(OPERATIONS)
+
+
+def test_every_apply_option_in_the_knowledge_base_has_an_operation():
+    assert apply_options(prep_families=True) and apply_options(True) <= set(OPERATIONS)
+    assert apply_options(prep_families=False) == set(APPLIED_OPTIONS)

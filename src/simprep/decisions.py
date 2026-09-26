@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from simprep.manifest.manifest import ManifestError
+from simprep.errors import ManifestError
 
 SEVERITIES = ("blocking", "warn", "info")
 
@@ -24,14 +24,18 @@ class DecisionStatus:
         return self.undecided["blocking"] > 0
 
 
-def decision_status(manifest: dict) -> DecisionStatus:
-    """Summarize decision coverage of a validated manifest (needs a findings snapshot)."""
+def decision_status(manifest: dict, include_variants: bool = True) -> DecisionStatus:
+    """Summarize decision coverage of a validated manifest (needs a findings snapshot).
+
+    With ``include_variants`` the variant_build findings of ``variant_snapshot`` count
+    too (``manifest status``); prep leaves them out, since the wild type does not
+    depend on them."""
     snapshot = manifest["findings_snapshot"]
     if snapshot is None:
         raise ManifestError(
             "manifest has no findings snapshot; run `simprep audit FILE --manifest M` first"
         )
-    findings = snapshot["findings"]
+    findings = snapshot["findings"] + (variant_findings(manifest) if include_variants else [])
     unresolved = unresolved_decisions(findings, manifest["decisions"])
     open_ids = {decision["finding_id"] for decision in unresolved}
     decided_ids = {d["finding_id"] for d in manifest["decisions"]} - open_ids
@@ -43,6 +47,11 @@ def decision_status(manifest: dict) -> DecisionStatus:
         explicit_choice_decisions=_explicit_choices(findings, manifest["decisions"]),
         unresolved_decisions=unresolved,
     )
+
+
+def variant_findings(manifest: dict) -> list[dict]:
+    snapshot = manifest.get("variant_snapshot")
+    return snapshot["findings"] if snapshot else []
 
 
 def unresolved_decisions(findings: list[dict], decisions: list[dict]) -> tuple[dict, ...]:

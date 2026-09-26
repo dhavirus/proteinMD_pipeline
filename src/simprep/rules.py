@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from collections import Counter
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 
 @dataclass(frozen=True)
@@ -47,6 +47,7 @@ class RuleSet:
     rules: tuple[Rule, ...]
     audit_defaults: dict
     residue_mappings: tuple[dict, ...] = ()
+    side_chains: dict = field(default_factory=dict)
 
     def family(self, family: str) -> tuple[Rule, ...]:
         """Rules of ``family``, highest priority first, then by rule id (deterministic)."""

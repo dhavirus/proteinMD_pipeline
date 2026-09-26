@@ -48,6 +48,17 @@ record accounting) and `prep_report.md`. See ADR-0004.
 On Colab, `notebooks/01_prep.ipynb` wraps the same function with the run layout from
 `CLAUDE.md` (`modules/prep_module.py`).
 
+## Variants
+
+List variants in the manifest (`"variants"`, or the review page's variant editor, e.g.
+`A:468 R>Q`), then run `simprep variants STRUCTURE --manifest M --out DIR`. The first run
+writes `DIR/manifest.json` with every side-chain rotamer candidate as a `variant_build`
+finding (exit 3); decide them on the review page, then run again with that manifest to
+get `wt/`, one directory per variant, `variant_record.json` and `variant_report.md`.
+Side chains are built from cited rotamer data in `knowledge/side_chains.yaml`; a rotamer
+that clashes with the kept atoms is never built. See ADR-0005 and
+`notebooks/02_variants.ipynb`.
+
 Layout: `schema/` (JSON Schemas, the source of truth), `knowledge/` (versioned YAML
 rules and residue mappings), `src/simprep/` (parser, detectors, severity, manifest, prep,
 CLI), `frontend/` (review page), `modules/` + `notebooks/` (Colab back end),

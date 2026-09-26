@@ -142,15 +142,77 @@ async function checkMismatch(page, base) {
   check("wrong structure is refused with both hashes", (text.match(/SHA-256 [0-9a-f]{64}/g) || []).length === 2);
 }
 
+const simprep = (...args) => {
+  try {
+    execFileSync("simprep", args, { cwd: ROOT, stdio: "pipe" });
+    return 0;
+  } catch (error) {
+    return error.status;
+  }
+};
+
+async function openWithManifest(page, base, manifestPath) {
+  await page.goto(`${base}/frontend/`);
+  await page.setInputFiles("#file-structure", join(ROOT, "tests/panel/5FQL.cif.gz"));
+  await page.setInputFiles("#file-findings", join(ROOT, "frontend/demo/5FQL.findings.json"));
+  await page.setInputFiles("#file-manifest", manifestPath);
+  await page.click('#open-form button[type="submit"]');
+  await page.waitForSelector("#review:not([hidden])", { timeout: 30000 });
+}
+
+async function exportTo(page, path) {
+  const [download] = await Promise.all([page.waitForEvent("download"), page.click("#export-build")]);
+  await download.saveAs(path);
+}
+
+async function addVariant(page, mutations) {
+  await page.fill("#variant-mutations", mutations);
+  await page.fill("#variant-rationale", "smoke test: IDS study variant");
+  await page.click('#variant-form button[type="submit"]');
+}
+
+async function checkVariants(page, base, manifestPath, outDir) {
+  await openWithManifest(page, base, manifestPath);
+  const offered = page.locator(".notice", { hasText: "unsaved work" });
+  if (await offered.count()) await offered.getByRole("button", { name: "Discard it" }).click();
+  await addVariant(page, "A:468 K>Q");
+  check("a mutation that does not match the structure is refused",
+    /is ARG in the loaded structure, not LYS/.test(await page.textContent("#variant-errors")));
+  await addVariant(page, "A:468 R>Q");
+  check("a valid variant is listed and marks candidates as not computed",
+    (await page.locator("#variants .region", { hasText: "R468Q" }).count()) === 1
+    && (await page.locator(".notice", { hasText: "Variants changed" }).isVisible()));
+  const withVariant = join(outDir, "manifest_variants.json");
+  await exportTo(page, withVariant);
+  check("simprep variants stops for rotamer decisions (exit 3)",
+    simprep("variants", "tests/panel/5FQL.cif.gz", "--manifest", withVariant, "--out", join(outDir, "pass1")) === 3);
+  await decideRotamer(page, base, join(outDir, "pass1", "manifest.json"));
+  const decided = join(outDir, "manifest_rotamer.json");
+  await exportTo(page, decided);
+  check("simprep variants builds the decided variant",
+    simprep("variants", "tests/panel/5FQL.cif.gz", "--manifest", decided, "--out", join(outDir, "built")) === 0
+    && existsSync(join(outDir, "built", "R468Q", "system.cif")));
+}
+
+async function decideRotamer(page, base, manifestPath) {
+  await openWithManifest(page, base, manifestPath);
+  await page.locator(".row", { hasText: "variant_build/R468Q/A:468" }).click();
+  await page.check("#option-choose_rotamer");
+  const clashing = await page.locator("#decision-rotamer option").evaluateAll(
+    (options) => options.map((o) => o.value).filter((v, i) => v && !/ 0 clashes/.test(options[i].textContent)));
+  await page.selectOption("#decision-rotamer", clashing[0]);
+  await page.fill("#decision-rationale", "smoke test");
+  await page.fill("#decision-by", "smoke-test");
+  await page.click('#decision-form button[type="submit"]');
+  check("a clashing rotamer is refused in the form", /will not build it/.test(await page.textContent("#decision-status")));
+  await page.selectOption("#decision-rotamer", "mm-40");
+  await page.click('#decision-form button[type="submit"]');
+  await page.waitForSelector("#decision-status.ok");
+  check("the variant finding is decided with a clash-free rotamer",
+    (await page.locator(".row", { hasText: "variant_build/R468Q/A:468" }).textContent()).includes("decided"));
+}
+
 function checkWithSimprep(manifestPath, outDir) {
-  const simprep = (...args) => {
-    try {
-      execFileSync("simprep", args, { cwd: ROOT, stdio: "pipe" });
-      return 0;
-    } catch (error) {
-      return error.status;
-    }
-  };
   check("simprep manifest status exits 0", simprep("manifest", "status", manifestPath, "--structure", "tests/panel/5FQL.cif.gz") === 0);
   check("re-audit with the exported manifest succeeds",
     simprep("audit", "tests/panel/5FQL.cif.gz", "--manifest", manifestPath, "--out", join(outDir, "reaudit")) === 0);
@@ -168,6 +230,7 @@ try {
   await checkManifestWithDraft(page, base, manifestPath);
   await checkMismatch(page, base);
   checkWithSimprep(manifestPath, outDir);
+  await checkVariants(page, base, manifestPath, outDir);
 } finally {
   await browser.close();
   server.close();

@@ -112,7 +112,8 @@
         "altlocs",
         "missing_residues",
         "covalent_contacts",
-        "unrecognized"
+        "unrecognized",
+        "variant_build"
       ]
     },
     "severity": {
@@ -385,6 +386,9 @@
         },
         {
           "$ref": "#/$defs/evidence_flag"
+        },
+        {
+          "$ref": "#/$defs/evidence_candidate"
         }
       ]
     },
@@ -579,6 +583,50 @@
       },
       "required": [
         "value"
+      ]
+    },
+    "evidence_candidate": {
+      "$ref": "#/$defs/evidence_base",
+      "unevaluatedProperties": false,
+      "description": "One side-chain placement evaluated for a variant: rotamer, chi angles, library frequency, and its contacts (TASK-005). atoms lists the pair with the largest overlap.",
+      "properties": {
+        "type": {
+          "const": "candidate"
+        },
+        "value": {
+          "type": "string",
+          "pattern": "^[a-z0-9-]+$",
+          "description": "Rotamer id (a -flip suffix marks the flipped planar group)."
+        },
+        "chi_degree": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "number"
+          }
+        },
+        "frequency_percent": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "clash_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "max_overlap_angstrom": {
+          "type": [
+            "number",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "value",
+        "chi_degree",
+        "frequency_percent",
+        "clash_count",
+        "max_overlap_angstrom"
       ]
     }
   }

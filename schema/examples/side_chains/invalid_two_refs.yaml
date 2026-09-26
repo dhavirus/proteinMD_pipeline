@@ -1,0 +1,10 @@
+# Invalid: an atom needs exactly three reference atoms.
+schema_version: 0.1.0
+references: []
+verify_flags: []
+residues:
+  SER:
+    atoms:
+      - {name: OG, element: O, refs: [CA, CB], bond_angstrom: 1.417, angle_degree: 111.1, dihedral: {chi: 1}}
+    rotamers:
+      - {id: p, chi_degree: [64], frequency_percent: 48}

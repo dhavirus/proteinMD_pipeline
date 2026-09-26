@@ -1,4 +1,5 @@
-"""Command line: ``simprep audit``, ``simprep manifest init|status`` and ``simprep prep``."""
+"""Command line: ``simprep audit``, ``simprep manifest init|status``, ``simprep prep`` and
+``simprep variants``."""
 
 from __future__ import annotations
 
@@ -9,6 +10,7 @@ from pathlib import Path
 
 from simprep.audit import ReportContext, build_findings_report, run_audit
 from simprep.config import default_config
+from simprep.decisions import decision_status, render_status
 from simprep.knowledge import load_ruleset
 from simprep.manifest import (
     attach_snapshot,
@@ -19,7 +21,6 @@ from simprep.manifest import (
     write_json,
 )
 from simprep.manifest.manifest import sha256_text
-from simprep.manifest.status import decision_status, render_status
 from simprep.paths import KNOWLEDGE_DIR
 from simprep.prep.run import RECORD_FILE, PrepRequest, run_prep
 from simprep.prep.run import REPORT_FILE as PREP_REPORT_FILE
@@ -27,6 +28,7 @@ from simprep.provenance import input_info, sha256_file, simprep_provenance, utc_
 from simprep.report import render_report
 from simprep.schemas import validate
 from simprep.structure.parse import read_structure
+from simprep.variants.run import VariantDecisionError, run_variants
 
 FINDINGS_FILE = "findings.json"
 REPORT_FILE = "report.md"
@@ -100,6 +102,25 @@ def prep(args: argparse.Namespace) -> int:
     return 0
 
 
+def variants(args: argparse.Namespace) -> int:
+    """Pass 1: candidate findings into manifest.json (exit 3). Pass 2: build the variants."""
+    try:
+        outcome = run_variants(PrepRequest(args.file, args.manifest, args.out, args.knowledge))
+    except VariantDecisionError as error:
+        print(f"simprep: {error}", file=sys.stderr)
+        return EXIT_BLOCKING_UNDECIDED
+    if outcome.status == "needs_decisions":
+        print(
+            f"rotamer candidates written to {outcome.manifest_path} (variant_snapshot); decide "
+            "them (option choose_rotamer with parameters.rotamer), then run again with it"
+        )
+        return EXIT_BLOCKING_UNDECIDED
+    for variant in outcome.record["variants"]:
+        print(f"{variant['name']}: {args.out / variant['directory']}")
+    print(f"wild type: {args.out / 'wt'}; record: {args.out / 'variant_record.json'}")
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="simprep")
     parser.add_argument(
@@ -136,6 +157,13 @@ def build_parser() -> argparse.ArgumentParser:
     prep_parser.add_argument("--manifest", type=Path, required=True)
     prep_parser.add_argument("--out", type=Path, required=True, help="output directory")
     prep_parser.set_defaults(handler=prep)
+    variants_parser = commands.add_parser(
+        "variants", help="build the manifest's variants from the prepared wild type"
+    )
+    variants_parser.add_argument("file", type=Path)
+    variants_parser.add_argument("--manifest", type=Path, required=True)
+    variants_parser.add_argument("--out", type=Path, required=True, help="output directory")
+    variants_parser.set_defaults(handler=variants)
     return parser
 
 
