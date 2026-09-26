@@ -1,0 +1,24 @@
+pdb_id: 1HZH
+file: 1HZH.cif.gz
+reviewed: false
+derived_by: 'tests/panel/derive_expected.py: raw mmCIF categories (atom_site, entity, struct_conn, pdbx_struct_mod_residue,
+  pdbx_unobs_or_zero_occ_residues); no simprep code'
+families:
+  metals: []
+  nonstandard_residues: []
+  altlocs: []
+  missing_residues:
+  - id: missing_residues/K:130-136
+    rule_id: missing_residues.internal
+    gap_length: 7
+  - id: missing_residues/K:236-238
+    rule_id: missing_residues.internal
+    gap_length: 3
+  - id: missing_residues/K:476-478
+    rule_id: missing_residues.c_terminal
+    gap_length: 3
+  unrecognized:
+  - id: unrecognized/group/A:1
+    components: NAG-NAG-BMA-MAN-NAG-GAL-MAN-NAG-GAL
+  - id: unrecognized/group/B:1
+    components: NAG-NAG-BMA-MAN-NAG-GAL-MAN-NAG-FUC

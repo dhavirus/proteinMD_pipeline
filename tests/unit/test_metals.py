@@ -107,3 +107,13 @@ def test_ideal_angle_tables_have_all_pairs():
         n_pairs = len(angles)
         cn = next(n for n in range(2, 9) if n * (n - 1) // 2 == n_pairs)
         assert cn >= 2, name
+
+
+def test_partially_occupied_ligand_is_labelled(ruleset):
+    site = b.zinc_catalytic_site()
+    residues = list(site.residues)
+    water = residues[-1]
+    residues[-1] = b.water("A", 1000, water.atoms[0].position, occupancy=0.29)
+    finding = only(detect_metals(b.structure(residues), ruleset, b.config()))
+    notes = [e["note"] for e in finding.evidence if e["key"] == "ligand_distance"]
+    assert "water, occupancy 0.29" in notes

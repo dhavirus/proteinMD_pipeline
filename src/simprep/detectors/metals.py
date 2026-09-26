@@ -206,7 +206,7 @@ def _ligand_evidence(metal: Residue, center: Atom, ligands: list[Ligand]) -> lis
             "ligand_distance",
             lig.distance_angstrom,
             [atom_ref(metal, center), atom_ref(lig.residue, lig.atom)],
-            note=lig.ligand_class,
+            note=_ligand_note(lig),
         )
         for lig in ligands
     ]
@@ -234,3 +234,13 @@ def _annotated_links(structure: Structure, metal: Residue) -> list[dict]:
             | {"atoms": [partner_ref(link.partner1), partner_ref(link.partner2)]}
         )
     return items
+
+
+def _ligand_note(ligand: Ligand) -> str:
+    """Ligand class, plus occupancy and altloc when the donor is not fully occupied."""
+    atom = ligand.atom
+    if atom.occupancy >= 1.0 and not atom.altloc:
+        return ligand.ligand_class
+    return f"{ligand.ligand_class}, occupancy {atom.occupancy:.2f}" + (
+        f", altloc {atom.altloc}" if atom.altloc else ""
+    )

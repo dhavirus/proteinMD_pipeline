@@ -1,0 +1,29 @@
+pdb_id: 1FO8
+file: 1FO8.cif.gz
+reviewed: false
+derived_by: 'tests/panel/derive_expected.py: raw mmCIF categories (atom_site, entity, struct_conn, pdbx_struct_mod_residue,
+  pdbx_unobs_or_zero_occ_residues); no simprep code'
+families:
+  metals: []
+  nonstandard_residues: []
+  altlocs:
+  - id: altlocs/A:123
+  - id: altlocs/A:159
+  - id: altlocs/A:198
+  - id: altlocs/A:201
+  - id: altlocs/A:254
+  - id: altlocs/A:298
+  - id: altlocs/A:301
+  - id: altlocs/A:311
+  - id: altlocs/A:316
+  - id: altlocs/A:406
+  - id: altlocs/A:1448
+  - id: altlocs/water
+    residues_with_altlocs: 1
+  missing_residues:
+  - id: missing_residues/A:318-330
+    rule_id: missing_residues.internal
+    gap_length: 13
+  unrecognized:
+  - id: unrecognized/group/A:1448
+    components: MMC
