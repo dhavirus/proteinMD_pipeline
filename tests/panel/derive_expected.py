@@ -8,7 +8,7 @@ the knowledge base that alters findings shows up as a regression-test mismatch.
 Usage: python tests/panel/derive_expected.py tests/panel/5FQL.cif.gz
 
 Writes tests/panel/expected_findings/<ID>.yaml with ``reviewed: false``. A hand-written
-``publication_checks`` block already present in that file is preserved.
+``curated_checks`` block already present in that file is preserved.
 """
 
 from __future__ import annotations
@@ -312,8 +312,8 @@ def main(path: Path) -> None:
     out = path.parent / "expected_findings" / f"{expected['pdb_id']}.yaml"
     if out.exists():
         previous = yaml.safe_load(out.read_text())
-        if "publication_checks" in previous:
-            expected["publication_checks"] = previous["publication_checks"]
+        if "curated_checks" in previous:
+            expected["curated_checks"] = previous["curated_checks"]
     out.write_text(yaml.safe_dump(expected, sort_keys=False, width=100))
     print(f"wrote {out}")
 

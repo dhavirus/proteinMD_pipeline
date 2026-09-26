@@ -180,13 +180,24 @@ rules:
       coordination_cutoff_angstrom: 2.6
       geometry_candidates: *geometry
       classification:
-        catalytic_if_shell_contains: [nonstandard_polymer_residue, nonpolymer_ligand]
+        # A bound nucleotide or other ligand does not make Mg catalytic: Mg2+ is a
+        # frequent crystallization additive (6OIM: "1mM MgCl2"; maintainer decision,
+        # TASK-001 review). Such sites stay ambiguous for a human to judge.
+        catalytic_if_shell_contains: [nonstandard_polymer_residue]
         open_site: null
         structural_min_protein_donors: 4
     base_severity: warn
     options: *options
     recommended_option: *recommendation
-    rationale: *rationale
+    rationale: >-
+      A metal site cannot be simulated without choosing an ion model, and the choice
+      changes the site's behaviour. The coordination shell, a geometry descriptor and the
+      classification are reported as evidence. For Mg2+ the classification criteria are:
+      the shell contains a non-standard polymer residue -> likely catalytic; at least the
+      structural minimum of protein donors -> likely structural; otherwise ambiguous. A
+      bound nucleotide or other non-polymer ligand does not by itself make the site
+      catalytic, because Mg2+ is a common crystallization additive; the file's
+      crystallization conditions are reported alongside.
     references: *references
     verify_flags:
       - "[VERIFY] 2.6 A shell cutoff: margin above Mg-O target distances (about 2.1 A) in Harding 2006; not re-read from the full text in this session."

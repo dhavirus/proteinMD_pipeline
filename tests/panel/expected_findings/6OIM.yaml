@@ -46,3 +46,22 @@ families:
     components: GDP
   - id: unrecognized/group/A:303
     components: MOV
+curated_checks:
+- source: 'Maintainer decision (TASK-001 review): Mg 301 is not catalytic just because GDP is in its shell;
+    the file''s crystallization conditions include 1 mM MgCl2.'
+  finding_id: metals/A:301
+  shell_residues:
+  - A:17
+  - A:302
+  - A:405
+  - A:415
+  - A:440
+  - A:447
+  evidence:
+    classification: ambiguous
+    coordination_number: 6
+    nonpolymer_ligand_donors: 1
+- source: 'struct_conn covale1: AMG 510 (MOV) C25 bonded to Cys12 SG'
+  finding_id: unrecognized/group/A:303
+  evidence:
+    components: MOV

@@ -117,3 +117,22 @@ def test_partially_occupied_ligand_is_labelled(ruleset):
     finding = only(detect_metals(b.structure(residues), ruleset, b.config()))
     notes = [e["note"] for e in finding.evidence if e["key"] == "ligand_distance"]
     assert "water, occupancy 0.29" in notes
+
+
+def test_magnesium_with_bound_ligand_is_not_catalytic(ruleset):
+    positions = [b.scaled(d, 2.1) for d in b.TETRAHEDRAL]
+    residues = [b.ion("A", 900, "MG")]
+    residues.append(b.residue("A", 901, "GDP", b.NP, [b.atom("O2B", "O", positions[0])]))
+    residues += [b.water("A", 1000 + i, positions[i]) for i in range(1, 4)]
+    finding = only(detect_metals(b.structure(residues), ruleset, b.config()))
+    assert finding.evidence_value("nonpolymer_ligand_donors") == 1
+    assert finding.evidence_value("classification") == "ambiguous"
+
+
+def test_crystallization_conditions_reported_verbatim(ruleset):
+    site = b.structure(
+        b.zinc_catalytic_site().residues, crystallization_details="1mM MgCl2, 0.1M MES pH6.5"
+    )
+    finding = only(detect_metals(site, ruleset, b.config()))
+    record = next(e for e in finding.evidence if e["key"] == "crystallization_conditions")
+    assert record["fields"]["pdbx_details"] == "1mM MgCl2, 0.1M MES pH6.5"

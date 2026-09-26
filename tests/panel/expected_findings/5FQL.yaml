@@ -70,7 +70,7 @@ families:
     components: CL
   - id: unrecognized/group/A:1569
     components: CL
-publication_checks:
+curated_checks:
 - source: 'Ca coordinated by one N and five O: D45, D46, D334 side chains, two sulfate O of FGS84, H335
     NE'
   finding_id: metals/A:1551

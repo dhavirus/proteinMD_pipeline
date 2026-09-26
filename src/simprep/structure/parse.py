@@ -21,6 +21,7 @@ from simprep.structure.model import (
 STRUCT_CONN = "_struct_conn."
 MOD_RESIDUE = "_pdbx_struct_mod_residue."
 UNOBSERVED = "_pdbx_unobs_or_zero_occ_residues."
+CRYSTAL_GROW = "_exptl_crystal_grow."
 ANNOTATION_CATEGORIES = (STRUCT_CONN, MOD_RESIDUE, UNOBSERVED)
 UNOBSERVED_OCCUPANCY_FLAG = "1"  # mmCIF: 1 = unobserved, 0 = zero occupancy
 
@@ -59,7 +60,15 @@ def read_structure(path: Path) -> Structure:
         annotation_categories=frozenset(
             name.strip("_.") for name in ANNOTATION_CATEGORIES if _has_category(block, name)
         ),
+        crystallization_details=_crystallization_details(block),
     )
+
+
+def _crystallization_details(block: gemmi.cif.Block) -> str | None:
+    """Crystallization conditions (all rows of exptl_crystal_grow), whitespace-normalized."""
+    details = [row.get("pdbx_details") for row in _rows(block, CRYSTAL_GROW)]
+    text = "; ".join(" ".join(d.split()) for d in details if d)
+    return text or None
 
 
 def _annotation_block(path: Path, gemmi_structure: gemmi.Structure) -> gemmi.cif.Block:

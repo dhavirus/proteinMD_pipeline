@@ -104,17 +104,17 @@ def test_record_accounting_balances(expected):
         assert row["in"] == row["passed_through"] + row["flagged"] + row["excluded"], row
 
 
-PUBLICATION = [
+CURATED = [
     pytest.param(e, id=p.stem)
     for p in EXPECTED
-    if "publication_checks" in (e := yaml.safe_load(p.read_text()))
+    if "curated_checks" in (e := yaml.safe_load(p.read_text()))
 ]
 
 
-@pytest.mark.parametrize("expected", PUBLICATION)
-def test_publication_checks(expected):
+@pytest.mark.parametrize("expected", CURATED)
+def test_curated_checks(expected):
     findings = by_id(audit(expected["file"]))
-    for check in expected["publication_checks"]:
+    for check in expected["curated_checks"]:
         if "absent" in check:
             assert not set(check["absent"]) & set(findings), check["source"]
         elif "glycans_attached_to" in check:

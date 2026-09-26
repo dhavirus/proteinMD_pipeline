@@ -165,6 +165,7 @@ def _metal_finding(
             + [ev_label("classification", label, note=basis)]
             + _ligand_evidence(metal, center_atom, ligands)
             + _annotated_links(structure, metal)
+            + _crystallization_record(structure)
         ),
         claims=frozenset({metal.id}),
     )
@@ -234,6 +235,19 @@ def _annotated_links(structure: Structure, metal: Residue) -> list[dict]:
             | {"atoms": [partner_ref(link.partner1), partner_ref(link.partner2)]}
         )
     return items
+
+
+def _crystallization_record(structure: Structure) -> list[dict]:
+    """The file's crystallization conditions, verbatim: was the ion a buffer component?"""
+    if structure.crystallization_details is None:
+        return []
+    return [
+        ev_source_record(
+            "crystallization_conditions",
+            "exptl_crystal_grow",
+            {"pdbx_details": structure.crystallization_details},
+        )
+    ]
 
 
 def _ligand_note(ligand: Ligand) -> str:

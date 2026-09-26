@@ -120,6 +120,8 @@ class Structure:
 
     ``annotation_categories`` lists which annotation sources were present in the input,
     so that absence of a record can be distinguished from absence of the annotation.
+    ``crystallization_details`` is the free-text crystallization condition, kept verbatim
+    as evidence (e.g. whether a bound ion was a buffer component).
     """
 
     name: str
@@ -128,6 +130,7 @@ class Structure:
     modified_residues: tuple[ModifiedResidue, ...] = ()
     unobserved_residues: tuple[UnobservedResidue, ...] = ()
     annotation_categories: frozenset[str] = field(default_factory=frozenset)
+    crystallization_details: str | None = None
 
     @cached_property
     def residue_index(self) -> dict[ResidueId, Residue]:

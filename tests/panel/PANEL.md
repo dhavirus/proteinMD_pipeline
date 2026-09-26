@@ -3,7 +3,7 @@
 Five structures, committed gzipped (mmCIF). Tests never fetch anything: these files are
 the source for every regression test. Expected findings live in
 `expected_findings/<ID>.yaml`, derived by `derive_expected.py` from the file's own
-annotations (no simprep code) plus hand-written `publication_checks`, all with
+annotations (no simprep code) plus hand-written `curated_checks`, all with
 `reviewed: false` until the maintainer reviews them.
 
 RCSB (files.rcsb.org, data.rcsb.org) was blocked by this environment's network policy
@@ -61,11 +61,12 @@ All five: X-RAY DIFFRACTION, one model.
   - unrecognized: 5 branched glycans (NAG-NAG[-FUC]) and 2 single NAG, each attached to
     an ASN; 3 chloride ions. All blocking, as specified for TASK-001.
 
-#### Open question (5FQL)
+#### Resolved (maintainer, TASK-001 review): 7 vs 8 glycosylation sites
 
 The paper states eight putative N-glycosylation sites with at least one NAG built at
 each; the deposited file attaches NAG to seven asparagines (115, 144, 246, 280, 325,
-513, 537). The expected findings follow the file.
+513, 537). Decision: rely on the deposited structure; the expected findings follow the
+file.
 
 ### 3KS3: human carbonic anhydrase II, 0.9 A
 
@@ -87,7 +88,8 @@ each; the deposited file attaches NAG to seven asparagines (115, 144, 246, 280, 
 - **The file has no ASN-NAG `struct_conn` record**: the glycans are reported without an
   attachment. Measured: NAG 1 C1 lies 2.64 A (chain A glycan) and 2.45 A (chain B glycan)
   from ND2 of ASN 314 in heavy chains H and K, i.e. the Fc glycosylation site, but at a
-  non-bonding distance and without annotation. See open questions.
+  non-bonding distance and without annotation. Maintainer decision: a later task adds a
+  rule that flags close covalent-contact candidates the annotations miss.
 
 ### 6OIM: KRAS G12C with AMG 510 (sotorasib), 1.65 A
 
@@ -96,8 +98,9 @@ each; the deposited file attaches NAG to seven asparagines (115, 144, 246, 280, 
 - AMG 510 is component **MOV** ("AMG 510 (bound form)"), covalently linked to Cys12 SG
   (`struct_conn` covale1): reported as one blocking `unrecognized` group with the Cys12
   attachment; Cys12 itself stays a standard residue. Mg 301 is octahedral (Ser17 OG,
-  GDP O2B, four waters) and is classified `likely_catalytic` because GDP is in its shell
-  (see open questions). GDP is unrecognized chemistry. Gaps: N-terminal tag (-13 to -1)
+  GDP O2B, four waters) and is classified `ambiguous`: by maintainer decision a bound
+  ligand does not make Mg catalytic, and the file's crystallization conditions
+  ("1mM MgCl2, 0.1M MES pH6.5, 30% PEG4000") are shown as evidence. GDP is unrecognized chemistry. Gaps: N-terminal tag (-13 to -1)
   and internal 105-107.
 
 ### 1FO8: rabbit N-acetylglucosaminyltransferase I, 1.4 A
