@@ -5,9 +5,8 @@ Read `CLAUDE.md`, ADR-0001 and ADR-0002 first. TASK-001 produced `simprep audit`
 `decisions` array. Nothing yet lets a human *make* those decisions comfortably, and
 nothing checks that every blocking finding has one. This task builds both.
 
-Status: **draft** for maintainer review. Items marked (Q) are open questions; see the
-end of this file. Do not start implementation until they are answered or accepted as
-defaults.
+Status: **accepted** (maintainer, 2026-09-26: defaults accepted for every open
+question; the resolved decisions are listed at the end of this file).
 
 ## Goal
 
@@ -65,7 +64,8 @@ considered and why.
   parameters go in the decision's `parameters` object; v0.1 needs one:
   `specific_altloc` → `{"altloc": "<id>"}`, chosen from the altlocs in the evidence.
 - **Regions**: create / rename / delete named residue sets, entered as residue labels
-  (`A:45, A:46, A:84`) and optionally picked from the Mol* selection (Q2). After any
+  (`A:45, A:46, A:84`); picking residues in the Mol* view is optional for v0.1
+  (decision 2). After any
   region change the page shows that severities are stale until
   `simprep audit --manifest` is re-run (ADR-0002); it does not re-weight them itself.
 - **Export**: a complete `manifest.json`: the loaded manifest (or one initialised from
@@ -83,10 +83,11 @@ considered and why.
   decisions against snapshot, input hash if the structure is given) and prints, per
   severity, decided / undecided counts and the list of undecided findings. Exit code 0
   when no blocking finding is undecided, 3 otherwise (documented), 2 on error.
-- `simprep audit --manifest` keeps decisions whose finding still exists and reports, in
-  `report.md`, decisions whose finding disappeared after a re-audit (e.g. after a
-  knowledge-base change) instead of silently dropping them. (Today `attach_snapshot`
-  raises; decide whether that stays an error or becomes a report item: Q4.)
+- `simprep audit --manifest` keeps refusing a manifest whose decisions name findings
+  that disappeared after a re-audit (e.g. after a knowledge-base change), as it does
+  today (decision 4). The error must list **every** orphaned decision (finding id,
+  option, decided_by), not just the first, and say how to resolve it (remove or
+  re-decide them in the front end).
 - `manifest status` lists decisions that use a `requires_explicit_choice` option
   separately, so they stay visible at review time (the schema already requires a
   rationale on every decision).
@@ -101,8 +102,8 @@ considered and why.
   `manifest.schema.json` and runs `simprep manifest status` on them. This checks the
   browser's output with the Python validator without a browser or network.
 - **Python**: unit tests for `manifest status` (all decided, blocking undecided,
-  unknown finding, wrong option, hash mismatch) and for the re-audit behaviour chosen in
-  Q4.
+  unknown finding, wrong option, hash mismatch) and for the re-audit error listing all
+  orphaned decisions (decision 4).
 - Browser smoke test (Playwright, Mol* and ajv from CDN) is **not** in CI because it
   needs network; document how to run it locally and run it once before opening the PR,
   reporting the result.
@@ -146,17 +147,16 @@ Lessons worth keeping:
 - Some static hosts do not serve `.cif`; GitHub Pages does, but the demo loader should
   not depend on the extension (read as text or bytes).
 
-## Open questions for the maintainer
-1. **Who uses the page?** Only you, or collaborators too? This decides whether
-   `decided_by` is free text (v0.1 default) or needs something stronger.
-2. **Region picking from Mol***: is typing residue labels enough for v0.1, or is
-   picking residues in the 3D view required? (Default: typing required, picking optional.)
-3. **Pyodide re-weighting** (ADR-0002 option 3): keep stale-severity banner only (default),
-   or re-weight in the browser in this task?
-4. **Decisions after a re-audit** whose finding no longer exists: hard error (current
-   behaviour) or carried as "orphaned decisions" in the report and manifest?
-5. **Exit code 3** for "blocking findings undecided": acceptable, or prefer a flag
-   (`--require-complete`) so the default always exits 0 on a valid manifest?
-6. **Public GitHub Pages**: the repository is public-facing if Pages is enabled. The
-   page contains no user data (everything is opened locally), but confirm you want it
-   published.
+## Resolved decisions (maintainer, 2026-09-26)
+1. **Users**: `decided_by` is free text in v0.1; no accounts or identity checks.
+2. **Regions**: entering residue labels is required; picking residues in the Mol* view
+   is optional for v0.1.
+3. **Severity after region edits**: the page shows a stale-severity banner and never
+   re-weights in the browser; re-running `simprep audit --manifest` is the only way to
+   update severities (ADR-0002 option 3 stays open for a later task).
+4. **Decisions orphaned by a re-audit**: remain a hard error, with a message listing
+   every orphaned decision and how to resolve it.
+5. **Exit codes of `simprep manifest status`**: 0 when every blocking finding is
+   decided, 3 when any blocking finding is undecided, 2 on error; no extra flag.
+6. **Hosting**: publish `frontend/` on GitHub Pages from `main`. The page holds no user
+   data; structures and findings are opened locally and never uploaded.
