@@ -216,6 +216,9 @@
           "$ref": "#/$defs/matcher_unobserved_run"
         },
         {
+          "$ref": "#/$defs/matcher_attachment_pattern"
+        },
+        {
           "$ref": "#/$defs/matcher_unclaimed_group"
         },
         {
@@ -556,6 +559,113 @@
             }
           }
         }
+      }
+    },
+    "matcher_attachment_pattern": {
+      "description": "Unannotated, altloc-compatible atom pairs between a non-polymer/branched residue and a polymer residue that match a declared attachment chemistry within a distance limit.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "annotated_conn_types",
+        "patterns"
+      ],
+      "properties": {
+        "kind": {
+          "const": "attachment_pattern"
+        },
+        "annotated_conn_types": {
+          "description": "struct_conn types that count as an existing covalent annotation; residue pairs joined by one are skipped.",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        },
+        "patterns": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "name",
+              "bond",
+              "ligand",
+              "polymer",
+              "max_distance_angstrom",
+              "sequon_check"
+            ],
+            "properties": {
+              "name": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9_]*$"
+              },
+              "bond": {
+                "type": "string",
+                "minLength": 1
+              },
+              "ligand": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "comp_ids"
+                ],
+                "minProperties": 2,
+                "properties": {
+                  "comp_ids": {
+                    "description": "Component IDs, or [\"*\"] for any non-polymer/branched component.",
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                      "type": "string",
+                      "pattern": "^([A-Z0-9]{1,5}|\\*)$"
+                    }
+                  },
+                  "atom_names": {
+                    "$ref": "#/$defs/atom_names"
+                  },
+                  "elements": {
+                    "$ref": "#/$defs/names"
+                  }
+                }
+              },
+              "polymer": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "res_names",
+                  "atom_names"
+                ],
+                "properties": {
+                  "res_names": {
+                    "$ref": "#/$defs/names"
+                  },
+                  "atom_names": {
+                    "$ref": "#/$defs/atom_names"
+                  }
+                }
+              },
+              "max_distance_angstrom": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              },
+              "sequon_check": {
+                "description": "Report whether the polymer residue starts an N-X-S/T sequon (X not proline).",
+                "type": "boolean"
+              }
+            }
+          }
+        }
+      }
+    },
+    "atom_names": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^[A-Z0-9']{1,4}$"
       }
     }
   },

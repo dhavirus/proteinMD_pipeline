@@ -2,7 +2,7 @@ pdb_id: 1FO8
 file: 1FO8.cif.gz
 reviewed: false
 derived_by: 'tests/panel/derive_expected.py: raw mmCIF categories (atom_site, entity, struct_conn, pdbx_struct_mod_residue,
-  pdbx_unobs_or_zero_occ_residues); no simprep code'
+  pdbx_unobs_or_zero_occ_residues, entity_poly_seq); no simprep code'
 families:
   metals: []
   nonstandard_residues: []
@@ -27,3 +27,8 @@ families:
   unrecognized:
   - id: unrecognized/group/A:1448
     components: MMC
+sequon_asparagines: {}
+curated_families:
+  source: 'Hand-written (TASK-003): negative control. Methylmercury altloc B overlaps Phe316 altloc A
+    (0.42 A); alternative states never coexist, so nothing may be reported.'
+  covalent_contacts: []

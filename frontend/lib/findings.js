@@ -6,8 +6,11 @@ export const FAMILY_LABELS = {
   nonstandard_residues: "Non-standard residues",
   altlocs: "Alternative locations",
   missing_residues: "Missing residues",
+  covalent_contacts: "Unannotated covalent contacts",
   unrecognized: "Unrecognized chemistry",
 };
+// Evidence items whose atoms are drawn as context around the selected finding.
+const CONTEXT_EVIDENCE = ["ligand_distance", "attachment", "link", "contact_distance"];
 const UNIT_SUFFIX = { angstrom: " Å", angstrom_squared: " Å²", degree: "°", fraction: "" };
 
 export function severityCounts(findings) {
@@ -68,7 +71,7 @@ export function altlocChoices(finding) {
 export function residuesToShow(finding) {
   const focus = finding.anchor_residues.length ? finding.anchor_residues : finding.locus.extent;
   const context = finding.evidence
-    .filter((e) => e.key === "ligand_distance" || e.key === "attachment" || e.key === "link")
+    .filter((e) => CONTEXT_EVIDENCE.includes(e.key))
     .flatMap((e) => e.atoms || [])
     .map((a) => ({ chain: a.chain, seq_num: a.seq_num, ins_code: a.ins_code }));
   return { focus, context };

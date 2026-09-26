@@ -22,7 +22,8 @@ STRUCT_CONN = "_struct_conn."
 MOD_RESIDUE = "_pdbx_struct_mod_residue."
 UNOBSERVED = "_pdbx_unobs_or_zero_occ_residues."
 CRYSTAL_GROW = "_exptl_crystal_grow."
-ANNOTATION_CATEGORIES = (STRUCT_CONN, MOD_RESIDUE, UNOBSERVED)
+POLY_SEQ = "_entity_poly_seq."
+ANNOTATION_CATEGORIES = (STRUCT_CONN, MOD_RESIDUE, UNOBSERVED, POLY_SEQ)
 UNOBSERVED_OCCUPANCY_FLAG = "1"  # mmCIF: 1 = unobserved, 0 = zero occupancy
 
 ENTITY_CLASSES = {
@@ -61,7 +62,19 @@ def read_structure(path: Path) -> Structure:
             name.strip("_.") for name in ANNOTATION_CATEGORIES if _has_category(block, name)
         ),
         crystallization_details=_crystallization_details(block),
+        polymer_sequences=_polymer_sequences(gemmi_structure),
     )
+
+
+def _polymer_sequences(gemmi_structure: gemmi.Structure) -> tuple[tuple[str, tuple[str, ...]], ...]:
+    """Full entity sequence per chain that has a polymer part."""
+    sequences = []
+    for chain in gemmi_structure[0]:
+        span = chain.get_polymer()
+        entity = gemmi_structure.get_entity_of(span) if span else None
+        if entity is not None and entity.full_sequence:
+            sequences.append((chain.name, tuple(entity.full_sequence)))
+    return tuple(sequences)
 
 
 def _crystallization_details(block: gemmi.cif.Block) -> str | None:

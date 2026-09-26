@@ -2,7 +2,7 @@ pdb_id: 1HZH
 file: 1HZH.cif.gz
 reviewed: false
 derived_by: 'tests/panel/derive_expected.py: raw mmCIF categories (atom_site, entity, struct_conn, pdbx_struct_mod_residue,
-  pdbx_unobs_or_zero_occ_residues); no simprep code'
+  pdbx_unobs_or_zero_occ_residues, entity_poly_seq); no simprep code'
 families:
   metals: []
   nonstandard_residues: []
@@ -22,3 +22,23 @@ families:
     components: NAG-NAG-BMA-MAN-NAG-GAL-MAN-NAG-GAL
   - id: unrecognized/group/B:1
     components: NAG-NAG-BMA-MAN-NAG-GAL-MAN-NAG-FUC
+sequon_asparagines:
+  H:
+  - H:314
+  K:
+  - K:314
+curated_families:
+  source: 'Hand-written (TASK-003), not derivable from annotations: the file has no ASN-NAG struct_conn
+    record. Evidence: each NAG 1 C1 lies 2.45-2.64 A from the ND2 of ASN 314, which starts an N-S-T sequon
+    in the file''s own entity sequence (sequon_asparagines). [VERIFY] ASN 314 is the IgG1 Fc Asn297 (EU
+    numbering) glycosylation site; the 1HZH paper''s abstract (doi:10.1126/science.1061692) does not state
+    it.'
+  covalent_contacts:
+  - id: covalent_contacts/n_glycosylation/A:1-H:314
+    rule_id: covalent_contacts.attachment_candidate
+    pattern: n_glycosylation
+    polymer_residue: H:314
+  - id: covalent_contacts/n_glycosylation/B:1-K:314
+    rule_id: covalent_contacts.attachment_candidate
+    pattern: n_glycosylation
+    polymer_residue: K:314

@@ -1,0 +1,89 @@
+schema_version: 0.1.0
+family: covalent_contacts
+description: >-
+  Covalent attachments the file does not annotate. Detection is otherwise annotation-
+  driven (struct_conn); this family looks at geometry, but only for declared attachment
+  chemistries, only between residues that have no annotated covalent link, and only for
+  altloc-compatible atoms (same altloc, or either has none).
+
+rules:
+  - rule_id: covalent_contacts.attachment_candidate
+    family: covalent_contacts
+    version: 0.1.0
+    title: Unannotated covalent attachment candidate
+    priority: 0
+    matcher:
+      kind: attachment_pattern
+      annotated_conn_types: [covale, covale_base, covale_phosphate, covale_sugar, disulf]
+      # 3.0 A is a working threshold (TASK-003 decision 2), not a literature value: above
+      # the C1-ND2 separations measured in 1HZH (2.45 and 2.64 A), below typical
+      # non-bonded C-N / C-S contacts.
+      patterns:
+        - name: n_glycosylation
+          bond: NAG C1 - ASN ND2 (N-glycosidic)
+          ligand: {comp_ids: [NAG], atom_names: [C1]}
+          polymer: {res_names: [ASN], atom_names: [ND2]}
+          max_distance_angstrom: 3.0
+          sequon_check: true
+        - name: cysteine_adduct
+          bond: ligand carbon - CYS SG (thioether)
+          ligand: {comp_ids: ["*"], elements: [C]}
+          polymer: {res_names: [CYS], atom_names: [SG]}
+          max_distance_angstrom: 3.0
+          sequon_check: false
+    base_severity: blocking
+    options:
+      - id: add_link
+        label: Treat as a covalent bond (record the link)
+        cost_hint: medium
+        trade_offs:
+          - The system gets the attachment the geometry indicates; preparation builds the bond.
+          - Asserts a bond the depositors did not annotate; the modelled geometry around it
+            (here longer than a real bond) will be regularized.
+      - id: treat_noncovalent
+        label: Keep the groups as separate molecules
+        cost_hint: low
+        trade_offs:
+          - Follows the file's annotations exactly.
+          - A sugar or ligand that is really attached can drift away during sampling.
+      - id: exclude_group
+        label: Exclude the ligand or glycan
+        cost_hint: low
+        trade_offs:
+          - Removes the question.
+          - Loses whatever the group contributes (contacts, shielding, charge).
+      - id: expert_review
+        label: Expert decision required
+        cost_hint: medium
+        trade_offs:
+          - Nothing proceeds until someone looks at the density and the chemistry.
+    recommended_option:
+      default: expert_review
+      conditions:
+        - name: n_glycan_in_sequon
+          when:
+            evidence:
+              pattern: [n_glycosylation]
+              in_sequon: [true]
+          option: add_link
+          reason: >-
+            NAG C1 sits next to the ND2 of an asparagine that starts an N-X-S/T sequon
+            (X not proline), the acceptor motif of N-linked glycosylation.
+    rationale: >-
+      Topology building needs to know which groups are bonded. An atom pair that matches a
+      known attachment chemistry and is closer than a non-bonded contact, but has no
+      struct_conn record, is reported so the bond is decided explicitly instead of being
+      silently dropped (as a free glycan) or silently added.
+    references:
+      - citation: >-
+          Gavel Y, von Heijne G. Sequence differences between glycosylated and
+          non-glycosylated Asn-X-Thr/Ser acceptor sites: implications for protein
+          engineering. Protein Eng. 1990;3(5):433-442.
+        doi: 10.1093/protein/3.5.433
+        pmid: "2349213"
+      - citation: >-
+          Bause E. Structural requirements of N-glycosylation of proteins. Studies with
+          proline peptides as conformational probes. Biochem J. 1983;209(2):331-336.
+        doi: 10.1042/bj2090331
+        pmid: "6847620"
+    verify_flags: []

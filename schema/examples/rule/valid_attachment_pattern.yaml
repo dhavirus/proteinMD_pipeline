@@ -1,0 +1,25 @@
+schema_version: 0.1.0
+family: covalent_contacts
+rules:
+  - rule_id: covalent_contacts.example
+    family: covalent_contacts
+    version: 0.1.0
+    title: Example attachment rule
+    priority: 0
+    matcher:
+      kind: attachment_pattern
+      annotated_conn_types: [covale]
+      patterns:
+        - name: n_glycosylation
+          bond: NAG C1 - ASN ND2
+          ligand: {comp_ids: [NAG], atom_names: [C1]}
+          polymer: {res_names: [ASN], atom_names: [ND2]}
+          max_distance_angstrom: 3.0
+          sequon_check: true
+    base_severity: blocking
+    options:
+      - {id: expert_review, label: Expert decision required, cost_hint: medium, trade_offs: [Nothing proceeds.]}
+    recommended_option: {default: expert_review, conditions: []}
+    rationale: Example.
+    references: []
+    verify_flags: []

@@ -111,6 +111,7 @@
         "nonstandard_residues",
         "altlocs",
         "missing_residues",
+        "covalent_contacts",
         "unrecognized"
       ]
     },

@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import { decisionProblems, isoSeconds, makeDecision } from "../lib/decisions.js";
-import { altlocChoices, formatEvidenceValue, groupFindings, severityCounts } from "../lib/findings.js";
+import { altlocChoices, formatEvidenceValue, groupFindings, residuesToShow, severityCounts } from "../lib/findings.js";
 import { miniReport } from "./fixtures.mjs";
 
 const findings = miniReport().findings;
@@ -62,4 +62,16 @@ test("evidence formatting with units", () => {
 
 test("timestamps are whole seconds", () => {
   assert.equal(isoSeconds(new Date("2026-01-02T03:04:05.678Z")), "2026-01-02T03:04:05Z");
+});
+
+test("contact findings show both atoms of the pair as context", () => {
+  const atom = (chain, seq) => ({ chain, seq_num: seq, ins_code: "", res_name: "X", atom_name: "C1", altloc: "" });
+  const finding = {
+    anchor_residues: [{ chain: "B", seq_num: 1, ins_code: "" }, { chain: "H", seq_num: 314, ins_code: "" }],
+    locus: { extent: [] },
+    evidence: [{ key: "contact_distance", type: "distance", value: 2.6, unit: "angstrom", atoms: [atom("B", 1), atom("H", 314)] }],
+  };
+  const { focus, context } = residuesToShow(finding);
+  assert.equal(focus.length, 2);
+  assert.deepEqual(context.map((r) => `${r.chain}:${r.seq_num}`), ["B:1", "H:314"]);
 });

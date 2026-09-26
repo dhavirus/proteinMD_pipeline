@@ -2,7 +2,7 @@ pdb_id: 5FQL
 file: 5FQL.cif.gz
 reviewed: false
 derived_by: 'tests/panel/derive_expected.py: raw mmCIF categories (atom_site, entity, struct_conn, pdbx_struct_mod_residue,
-  pdbx_unobs_or_zero_occ_residues); no simprep code'
+  pdbx_unobs_or_zero_occ_residues, entity_poly_seq); no simprep code'
 families:
   metals:
   - id: metals/A:1551
@@ -70,6 +70,20 @@ families:
     components: CL
   - id: unrecognized/group/A:1569
     components: CL
+sequon_asparagines:
+  A:
+  - A:115
+  - A:144
+  - A:246
+  - A:280
+  - A:325
+  - A:513
+  - A:537
+curated_families:
+  source: 'Hand-written (TASK-003): negative control. All seven NAG-ASN attachments are annotated in struct_conn,
+    so no candidate may be reported (the survey found 21 contacts under 2.6 A next to those annotated
+    bonds).'
+  covalent_contacts: []
 curated_checks:
 - source: 'Ca coordinated by one N and five O: D45, D46, D334 side chains, two sulfate O of FGS84, H335
     NE'

@@ -1,13 +1,13 @@
 {
   "schema_version": "0.1.0",
-  "generated_at": "2026-09-26T04:05:03Z",
+  "generated_at": "2026-09-26T04:36:27Z",
   "simprep": {
     "version": "0.1.0",
-    "git_commit": "c72dc6b6a64207bdb27b9eeda725a1ee825f4184"
+    "git_commit": "e07a1e5ceb4659b910db2e0c4b3a31d08b6f463a-dirty"
   },
   "knowledge_base": {
-    "version": "0.1.0",
-    "sha256": "133060539b2a260a1d8f9ce7c840c4a86ecba407b5e0d27b2ed11317df08d981"
+    "version": "0.2.0",
+    "sha256": "0c397f9f5a703f0ed947671fde9c8d19760b141a934f60c90ecbfdccdb25e521"
   },
   "input": {
     "path": "tests/panel/5FQL.cif.gz",
@@ -34,6 +34,7 @@
     "name": "5FQL",
     "scope": "Model 1 of the deposited asymmetric unit as parsed; no biological assembly is generated and no coordinates are modified by an audit.",
     "annotation_categories_present": [
+      "entity_poly_seq",
       "pdbx_struct_mod_residue",
       "pdbx_unobs_or_zero_occ_residues",
       "struct_conn"

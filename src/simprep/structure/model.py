@@ -122,6 +122,9 @@ class Structure:
     so that absence of a record can be distinguished from absence of the annotation.
     ``crystallization_details`` is the free-text crystallization condition, kept verbatim
     as evidence (e.g. whether a bound ion was a buffer component).
+    ``polymer_sequences`` maps each chain to its full entity sequence (observed and
+    unobserved residues, indexed by label_seq - 1); a position with microheterogeneity
+    lists its alternatives joined by commas.
     """
 
     name: str
@@ -131,6 +134,7 @@ class Structure:
     unobserved_residues: tuple[UnobservedResidue, ...] = ()
     annotation_categories: frozenset[str] = field(default_factory=frozenset)
     crystallization_details: str | None = None
+    polymer_sequences: tuple[tuple[str, tuple[str, ...]], ...] = ()
 
     @cached_property
     def residue_index(self) -> dict[ResidueId, Residue]:
@@ -142,6 +146,10 @@ class Structure:
             return self.residue_index[residue_id]
         except KeyError:
             raise KeyError(f"residue {residue_id.label()} not found in {self.name}") from None
+
+    def sequence(self, chain: str) -> tuple[str, ...]:
+        """Full entity sequence of ``chain`` (empty if the file has none)."""
+        return dict(self.polymer_sequences).get(chain, ())
 
     def polymer_residues(self, chain: str) -> tuple[Residue, ...]:
         """Observed polymer residues of ``chain`` in file order."""

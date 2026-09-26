@@ -34,7 +34,9 @@ def test_parser_builds_model_and_annotations(mini_path):
         "struct_conn",
         "pdbx_struct_mod_residue",
         "pdbx_unobs_or_zero_occ_residues",
+        "entity_poly_seq",
     }
+    assert structure.sequence("A")[:3] == ("GLY", "HIS", "MSE")
 
 
 def test_multi_model_input_is_refused(tmp_path):

@@ -3,7 +3,7 @@
 Five structures, committed gzipped (mmCIF). Tests never fetch anything: these files are
 the source for every regression test. Expected findings live in
 `expected_findings/<ID>.yaml`, derived by `derive_expected.py` from the file's own
-annotations (no simprep code) plus hand-written `curated_checks`, all with
+annotations (no simprep code) plus hand-written `curated_families` / `curated_checks`, all with
 `reviewed: false` until the maintainer reviews them.
 
 RCSB (files.rcsb.org, data.rcsb.org) was blocked by this environment's network policy
@@ -88,8 +88,11 @@ file.
 - **The file has no ASN-NAG `struct_conn` record**: the glycans are reported without an
   attachment. Measured: NAG 1 C1 lies 2.64 A (chain A glycan) and 2.45 A (chain B glycan)
   from ND2 of ASN 314 in heavy chains H and K, i.e. the Fc glycosylation site, but at a
-  non-bonding distance and without annotation. Maintainer decision: a later task adds a
-  rule that flags close covalent-contact candidates the annotations miss.
+  non-bonding distance and without annotation. Since TASK-003 the `covalent_contacts`
+  family reports both as blocking `n_glycosylation` candidates (recommended `add_link`:
+  ASN 314 starts an N-S-T sequon in the file's own entity sequence). They are listed by
+  hand in `curated_families` of `expected_findings/1HZH.yaml`, because no annotation
+  can give them.
 
 ### 6OIM: KRAS G12C with AMG 510 (sotorasib), 1.65 A
 
