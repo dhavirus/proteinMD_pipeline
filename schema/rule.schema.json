@@ -231,7 +231,8 @@
         "elements",
         "donor_elements",
         "coordination_cutoff_angstrom",
-        "classification"
+        "classification",
+        "min_donor_occupancy"
       ],
       "properties": {
         "kind": {
@@ -314,6 +315,12 @@
               "minimum": 1
             }
           }
+        },
+        "min_donor_occupancy": {
+          "description": "A donor counts toward the coordination number only if the occupancies of its records inside the cutoff sum to at least this value; others are reported as excluded partial donors.",
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
         }
       }
     },

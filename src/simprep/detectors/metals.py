@@ -38,6 +38,7 @@ IDEAL_ANGLES_DEGREE: dict[str, tuple[float, ...]] = {
     "octahedral": (90.0,) * 12 + (180.0,) * 3,
     "pentagonal_bipyramidal": (72.0,) * 5 + (90.0,) * 10 + (144.0,) * 5 + (180.0,),
 }
+OCCUPANCY_DECIMALS = 2  # occupancies are deposited with two decimals
 LIGAND_CLASSES = ("protein", "water", "nonstandard_polymer_residue", "nonpolymer_ligand")
 
 
@@ -49,6 +50,7 @@ class Ligand:
     atom: Atom
     distance_angstrom: float
     ligand_class: str
+    shell_occupancy: float
 
 
 @register("metals")
@@ -76,10 +78,14 @@ def _matching_rule(residue: Residue, rules: tuple[Rule, ...]) -> Rule | None:
 def coordination_shell(
     structure: Structure, metal: Residue, rule_standard: tuple[Rule, frozenset[str]]
 ) -> list[Ligand]:
-    """Donor atoms within the rule's cutoff; closest altloc per atom; sorted by distance."""
+    """Donor atoms within the rule's cutoff, sorted by distance.
+
+    Each donor is represented by its closest altloc record; ``shell_occupancy`` sums the
+    occupancies of all of that atom's records inside the cutoff.
+    """
     rule, standard = rule_standard
     center = primary_atom(metal.atoms).position
-    closest: dict[tuple, Ligand] = {}
+    records: dict[tuple, list[tuple[float, Atom, Residue]]] = {}
     for residue in structure.residues:
         if residue.id == metal.id:
             continue
@@ -87,12 +93,23 @@ def coordination_shell(
             if atom.element not in rule.matcher["donor_elements"]:
                 continue
             d = distance(center, atom.position)
-            key = (residue.id, atom.name)
-            if d <= rule.matcher["coordination_cutoff_angstrom"] and (
-                key not in closest or d < closest[key].distance_angstrom
-            ):
-                closest[key] = Ligand(residue, atom, d, _ligand_class(residue, standard))
-    return sorted(closest.values(), key=lambda lig: (lig.distance_angstrom, lig.residue.id))
+            if d <= rule.matcher["coordination_cutoff_angstrom"]:
+                records.setdefault((residue.id, atom.name), []).append((d, atom, residue))
+    ligands = [_ligand(found, standard) for found in records.values()]
+    return sorted(ligands, key=lambda lig: (lig.distance_angstrom, lig.residue.id))
+
+
+def _ligand(records: list[tuple[float, Atom, Residue]], standard: frozenset[str]) -> Ligand:
+    d, atom, residue = min(records, key=lambda record: (record[0], record[1].altloc))
+    occupancy = sum(record[1].occupancy for record in records)
+    return Ligand(residue, atom, d, _ligand_class(residue, standard), occupancy)
+
+
+def split_by_occupancy(ligands: list[Ligand], rule: Rule) -> tuple[list[Ligand], list[Ligand]]:
+    """(counted, excluded): donors below the rule's minimum shell occupancy do not count."""
+    minimum = rule.matcher["min_donor_occupancy"]
+    counted = [lig for lig in ligands if round(lig.shell_occupancy, OCCUPANCY_DECIMALS) >= minimum]
+    return counted, [lig for lig in ligands if lig not in counted]
 
 
 def _ligand_class(residue: Residue, standard: frozenset[str]) -> str:
@@ -151,7 +168,7 @@ def _metal_finding(
     structure: Structure, metal: Residue, rule_standard: tuple[Rule, frozenset[str]]
 ) -> Finding:
     rule = rule_standard[0]
-    ligands = coordination_shell(structure, metal, rule_standard)
+    ligands, partial = split_by_occupancy(coordination_shell(structure, metal, rule_standard), rule)
     center_atom = primary_atom(metal.atoms)
     label, basis = classify(ligands, rule.matcher["classification"])
     return Finding(
@@ -163,7 +180,8 @@ def _metal_finding(
         evidence=tuple(
             _site_evidence(metal, ligands, rule)
             + [ev_label("classification", label, note=basis)]
-            + _ligand_evidence(metal, center_atom, ligands)
+            + _ligand_evidence(metal, center_atom, (ligands, "ligand_distance"))
+            + _ligand_evidence(metal, center_atom, (partial, "excluded_partial_donor"))
             + _annotated_links(structure, metal)
             + _crystallization_record(structure)
         ),
@@ -178,6 +196,7 @@ def _site_evidence(metal: Residue, ligands: list[Ligand], rule: Rule) -> list[di
         ev_occupancy("metal_occupancy", center.occupancy),
         ev_b_factor("metal_b_factor", center.b_iso),
         ev_number("coordination_cutoff", rule.matcher["coordination_cutoff_angstrom"], "angstrom"),
+        ev_number("min_donor_occupancy", rule.matcher["min_donor_occupancy"], "fraction"),
         ev_count("coordination_number", len(ligands)),
     ]
     items += [
@@ -201,10 +220,11 @@ def _site_evidence(metal: Residue, ligands: list[Ligand], rule: Rule) -> list[di
     return items
 
 
-def _ligand_evidence(metal: Residue, center: Atom, ligands: list[Ligand]) -> list[dict]:
+def _ligand_evidence(metal: Residue, center: Atom, ligands_key: tuple) -> list[dict]:
+    ligands, key = ligands_key
     return [
         ev_distance(
-            "ligand_distance",
+            key,
             lig.distance_angstrom,
             [atom_ref(metal, center), atom_ref(lig.residue, lig.atom)],
             note=_ligand_note(lig),
@@ -251,10 +271,10 @@ def _crystallization_record(structure: Structure) -> list[dict]:
 
 
 def _ligand_note(ligand: Ligand) -> str:
-    """Ligand class, plus occupancy and altloc when the donor is not fully occupied."""
+    """Ligand class, plus shell occupancy and altloc when the donor is not fully occupied."""
     atom = ligand.atom
-    if atom.occupancy >= 1.0 and not atom.altloc:
+    if ligand.shell_occupancy >= 1.0 and not atom.altloc:
         return ligand.ligand_class
-    return f"{ligand.ligand_class}, occupancy {atom.occupancy:.2f}" + (
-        f", altloc {atom.altloc}" if atom.altloc else ""
+    return f"{ligand.ligand_class}, occupancy in shell {ligand.shell_occupancy:.2f}" + (
+        f", closest altloc {atom.altloc}" if atom.altloc else ""
     )

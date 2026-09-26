@@ -109,14 +109,46 @@ def test_ideal_angle_tables_have_all_pairs():
         assert cn >= 2, name
 
 
-def test_partially_occupied_ligand_is_labelled(ruleset):
+def test_majority_occupied_donor_counts(ruleset):
+    residues = list(b.zinc_catalytic_site().residues)
+    residues[-1] = b.water("A", 1000, residues[-1].atoms[0].position, occupancy=0.87)
+    finding = only(detect_metals(b.structure(residues), ruleset, b.config()))
+    assert finding.evidence_value("coordination_number") == 4
+
+
+def test_partially_occupied_donor_is_excluded_from_cn(ruleset):
     site = b.zinc_catalytic_site()
     residues = list(site.residues)
     water = residues[-1]
     residues[-1] = b.water("A", 1000, water.atoms[0].position, occupancy=0.29)
     finding = only(detect_metals(b.structure(residues), ruleset, b.config()))
-    notes = [e["note"] for e in finding.evidence if e["key"] == "ligand_distance"]
-    assert "water, occupancy 0.29" in notes
+    assert finding.evidence_value("coordination_number") == 3
+    excluded = [e for e in finding.evidence if e["key"] == "excluded_partial_donor"]
+    assert [e["note"] for e in excluded] == ["water, occupancy in shell 0.29"]
+
+
+def altloc_water_site(second_altloc_inside: bool):
+    """Catalytic zinc whose water has altlocs A (0.3, inside) and B (0.7, inside or 2 A out)."""
+    residues = list(b.zinc_catalytic_site().residues)
+    position = residues[-1].atoms[0].position
+    shift = (0.1, 0, 0) if second_altloc_inside else b.scaled(position, 2.0)
+    atoms = [
+        b.atom("O", "O", position, 0.3, altloc="A"),
+        b.atom("O", "O", b.offset(position, shift), 0.7, altloc="B"),
+    ]
+    residues[-1] = b.residue("A", 1000, "HOH", b.W, atoms)
+    return b.structure(residues)
+
+
+def test_donor_with_all_altlocs_in_shell_counts(ruleset):
+    finding = only(detect_metals(altloc_water_site(True), ruleset, b.config()))
+    assert finding.evidence_value("coordination_number") == 4
+
+
+def test_donor_with_one_altloc_in_shell_is_excluded(ruleset):
+    finding = only(detect_metals(altloc_water_site(False), ruleset, b.config()))
+    assert finding.evidence_value("coordination_number") == 3
+    assert finding.evidence_value("excluded_partial_donor") is not None
 
 
 def test_magnesium_with_bound_ligand_is_not_catalytic(ruleset):

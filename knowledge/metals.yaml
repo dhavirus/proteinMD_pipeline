@@ -109,6 +109,9 @@ rules:
       kind: metal_element
       elements: [ZN]
       donor_elements: [N, O, S]
+      # Donors whose in-shell occupancy is below 0.5 do not count toward CN (maintainer
+      # decision, TASK-001 review; 0.5 keeps e.g. the 0.87-occupancy Zn-bound water of 3KS3).
+      min_donor_occupancy: 0.5
       coordination_cutoff_angstrom: 2.8
       geometry_candidates: *geometry
       classification:
@@ -153,6 +156,9 @@ rules:
       kind: metal_element
       elements: [CA]
       donor_elements: [O, N]
+      # Donors whose in-shell occupancy is below 0.5 do not count toward CN (maintainer
+      # decision, TASK-001 review; 0.5 keeps e.g. the 0.87-occupancy Zn-bound water of 3KS3).
+      min_donor_occupancy: 0.5
       coordination_cutoff_angstrom: 3.0
       geometry_candidates: *geometry
       classification:
@@ -177,6 +183,9 @@ rules:
       kind: metal_element
       elements: [MG]
       donor_elements: [O, N]
+      # Donors whose in-shell occupancy is below 0.5 do not count toward CN (maintainer
+      # decision, TASK-001 review; 0.5 keeps e.g. the 0.87-occupancy Zn-bound water of 3KS3).
+      min_donor_occupancy: 0.5
       coordination_cutoff_angstrom: 2.6
       geometry_candidates: *geometry
       classification:
@@ -212,6 +221,9 @@ rules:
       kind: metal_element
       elements: [MN, FE, CO, NI, CU, CD]
       donor_elements: [N, O, S]
+      # Donors whose in-shell occupancy is below 0.5 do not count toward CN (maintainer
+      # decision, TASK-001 review; 0.5 keeps e.g. the 0.87-occupancy Zn-bound water of 3KS3).
+      min_donor_occupancy: 0.5
       coordination_cutoff_angstrom: 2.8
       geometry_candidates: *geometry
       classification:
@@ -236,6 +248,9 @@ rules:
       kind: metal_element
       elements: [NA, K]
       donor_elements: [O]
+      # Donors whose in-shell occupancy is below 0.5 do not count toward CN (maintainer
+      # decision, TASK-001 review; 0.5 keeps e.g. the 0.87-occupancy Zn-bound water of 3KS3).
+      min_donor_occupancy: 0.5
       coordination_cutoff_angstrom: 3.2
       geometry_candidates: *geometry
       classification:

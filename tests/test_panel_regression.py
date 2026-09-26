@@ -73,11 +73,11 @@ def test_family_findings_match_annotations(expected, family):
             assert actual[finding_id]["rule_id"] == entry["rule_id"], finding_id
 
 
-def shell_atoms(finding: dict) -> set[tuple[str, str]]:
+def shell_atoms(finding: dict, keys: tuple[str, ...] = ("ligand_distance",)) -> set[tuple]:
     return {
         (f"{a['chain']}:{a['seq_num']}{a['ins_code']}", a["atom_name"])
         for item in finding["evidence"]
-        if item["key"] == "ligand_distance"
+        if item["key"] in keys
         for a in item["atoms"][1:]
     }
 
@@ -95,7 +95,9 @@ def test_annotated_metal_ligands_within_cutoff_are_in_shell(expected):
             for lig in entry["annotated_ligands"]
             if lig["distance_angstrom"] <= cutoff and lig["element"] in donors
         }
-        assert within <= shell_atoms(finding), entry["id"]
+        # Annotated ligands appear in the shell, counted or excluded for partial occupancy.
+        reported = shell_atoms(finding, ("ligand_distance", "excluded_partial_donor"))
+        assert within <= reported, entry["id"]
 
 
 @pytest.mark.parametrize("expected", [expected_param(p) for p in EXPECTED])
