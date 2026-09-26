@@ -1,5 +1,5 @@
-"""Command line: ``simprep audit``, ``simprep manifest init|status``, ``simprep prep`` and
-``simprep variants``."""
+"""Command line: ``simprep audit``, ``simprep manifest init|status``, ``simprep prep``,
+``simprep model`` and ``simprep variants``."""
 
 from __future__ import annotations
 
@@ -21,6 +21,7 @@ from simprep.manifest import (
     write_json,
 )
 from simprep.manifest.manifest import sha256_text
+from simprep.model.run import LoopRejected, run_model
 from simprep.paths import KNOWLEDGE_DIR
 from simprep.prep.run import RECORD_FILE, PrepRequest, run_prep
 from simprep.prep.run import REPORT_FILE as PREP_REPORT_FILE
@@ -102,11 +103,24 @@ def prep(args: argparse.Namespace) -> int:
     return 0
 
 
+def model(args: argparse.Namespace) -> int:
+    """Prepare the wild type and build its gaps decided model_loop (exit 3 if rejected)."""
+    try:
+        record = run_model(PrepRequest(args.file, args.manifest, args.out, args.knowledge))
+    except LoopRejected as error:
+        print(f"simprep: {error}", file=sys.stderr)
+        return EXIT_BLOCKING_UNDECIDED
+    loops = ", ".join(loop["label"] for loop in record["loops"])
+    print(f"modelled {loops}: {args.out / record['system']['directory']}")
+    print(f"record: {args.out / 'model_record.json'}")
+    return 0
+
+
 def variants(args: argparse.Namespace) -> int:
     """Pass 1: candidate findings into manifest.json (exit 3). Pass 2: build the variants."""
     try:
         outcome = run_variants(PrepRequest(args.file, args.manifest, args.out, args.knowledge))
-    except VariantDecisionError as error:
+    except (VariantDecisionError, LoopRejected) as error:
         print(f"simprep: {error}", file=sys.stderr)
         return EXIT_BLOCKING_UNDECIDED
     if outcome.status == "needs_decisions":
@@ -157,6 +171,13 @@ def build_parser() -> argparse.ArgumentParser:
     prep_parser.add_argument("--manifest", type=Path, required=True)
     prep_parser.add_argument("--out", type=Path, required=True, help="output directory")
     prep_parser.set_defaults(handler=prep)
+    model_parser = commands.add_parser(
+        "model", help="build the wild type's gaps decided model_loop -> wt_modelled/"
+    )
+    model_parser.add_argument("file", type=Path)
+    model_parser.add_argument("--manifest", type=Path, required=True)
+    model_parser.add_argument("--out", type=Path, required=True, help="output directory")
+    model_parser.set_defaults(handler=model)
     variants_parser = commands.add_parser(
         "variants", help="build the manifest's variants from the prepared wild type"
     )

@@ -22,6 +22,7 @@ dev = [
 ]
 relax = [
     "openmm==8.6.1",
+    "pdbfixer==1.12.0",
 ]
 
 [project.scripts]

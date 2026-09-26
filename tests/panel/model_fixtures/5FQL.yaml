@@ -1,0 +1,38 @@
+# Model fixture (TASK-007) for 5FQL: the acceptance decisions on top of the prep fixture.
+# Expected values are written by hand from the task spec (docs/tasks/TASK-007-modelling.md:
+# the paper and the file measurements quoted there) and the file's own records (entity
+# sequence, pdbx_unobs_or_zero_occ_residues); they are not read back from simprep model.
+# reviewed: false until the maintainer reviews.
+structure: 5FQL.cif.gz
+prep_fixture: 5FQL.yaml
+reviewed: false
+decisions:  # replace the prep fixture's decisions for these findings
+  missing_residues/A:26-33:
+    option: truncate
+    rationale: >-
+      Signal peptide and propeptide are cleaved; Thr34 is the mature N-terminus
+      (Demydchuk et al. 2017, Nat Commun 8:15786, doi:10.1038/ncomms15786)
+  missing_residues/A:444-453:
+    option: model_loop
+    rationale: "Intact single chain with the SD1-SD2 linker modelled (TASK-007 decision 1)"
+expected:
+  loop:
+    chain: A
+    flanks: [443, 454]
+    # Entity sequence positions of author 444-453 (label_seq = auth - 25): FRDLEEDPYL.
+    residues: [[444, PHE], [445, ARG], [446, ASP], [447, LEU], [448, GLU], [449, GLU],
+               [450, ASP], [451, PRO], [452, TYR], [453, LEU]]
+    # Standard heavy atoms of each residue inside a chain (no OXT):
+    # F 11, R 11, D 8, L 8, E 9, E 9, D 8, P 7, Y 12, L 8.
+    heavy_atoms: 91
+  checks:  # TASK-007 acceptance, every peptide bond from A:443 to A:454
+    c_n_angstrom: [1.28, 1.38]
+    ca_ca_angstrom: [3.7, 3.9]
+  marking: {occupancy: 0.0}
+  accounting:
+    polymer_residues_added: 10
+    # pdbx_unobs_or_zero_occ_residues of 5FQL: A:26-33 (8) and A:444-453 (10).
+    unobserved_in: 18
+    unobserved_out: 8
+  truncated_n_terminus: "charged N-terminus (NH3+) at THR A:34"
+  absent_residues: [26, 27, 28, 29, 30, 31, 32, 33]
