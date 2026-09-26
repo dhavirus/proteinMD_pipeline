@@ -22,9 +22,18 @@ from simprep.prep.write import write_system
 from simprep.provenance import sha256_file, simprep_provenance, utc_now
 from simprep.schemas import validate
 from simprep.severity import apply_context
-from simprep.structure.model import Structure
+from simprep.structure.model import ResidueId, Structure
 from simprep.variants.apply import apply_mutations, mutated_residue
 from simprep.variants.findings import Evaluation, evaluate_site, finding_id, site_finding
+from simprep.variants.relaxation import (
+    Relaxed,
+    protonation_items,
+    relax_system,
+    relaxation_entry,
+    residual_findings,
+    site_label,
+    union_shell,
+)
 from simprep.variants.report import render_variant_report
 from simprep.variants.validate import Site, VariantError, resolve_sites
 
@@ -32,6 +41,7 @@ MANIFEST_FILE = "manifest.json"
 RECORD_FILE = "variant_record.json"
 REPORT_FILE = "variant_report.md"
 WILD_TYPE_DIR = "wt"
+UNRELAXED_DIR = "unrelaxed"
 SYSTEM_NAME = "system"
 CONTACTS_RECORDED = 5
 CHOOSE_ROTAMER = "choose_rotamer"
@@ -39,7 +49,7 @@ APPLIED_OPTIONS = (CHOOSE_ROTAMER,)  # apply options of the variant_build family
 
 
 class VariantDecisionError(VariantError):
-    """Rotamer decisions are missing, not final, or refused (e.g. a clashing rotamer)."""
+    """Rotamer decisions are missing, not final, or name an unknown rotamer."""
 
 
 @dataclass(frozen=True)
@@ -74,11 +84,12 @@ def run_variants(request: PrepRequest) -> VariantOutcome:
         return _needs_decisions(inputs, findings, request.out_dir)
     choices = chosen_candidates(inputs.manifest, results)
     wt_record = write_prep(inputs, plan, request.out_dir / WILD_TYPE_DIR)
-    entries = [
-        _write_variant(variant, (wild_type, results, choices), (wt_record, request.out_dir))
-        for variant in variants
-    ]
-    record = _record(inputs, wt_record, entries, request.out_dir)
+    built = [_build(variant, (wild_type, results, choices)) for variant in variants]
+    protocol = inputs.manifest.get("relaxation") or inputs.ruleset.relaxation
+    context = Context(inputs, wild_type, wt_record, protocol, request.out_dir)
+    relaxed_wts, relaxed = _relax_all(built, context) if protocol["enabled"] else ([], {})
+    entries = [_variant_entry(b, relaxed.get(b.name), context) for b in built]
+    record = _record(context, entries, relaxed_wts)
     return VariantOutcome("built", record=record)
 
 
@@ -108,7 +119,10 @@ def _snapshot_current(manifest: dict, findings: list[dict]) -> bool:
 
 
 def _needs_decisions(inputs: PrepInputs, findings: list[dict], out_dir: Path) -> VariantOutcome:
-    updated = attach_variant_snapshot(inputs.manifest, findings, utc_now())
+    """Write the manifest with fresh candidates (and the default relaxation protocol when
+    it has none, so the study sees and can edit it)."""
+    manifest = {"relaxation": inputs.ruleset.relaxation, **inputs.manifest}
+    updated = attach_variant_snapshot(manifest, findings, utc_now())
     out_dir.mkdir(parents=True, exist_ok=True)
     path = out_dir / MANIFEST_FILE
     write_json(updated, path)
@@ -142,35 +156,113 @@ def _choice(fid: str, decision: dict | None, evaluations: list[Evaluation]):
             None,
             f"{fid}: parameters.rotamer must be one of {', '.join(by_id)} (got {rotamer!r})",
         )
-    if by_id[rotamer].clashes:
-        return None, (
-            f"{fid}: rotamer {rotamer} has {len(by_id[rotamer].clashes)} clash(es); "
-            "a clashing side chain is not built (TASK-005 decision 4)"
-        )
     return by_id[rotamer], None
 
 
-def _write_variant(variant: dict, built: tuple, where: tuple) -> dict:
+@dataclass(frozen=True)
+class Built:
+    """A variant built rigidly on the prepared wild type."""
+
+    name: str
+    sites: frozenset[ResidueId]
+    structure: Structure
+    mutations: list[dict]
+    protonation: list[dict]
+
+
+@dataclass(frozen=True)
+class Context:
+    inputs: PrepInputs
+    wild_type: Structure
+    wt_record: dict
+    protocol: dict
+    out_dir: Path
+
+
+def _build(variant: dict, built: tuple) -> Built:
     wild_type, results, choices = built
-    wt_record, out_dir = where
     fids = [fid for fid, r in results.items() if r.site.variant == variant["name"]]
     residues = tuple(
         mutated_residue(results[fid].site.residue, results[fid].site.to, choices[fid].atoms)
         for fid in fids
     )
-    structure = apply_mutations(wild_type, residues)
-    directory = out_dir / variant["name"]
-    directory.mkdir(parents=True, exist_ok=True)
-    files = write_system(structure, directory, SYSTEM_NAME)
+    return Built(
+        variant["name"],
+        frozenset(results[fid].site.residue.id for fid in fids),
+        apply_mutations(wild_type, residues),
+        [_mutation_entry(fid, results[fid].site, choices[fid]) for fid in fids],
+        [_protonation_item(fid, results[fid].site) for fid in fids],
+    )
+
+
+def _relax_all(built: list[Built], context: Context) -> tuple[list[dict], dict]:
+    """Per site: the relaxed wild type (record entries) and each relaxed variant."""
+    groups: dict[frozenset, list[Built]] = {}
+    for variant in built:
+        groups.setdefault(variant.sites, []).append(variant)
+    wild_types, relaxed = [], {}
+    for sites, members in sorted(groups.items(), key=lambda item: sorted(item[0])):
+        structures = [context.wild_type] + [m.structure for m in members]
+        where = (sites, union_shell(structures, sites, context.protocol))
+        wild_types.append(_relaxed_wild_type(sites, where, context))
+        for member in members:
+            relaxed[member.name] = relax_system(
+                member.name, member.structure, where, (context.protocol, context.inputs.ruleset)
+            )
+    return wild_types, relaxed
+
+
+def _relaxed_wild_type(sites: frozenset, where: tuple, context: Context) -> dict:
+    name = f"{WILD_TYPE_DIR}_relaxed_{site_label(sites)}"
+    result = relax_system(
+        name, context.wild_type, where, (context.protocol, context.inputs.ruleset)
+    )
+    structure = result.outcome.structure
     return {
-        "name": variant["name"],
-        "directory": variant["name"],
-        "mutations": [_mutation_entry(fid, results[fid].site, choices[fid]) for fid in fids],
-        "files": files,
-        "counts": system_counts(wild_type, structure),
-        "work_order": wt_record["work_order"]
-        + [_protonation_item(fid, results[fid].site) for fid in fids],
+        "name": name,
+        "directory": name,
+        "sites": [rid.to_dict() for rid in sorted(sites)],
+        "files": _write(structure, context.out_dir / name),
+        "counts": system_counts(context.wild_type, structure),
+        "relaxation": relaxation_entry(result),
+        "findings": _residual(result, context),
+        "work_order": context.wt_record["work_order"]
+        + protonation_items(result, f"relaxation/{name}", frozenset()),
     }
+
+
+def _variant_entry(variant: Built, result: Relaxed | None, context: Context) -> dict:
+    directory = context.out_dir / variant.name
+    structure = variant.structure if result is None else result.outcome.structure
+    entry = {
+        "name": variant.name,
+        "directory": variant.name,
+        "mutations": variant.mutations,
+        "files": _write(structure, directory),
+        "counts": system_counts(context.wild_type, structure),
+        "work_order": context.wt_record["work_order"] + variant.protonation,
+    }
+    if result is not None:
+        unrelaxed = _write(variant.structure, directory / UNRELAXED_DIR)
+        entry["unrelaxed_files"] = [
+            {**f, "path": f"{UNRELAXED_DIR}/{f['path']}"} for f in unrelaxed
+        ]
+        entry["relaxation"] = relaxation_entry(result)
+        entry["findings"] = _residual(result, context)
+        entry["work_order"] += protonation_items(
+            result, variant.mutations[0]["finding_id"], variant.sites
+        )
+    return entry
+
+
+def _write(structure: Structure, directory: Path) -> list[dict]:
+    directory.mkdir(parents=True, exist_ok=True)
+    return write_system(structure, directory, SYSTEM_NAME)
+
+
+def _residual(result: Relaxed, context: Context) -> list[dict]:
+    config = config_from_manifest(context.inputs.manifest, context.inputs.manifest_sha256)
+    return residual_findings(result, result.outcome.structure, (context.inputs.ruleset, config))
 
 
 def _mutation_entry(fid: str, site: Site, evaluation: Evaluation) -> dict:
@@ -211,7 +303,8 @@ def _protonation_item(fid: str, site: Site) -> dict:
     }
 
 
-def _record(inputs: PrepInputs, wt_record: dict, entries: list[dict], out_dir: Path) -> dict:
+def _record(context: Context, entries: list[dict], relaxed_wild_types: list[dict]) -> dict:
+    inputs, wt_record, out_dir = context.inputs, context.wt_record, context.out_dir
     record = {
         "schema_version": wt_record["schema_version"],
         "generated_at": utc_now(),
@@ -219,10 +312,12 @@ def _record(inputs: PrepInputs, wt_record: dict, entries: list[dict], out_dir: P
         "knowledge_base": wt_record["knowledge_base"],
         "input": inputs.source,
         "manifest_sha256": inputs.manifest_sha256,
+        "relaxation_protocol": context.protocol,
         "wild_type": {
             "directory": WILD_TYPE_DIR,
             "prep_record_sha256": sha256_file(out_dir / WILD_TYPE_DIR / PREP_RECORD_FILE),
         },
+        "relaxed_wild_types": relaxed_wild_types,
         "variants": entries,
     }
     validate(record, "variant_record")

@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:simprep:schema:relaxation",
+  "x-schema-version": "0.1.0",
+  "title": "simprep relaxation defaults (knowledge/relaxation.yaml)",
+  "description": "Default protocol for the restrained local minimization of variant sites and the matched wild type (TASK-006). A study copies it into the manifest's `relaxation` and may edit it there; every output records the protocol it used.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "protocol", "references", "verify_flags"],
+  "properties": {
+    "schema_version": {"const": "0.1.0"},
+    "protocol": {"$ref": "#/$defs/protocol"},
+    "references": {"type": "array", "items": {"$ref": "urn:simprep:schema:finding#/$defs/reference"}},
+    "verify_flags": {"type": "array", "items": {"type": "string", "pattern": "^\\[VERIFY\\]"}}
+  },
+  "$defs": {
+    "protocol": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "enabled", "engine", "force_field_files", "mobile_shell_angstrom", "mobile_atoms",
+        "restraint_kj_per_mol_nm2", "tolerance_kj_per_mol_nm", "max_iterations",
+        "nonbonded_cutoff_nm", "platform", "hydrogen_ph", "seed"
+      ],
+      "properties": {
+        "enabled": {"type": "boolean", "description": "Relax every variant and its matched wild type (TASK-006 decision 5)."},
+        "engine": {"const": "openmm"},
+        "force_field_files": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+        "mobile_shell_angstrom": {"type": "number", "exclusiveMinimum": 0, "description": "Residues and waters with a heavy atom within this distance of a mutated residue form the mobile shell."},
+        "mobile_atoms": {"const": "side_chains_and_waters", "description": "Side chains (not N, CA, C, O) of shell residues and whole shell waters move; everything else is fixed."},
+        "restraint_kj_per_mol_nm2": {"type": "number", "minimum": 0, "description": "Harmonic positional restraint on mobile heavy atoms, except the mutated residue's side chain."},
+        "tolerance_kj_per_mol_nm": {"type": "number", "exclusiveMinimum": 0},
+        "max_iterations": {"type": "integer", "minimum": 1},
+        "nonbonded_cutoff_nm": {"type": "number", "exclusiveMinimum": 0, "description": "Also the distance within which a residue without a force-field template stops relaxation (TASK-006 decision 4)."},
+        "platform": {"const": "Reference", "description": "Double precision, single thread: byte-identical output (TASK-006 decision 7)."},
+        "hydrogen_ph": {"type": "number", "minimum": 0, "maximum": 14},
+        "seed": {"type": "integer", "minimum": 0}
+      }
+    }
+  }
+}

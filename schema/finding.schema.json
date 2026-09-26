@@ -113,7 +113,8 @@
         "missing_residues",
         "covalent_contacts",
         "unrecognized",
-        "variant_build"
+        "variant_build",
+        "relaxation"
       ]
     },
     "severity": {

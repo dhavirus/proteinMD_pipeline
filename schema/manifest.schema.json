@@ -37,6 +37,10 @@
       ]
     },
     "decisions": {"type": "array", "items": {"$ref": "#/$defs/decision"}},
+    "relaxation": {
+      "description": "Relaxation protocol for variants and their matched wild type (TASK-006); simprep variants fills it from knowledge/relaxation.yaml when absent.",
+      "$ref": "urn:simprep:schema:relaxation#/$defs/protocol"
+    },
     "variants": {
       "description": "Variants to build from the prepared wild-type system (TASK-005). Optional.",
       "type": "array",

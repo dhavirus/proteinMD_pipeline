@@ -1,0 +1,30 @@
+# Relaxation protocol defaults (TASK-006). A study copies this protocol into the
+# manifest's `relaxation` (simprep variants does so when it is absent) and may edit it
+# there; the protocol used is recorded in every output. Values below are the maintainer's
+# accepted defaults from the TASK-006 spike, not literature values.
+schema_version: 0.1.0
+protocol:
+  enabled: true
+  engine: openmm
+  force_field_files: [amber14-all.xml, amber14/tip3p.xml]
+  mobile_shell_angstrom: 6.0
+  mobile_atoms: side_chains_and_waters
+  restraint_kj_per_mol_nm2: 10000.0
+  tolerance_kj_per_mol_nm: 1.0
+  max_iterations: 5000
+  nonbonded_cutoff_nm: 1.0
+  platform: Reference
+  hydrogen_ph: 7.0
+  seed: 20260926
+references:
+  - citation: "Maier JA, Martinez C, Kasavajhala K, Wickstrom L, Hauser KE, Simmerling C. ff14SB: Improving the Accuracy of Protein Side Chain and Backbone Parameters from ff99SB. J Chem Theory Comput 2015;11:3696-713."
+    doi: "10.1021/acs.jctc.5b00255"
+    pmid: "26574453"
+    note: "Protein force field of OpenMM's amber14-all.xml (read in PubMed in the TASK-006 session)."
+  - citation: "Eastman P, et al. OpenMM 8: Molecular Dynamics Simulation with Machine Learning Potentials. J Phys Chem B 2024;128:109-116."
+    doi: "10.1021/acs.jpcb.3c06662"
+    pmid: "38154096"
+    note: "Engine (read in PubMed in the TASK-006 session)."
+verify_flags:
+  - "[VERIFY] TIP3P water model reference (Jorgensen et al. 1983) not checked in this session."
+  - "[VERIFY] That OpenMM 8.6.1's amber14-all.xml implements ff14SB as published was not checked against the file's own documentation in this session."

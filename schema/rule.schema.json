@@ -226,6 +226,9 @@
         },
         {
           "$ref": "#/$defs/matcher_side_chain_placement"
+        },
+        {
+          "$ref": "#/$defs/matcher_residual_clashes"
         }
       ]
     },
@@ -751,6 +754,25 @@
             "type": "number",
             "exclusiveMinimum": 0
           }
+        }
+      }
+    },
+    "matcher_residual_clashes": {
+      "description": "Clashes that remain at a mutated residue after relaxation, judged with the variant_build criterion (TASK-006). Evaluated by `simprep variants`, not by `simprep audit`.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "criterion_rule"
+      ],
+      "properties": {
+        "kind": {
+          "const": "residual_clashes"
+        },
+        "criterion_rule": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Rule id whose side_chain_placement matcher defines a clash."
         }
       }
     }
