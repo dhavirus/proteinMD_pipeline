@@ -6,12 +6,14 @@ description: >-
 
 x-options: &options
   - id: highest_occupancy
+    prep_action: apply
     label: Keep the highest-occupancy altloc
     cost_hint: low
     trade_offs:
       - Simple and reproducible; ties are broken by altloc identifier (A before B).
       - Discards the minor state, which may be the functionally relevant one.
   - id: specific_altloc
+    prep_action: apply
     label: Keep a specific altloc (named in the decision)
     cost_hint: low
     trade_offs:
@@ -19,6 +21,7 @@ x-options: &options
       - Mixing altloc letters across residues can create clashes when the letters were
         not refined as a consistent set; check neighbours.
   - id: keep_ensemble
+    prep_action: apply
     label: Keep each altloc as a separate system (ensemble)
     cost_hint: high
     trade_offs:

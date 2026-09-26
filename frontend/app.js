@@ -1,6 +1,6 @@
 // simprep review page: wires the pure logic in lib/ to the DOM, Mol* and ajv.
 // All state lives in one immutable object (lib/state.js); every change re-renders.
-import { decisionProblems, isoSeconds, makeDecision, OPTION_PARAMETERS } from "./lib/decisions.js";
+import { decisionProblems, isFinal, isoSeconds, makeDecision, OPTION_PARAMETERS } from "./lib/decisions.js";
 import {
   altlocChoices, FAMILY_LABELS, formatAtom, formatEvidenceValue, groupFindings, SEVERITIES, severityCounts,
 } from "./lib/findings.js";
@@ -181,8 +181,9 @@ function render() {
 function renderSummary() {
   const findings = state.report.findings;
   const counts = severityCounts(findings);
-  const decided = findings.filter((f) => state.decisions[f.id]).length;
-  const blockingOpen = findings.filter((f) => f.effective_severity === "blocking" && !state.decisions[f.id]).length;
+  const final = decidedIds(state);
+  const decided = final.size;
+  const blockingOpen = findings.filter((f) => f.effective_severity === "blocking" && !final.has(f.id)).length;
   $("summary").replaceChildren(
     el("span", { class: "chip neutral", text: `${findings.length} findings` }),
     ...SEVERITIES.map((s) => el("span", { class: `chip ${s}`, text: `${counts[s]} ${s}` })),
@@ -253,7 +254,15 @@ function findingRow(finding) {
   el("span", { class: "tags" },
     escalated ? el("span", { class: "escalated", text: `${finding.base_severity} →` }) : null,
     el("span", { class: `chip ${finding.effective_severity}`, text: finding.effective_severity }),
-    state.decisions[finding.id] ? el("span", { class: "chip decided", text: "decided" }) : null));
+    decisionChip(finding)));
+}
+
+function decisionChip(finding) {
+  const decision = state.decisions[finding.id];
+  if (!decision) return null;
+  return isFinal(finding, decision.option_id)
+    ? el("span", { class: "chip decided", text: "decided" })
+    : el("span", { class: "chip warn", text: "not final" });
 }
 
 function renderDetail() {
@@ -328,7 +337,7 @@ function optionChoice(finding, option, saved) {
   const id = `option-${option.id}`;
   const checked = (saved ? saved.option_id : finding.recommended_option) === option.id;
   return el("label", { class: "opt", for: id },
-    el("input", { type: "radio", name: "option", id, value: option.id, checked }),
+    el("input", { type: "radio", name: "option", id, value: option.id, checked, "data-final": String(isFinal(finding, option.id)) }),
     el("span", { class: "name" }, option.label, el("span", { class: "tag", text: `cost ${option.cost_hint}` }),
       option.id === finding.recommended_option ? el("span", { class: "tag rec", text: "recommended" }) : null,
       option.requires_explicit_choice ? el("span", { class: "tag explicit", text: "explicit choice only" }) : null),
@@ -345,6 +354,9 @@ function renderDecisionExtra(form, finding, saved) {
     nodes.push(el("label", { class: "confirm", for: "decision-confirm" },
       el("input", { type: "checkbox", id: "decision-confirm", checked: saved?.option_id === optionId }),
       el("span", { text: `I choose "${option.label}" deliberately. It is never applied by default: ${option.trade_offs.join(" ")}` })));
+  }
+  if (option && !isFinal(finding, optionId)) {
+    nodes.push(el("p", { class: "msg", text: `"${option.label}" records that the decision is still open: the finding stays undecided, and prep will not run until it gets a final decision.` }));
   }
   if (OPTION_PARAMETERS[optionId]) nodes.push(...altlocInput(finding, saved));
   extra.replaceChildren(...nodes);

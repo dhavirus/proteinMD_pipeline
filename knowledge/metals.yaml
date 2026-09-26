@@ -17,6 +17,8 @@ x-geometry: &geometry
 
 x-options: &options
   - id: nonbonded_12_6
+    prep_action: defer
+    prep_stage: parameterization
     label: Nonbonded 12-6 LJ ion model
     cost_hint: low
     trade_offs:
@@ -25,6 +27,8 @@ x-options: &options
         energy, ion-oxygen distance and coordination number at once (Li & Merz 2014),
         so the first shell may rearrange or collapse during sampling.
   - id: nonbonded_12_6_4
+    prep_action: defer
+    prep_stage: parameterization
     label: Nonbonded 12-6-4 LJ-type ion model
     cost_hint: low
     trade_offs:
@@ -33,6 +37,8 @@ x-options: &options
       - Modest overhead; needs C4 terms for each ion/atom-type pair; does not treat
         charge transfer explicitly.
   - id: bonded_mcpb
+    prep_action: defer
+    prep_stage: parameterization
     label: Bonded model (MCPB.py-style)
     cost_hint: high
     trade_offs:
@@ -41,6 +47,8 @@ x-options: &options
         exchange is impossible, which biases any landscape where site rearrangement
         matters; must be rebuilt if a variant changes a ligand.
   - id: restrained
+    prep_action: defer
+    prep_stage: parameterization
     label: Nonbonded ion plus distance restraints to crystal ligands
     cost_hint: low
     trade_offs:

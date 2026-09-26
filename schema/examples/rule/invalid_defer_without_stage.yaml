@@ -1,4 +1,4 @@
-# Example only: 'XYZ' is a placeholder, not a real chemical component ID.
+# Invalid: a deferred option must name the stage that receives it (prep_stage).
 schema_version: 0.1.0
 family: nonstandard_residues
 rules:
@@ -15,7 +15,6 @@ rules:
     options:
       - id: route_to_topology_builder
         prep_action: defer
-        prep_stage: parameterization
         label: Build a topology
         cost_hint: medium
         trade_offs: [Keeps the deposited chemistry.]

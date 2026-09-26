@@ -1,7 +1,8 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import { buildManifest, manifestMismatch } from "../lib/manifest.js";
-import { applyDraft, createState, recordDecision, removeDecision, setRegions, severityIsStale } from "../lib/state.js";
+import { applyDraft, createState, decidedIds, recordDecision, removeDecision, setRegions, severityIsStale } from "../lib/state.js";
+import { finalOption, isFinal } from "../lib/decisions.js";
 import { exampleManifest, miniReport } from "./fixtures.mjs";
 
 const decision = (id, option) => ({ finding_id: id, option_id: option, rationale: "r", decided_by: "b", timestamp: "2026-01-01T00:00:00Z" });
@@ -66,4 +67,15 @@ test("drafts restore only decisions for findings in this report", () => {
   });
   assert.deepEqual(Object.keys(state.decisions), ["metals/A:901"]);
   assert.deepEqual(state.regions, [region]);
+});
+
+test("an expert-review decision leaves the finding undecided", () => {
+  const report = miniReport();
+  const group = report.findings.find((f) => f.id === "unrecognized/group/A:902");
+  group.options = group.options.map((o) => ({ ...o, prep_action: o.id === "expert_review" || o.id === "add_rule" ? "unresolved" : "apply" }));
+  assert.ok(!isFinal(group, "expert_review"));
+  assert.equal(finalOption(group), "exclude");
+  const state = recordDecision(createState(report), decision(group.id, "expert_review"));
+  assert.ok(!decidedIds(state).has(group.id));
+  assert.ok(decidedIds(recordDecision(state, decision(group.id, "exclude"))).has(group.id));
 });

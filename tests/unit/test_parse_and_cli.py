@@ -126,11 +126,17 @@ def audited_manifest(mini_path, tmp_path):
     return json.loads((tmp_path / "a" / "manifest.json").read_text())
 
 
+def final_option(finding: dict) -> str:
+    """The recommended option if it is a final decision, else the first final one."""
+    final = [o["id"] for o in finding["options"] if o.get("prep_action") != "unresolved"]
+    return finding["recommended_option"] if finding["recommended_option"] in final else final[0]
+
+
 def decide_blocking(manifest):
     manifest["decisions"] = [
         {
             "finding_id": f["id"],
-            "option_id": f["recommended_option"],
+            "option_id": final_option(f),
             "rationale": "test",
             "decided_by": "test",
             "timestamp": "2026-01-01T00:00:00Z",
@@ -147,6 +153,12 @@ def test_manifest_status_exit_codes(mini_path, tmp_path, capsys):
     path.write_text(json.dumps(manifest))
     assert run_cli("manifest", "status", path, "--structure", mini_path) == 3
     assert "unrecognized/group/A:902" in capsys.readouterr().out
+    unresolved = decide_blocking(json.loads(json.dumps(manifest)))
+    for decision in unresolved["decisions"]:
+        decision["option_id"] = "expert_review"
+    path.write_text(json.dumps(unresolved))
+    assert run_cli("manifest", "status", path, "--structure", mini_path) == 3
+    assert "not final" in capsys.readouterr().out
     path.write_text(json.dumps(decide_blocking(manifest)))
     assert run_cli("manifest", "status", path, "--structure", mini_path) == 0
     other = tmp_path / "other.cif"

@@ -1,4 +1,5 @@
 // Application state: one plain object, replaced (never mutated) on every change.
+import { isFinal } from "./decisions.js";
 import { sameRegions } from "./regions.js";
 
 /**
@@ -45,8 +46,13 @@ export function severityIsStale(state) {
   return !sameRegions(state.regions, state.report.audit_config.regions);
 }
 
+/** Findings with a final decision (an "expert review" decision leaves a finding open). */
 export function decidedIds(state) {
-  return new Set(Object.keys(state.decisions));
+  return new Set(
+    state.report.findings
+      .filter((f) => state.decisions[f.id] && isFinal(f, state.decisions[f.id].option_id))
+      .map((f) => f.id),
+  );
 }
 
 /** Restore a saved draft (decisions + regions) for the same input file. */

@@ -3,7 +3,7 @@
 // Usage: node export_manifests.mjs FINDINGS_JSON OUT_DIR "A:45 A:46 ..."
 import { readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-import { decisionProblems, makeDecision } from "../lib/decisions.js";
+import { decisionProblems, finalOption, makeDecision } from "../lib/decisions.js";
 import { buildManifest } from "../lib/manifest.js";
 import { regionFromDraft } from "../lib/regions.js";
 import { createState, recordDecision, setRegions } from "../lib/state.js";
@@ -20,7 +20,7 @@ function decide(state, finding, optionId, extra = {}) {
 }
 
 function decideAll(state, findings) {
-  return findings.reduce((s, f) => decide(s, f, f.recommended_option), state);
+  return findings.reduce((s, f) => decide(s, f, finalOption(f)), state);
 }
 
 async function write(name, state) {

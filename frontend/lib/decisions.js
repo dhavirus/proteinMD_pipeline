@@ -49,3 +49,16 @@ export function makeDecision(finding, draft, timestamp) {
 export function isoSeconds(date) {
   return date.toISOString().replace(/\.\d{3}Z$/, "Z");
 }
+
+/** A decision is final unless its option only defers the decision (e.g. expert_review). */
+export function isFinal(finding, optionId) {
+  const option = finding.options.find((o) => o.id === optionId);
+  return Boolean(option) && option.prep_action !== "unresolved";
+}
+
+/** The recommended option if it is final, else the first final option. */
+export function finalOption(finding) {
+  if (isFinal(finding, finding.recommended_option)) return finding.recommended_option;
+  const option = finding.options.find((o) => isFinal(finding, o.id));
+  return option ? option.id : null;
+}

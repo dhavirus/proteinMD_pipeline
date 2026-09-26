@@ -6,23 +6,28 @@ description: >-
 
 x-options: &options
   - id: expert_review
+    prep_action: unresolved
     label: Expert decision required
     cost_hint: medium
     trade_offs:
       - Nothing proceeds until a human decides how to treat the chemistry.
   - id: add_rule
+    prep_action: unresolved
     label: Add a knowledge-base rule for this chemistry, then re-audit
     cost_hint: medium
     trade_offs:
       - Makes the treatment reusable and documented.
       - Requires a rule with sources and a panel structure that exercises it.
   - id: exclude
+    prep_action: apply
     label: Exclude from the system (recorded decision)
     cost_hint: low
     trade_offs:
       - Removes the unknown chemistry.
       - Anything it contributes (contacts, charge, covalent attachment) is lost.
   - id: parameterize_manually
+    prep_action: defer
+    prep_stage: parameterization
     label: Keep and parameterize outside the rule system
     cost_hint: high
     trade_offs:

@@ -336,6 +336,24 @@
         "requires_explicit_choice": {
           "description": "Never recommended by default; only applied when a human selects it.",
           "type": "boolean"
+        },
+        "prep_action": {
+          "description": "What prep does with this option: apply (changes coordinates or links), record (no change, noted for topology), defer (a later stage acts; work-order item), unresolved (not a final decision; prep refuses).",
+          "enum": [
+            "apply",
+            "record",
+            "defer",
+            "unresolved"
+          ]
+        },
+        "prep_stage": {
+          "description": "Later stage that receives the work-order item (record / defer).",
+          "enum": [
+            "modelling",
+            "chemistry",
+            "parameterization",
+            "topology"
+          ]
         }
       }
     },

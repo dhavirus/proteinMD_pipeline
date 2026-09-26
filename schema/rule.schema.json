@@ -76,7 +76,7 @@
           "type": "array",
           "minItems": 1,
           "items": {
-            "$ref": "urn:simprep:schema:finding#/$defs/option"
+            "$ref": "#/$defs/rule_option"
           }
         },
         "recommended_option": {
@@ -667,6 +667,43 @@
         "type": "string",
         "pattern": "^[A-Z0-9']{1,4}$"
       }
+    },
+    "rule_option": {
+      "description": "A finding option plus what prep does with it (TASK-004).",
+      "allOf": [
+        {
+          "$ref": "urn:simprep:schema:finding#/$defs/option"
+        },
+        {
+          "required": [
+            "prep_action"
+          ]
+        },
+        {
+          "if": {
+            "properties": {
+              "prep_action": {
+                "enum": [
+                  "record",
+                  "defer"
+                ]
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "prep_stage"
+            ]
+          },
+          "else": {
+            "not": {
+              "required": [
+                "prep_stage"
+              ]
+            }
+          }
+        }
+      ]
     }
   },
   "patternProperties": {

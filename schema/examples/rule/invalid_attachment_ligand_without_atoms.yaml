@@ -19,7 +19,7 @@ rules:
           sequon_check: false
     base_severity: blocking
     options:
-      - {id: expert_review, label: Expert decision required, cost_hint: medium, trade_offs: [Nothing proceeds.]}
+      - {id: expert_review, prep_action: unresolved, label: Expert decision required, cost_hint: medium, trade_offs: [Nothing proceeds.]}
     recommended_option: {default: expert_review, conditions: []}
     rationale: Example.
     references: []

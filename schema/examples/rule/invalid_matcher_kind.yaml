@@ -9,7 +9,7 @@ rules:
     matcher: {kind: magic, elements: [ZN]}
     base_severity: warn
     options:
-      - {id: nonbonded_12_6, label: 12-6, cost_hint: low, trade_offs: [Cheap.]}
+      - {id: nonbonded_12_6, prep_action: defer, prep_stage: parameterization, label: 12-6, cost_hint: low, trade_offs: [Cheap.]}
     recommended_option: {default: nonbonded_12_6, conditions: []}
     rationale: Example.
     references: []
