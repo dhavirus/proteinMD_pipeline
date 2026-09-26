@@ -10,13 +10,21 @@ from dataclasses import dataclass
 from simprep import SCHEMA_VERSION
 from simprep.config import AuditConfig
 from simprep.detectors import load_detectors
+from simprep.detectors.covalent_contacts import link_to_groups
 from simprep.detectors.unrecognized import detect_unrecognized
 from simprep.findings import Finding
 from simprep.rules import RuleSet
 from simprep.severity import apply_context
 from simprep.structure.model import ResidueClass, ResidueId, Structure
 
-FAMILY_ORDER = ("metals", "nonstandard_residues", "altlocs", "missing_residues", "unrecognized")
+FAMILY_ORDER = (
+    "metals",
+    "nonstandard_residues",
+    "altlocs",
+    "missing_residues",
+    "covalent_contacts",
+    "unrecognized",
+)
 SCOPE = (
     "Model 1 of the deposited asymmetric unit as parsed; no biological assembly is "
     "generated and no coordinates are modified by an audit."
@@ -25,6 +33,7 @@ ANNOTATION_CATEGORIES = (
     "struct_conn",
     "pdbx_struct_mod_residue",
     "pdbx_unobs_or_zero_occ_residues",
+    "entity_poly_seq",
 )
 
 
@@ -48,6 +57,7 @@ def run_audit(structure: Structure, ruleset: RuleSet, config: AuditConfig) -> li
     ]
     claimed = frozenset(rid for finding in findings for rid in finding.claims)
     findings += detect_unrecognized(structure, ruleset, claimed)
+    findings = link_to_groups(findings)
     return sorted(apply_context(findings, structure, config), key=_sort_key)
 
 

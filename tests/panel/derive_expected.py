@@ -7,8 +7,9 @@ the knowledge base that alters findings shows up as a regression-test mismatch.
 
 Usage: python tests/panel/derive_expected.py tests/panel/5FQL.cif.gz
 
-Writes tests/panel/expected_findings/<ID>.yaml with ``reviewed: false``. A hand-written
-``curated_checks`` block already present in that file is preserved.
+Writes tests/panel/expected_findings/<ID>.yaml with ``reviewed: false``. Hand-written
+``curated_families`` (families that annotations cannot give, such as covalent_contacts)
+and ``curated_checks`` blocks already present in that file are preserved.
 """
 
 from __future__ import annotations
@@ -287,6 +288,28 @@ def standard_link(link: dict, found: dict) -> bool:
     )
 
 
+def sequon_asparagines(block, found) -> dict[str, list[str]]:
+    """Per chain, observed ASN residues starting an N-X-S/T sequon (X not PRO), from
+    _entity_poly_seq; used to check covalent_contacts candidates independently."""
+    sequences: dict[str, dict[int, set[str]]] = defaultdict(lambda: defaultdict(set))
+    for row in rows(block, "_entity_poly_seq."):
+        sequences[row["entity_id"]][int(row["num"])].add(row["mon_id"])
+    positions: list[tuple[str, int, str]] = []
+    for key, res in found.items():
+        if res["type"] == "polymer" and res["label_seq"]:
+            positions.append((res["atoms"][0]["label_entity_id"], int(res["label_seq"]), key))
+    result: dict[str, list[str]] = defaultdict(list)
+    for entity, number, key in sorted(positions, key=lambda item: _sort_key(item[2])):
+        seq = sequences.get(entity, {})
+        if (
+            "ASN" in seq.get(number, set())
+            and "PRO" not in seq.get(number + 1, {"PRO"})
+            and seq.get(number + 2, set()) & {"SER", "THR"}
+        ):
+            result[key.split(":")[0]].append(key)
+    return dict(result)
+
+
 def derive(path: Path) -> dict:
     block = gemmi.cif.read(str(path)).sole_block()
     found = residues(block)
@@ -296,7 +319,7 @@ def derive(path: Path) -> dict:
         "reviewed": False,
         "derived_by": "tests/panel/derive_expected.py: raw mmCIF categories (atom_site, "
         "entity, struct_conn, pdbx_struct_mod_residue, "
-        "pdbx_unobs_or_zero_occ_residues); no simprep code",
+        "pdbx_unobs_or_zero_occ_residues, entity_poly_seq); no simprep code",
         "families": {
             "metals": metals(block, found),
             "nonstandard_residues": nonstandard(block, found),
@@ -304,6 +327,7 @@ def derive(path: Path) -> dict:
             "missing_residues": missing(block, found),
             "unrecognized": unrecognized(block, found),
         },
+        "sequon_asparagines": sequon_asparagines(block, found),
     }
 
 
@@ -312,8 +336,9 @@ def main(path: Path) -> None:
     out = path.parent / "expected_findings" / f"{expected['pdb_id']}.yaml"
     if out.exists():
         previous = yaml.safe_load(out.read_text())
-        if "curated_checks" in previous:
-            expected["curated_checks"] = previous["curated_checks"]
+        for key in ("curated_families", "curated_checks"):
+            if key in previous:
+                expected[key] = previous[key]
     out.write_text(yaml.safe_dump(expected, sort_keys=False, width=100))
     print(f"wrote {out}")
 

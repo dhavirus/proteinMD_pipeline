@@ -21,6 +21,7 @@ PANEL_DIR = Path(__file__).parent / "panel"
 EXPECTED_DIR = PANEL_DIR / "expected_findings"
 PANEL_SIZE = 5
 FAMILIES = ("metals", "nonstandard_residues", "altlocs", "missing_residues", "unrecognized")
+CURATED_FAMILIES = ("covalent_contacts",)
 EXPECTED = sorted(EXPECTED_DIR.glob("*.yaml"))
 
 
@@ -71,6 +72,33 @@ def test_family_findings_match_annotations(expected, family):
     for finding_id, entry in wanted.items():
         if "rule_id" in entry:
             assert actual[finding_id]["rule_id"] == entry["rule_id"], finding_id
+
+
+@pytest.mark.parametrize("family", CURATED_FAMILIES)
+@pytest.mark.parametrize("expected", [expected_param(p) for p in EXPECTED])
+def test_curated_family_findings(expected, family):
+    """Families the annotations cannot give are listed by hand in curated_families."""
+    actual = {f["id"]: f for f in audit(expected["file"])["findings"] if f["rule_family"] == family}
+    wanted = {entry["id"]: entry for entry in expected["curated_families"][family]}
+    assert sorted(actual) == sorted(wanted)
+    for finding_id, entry in wanted.items():
+        assert actual[finding_id]["rule_id"] == entry["rule_id"]
+
+
+@pytest.mark.parametrize("expected", [expected_param(p) for p in EXPECTED])
+def test_glycosylation_candidates_sit_on_derived_sequons(expected):
+    """Independent check: n_glycosylation candidates start an N-X-S/T sequon according to
+    the file's own entity sequence (derive_expected.py), and are recommended add_link."""
+    sequon_residues = {r for chain in expected["sequon_asparagines"].values() for r in chain}
+    findings = by_id(audit(expected["file"]))
+    for entry in expected["curated_families"]["covalent_contacts"]:
+        if entry["pattern"] != "n_glycosylation":
+            continue
+        assert entry["polymer_residue"] in sequon_residues, entry["id"]
+        finding = findings[entry["id"]]
+        evidence = {item["key"]: item.get("value") for item in finding["evidence"]}
+        assert evidence["in_sequon"] is True and finding["recommended_option"] == "add_link"
+        assert evidence["ligand_group_finding"].startswith("unrecognized/group/")
 
 
 def shell_atoms(finding: dict, keys: tuple[str, ...] = ("ligand_distance",)) -> set[tuple]:

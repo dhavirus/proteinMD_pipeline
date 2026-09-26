@@ -1,0 +1,26 @@
+# A ligand selector must name atoms or elements, not just components.
+schema_version: 0.1.0
+family: covalent_contacts
+rules:
+  - rule_id: covalent_contacts.example
+    family: covalent_contacts
+    version: 0.1.0
+    title: Example attachment rule
+    priority: 0
+    matcher:
+      kind: attachment_pattern
+      annotated_conn_types: [covale]
+      patterns:
+        - name: any_contact
+          bond: anything
+          ligand: {comp_ids: ["*"]}
+          polymer: {res_names: [CYS], atom_names: [SG]}
+          max_distance_angstrom: 3.0
+          sequon_check: false
+    base_severity: blocking
+    options:
+      - {id: expert_review, label: Expert decision required, cost_hint: medium, trade_offs: [Nothing proceeds.]}
+    recommended_option: {default: expert_review, conditions: []}
+    rationale: Example.
+    references: []
+    verify_flags: []

@@ -33,6 +33,7 @@ def load_detectors() -> dict[str, Detector]:
     """Import every family module (which registers itself) and return the registry."""
     from simprep.detectors import (  # noqa: F401
         altlocs,
+        covalent_contacts,
         metals,
         missing_residues,
         nonstandard_residues,
