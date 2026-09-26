@@ -9,7 +9,7 @@ ADR-0007 (modelling stage) first. After TASK-007 the 5FQL work order still holds
 | parameterization | Ca2+ A:1551; Cl- A:1567-1569 |
 | protonation | modelled loop A:444-453, moved flanks, mutated residues |
 
-Status: **draft** (open questions below, each with a default, for the maintainer).
+Status: **accepted** (maintainer, 2026-09-26: every default accepted; see the end of this file).
 
 ## What the primary publication says (read in this session, PubMed PMC5472762)
 
@@ -138,3 +138,9 @@ protonation), DDZ / Ca2+ parameters (TASK-010), active-site water placement.
 ## [VERIFY] introduced
 - None new. Removed: DDZ identity (CCD read). Kept: FGly aldehyde component ID; ALS as
   FGly sulfate in other entries.
+
+## Resolved decisions (maintainer, 2026-09-26)
+Every default above is accepted: (1) the edit runs in prep as a mapping-driven `apply`
+operation; (2) the vacated Ca2+ position is recorded and left empty; (3) OG -> OG1,
+OS1 -> OG2; (4) the `metals/A:1551` decision is kept and the coordination change is noted
+in the prep record.

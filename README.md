@@ -39,8 +39,10 @@ node frontend/tests/smoke/smoke.mjs  # browser smoke test (needs Playwright and 
 
 `simprep prep` applies a manifest in which every blocking finding has a final decision
 (`expert_review` / `add_rule` are not final). It selects altlocs, deletes excluded
-residues, writes `add_link` bonds into `struct_conn`, and never invents coordinates:
-loop modelling, capping, chemistry edits and parameterization go into the work order in
+residues, writes `add_link` bonds into `struct_conn`, applies residue mappings that only
+delete and rename atoms (`revert_to_parent`; `model_gem_diol`: formylglycine sulfate ALS ->
+gem-diol DDZ, ADR-0008), and never invents coordinates:
+loop modelling, capping and parameterization go into the work order in
 `prep_record.json` for later stages. Outputs: `system.cif` + `system.pdb` (or one pair
 per altloc with `keep_ensemble`), `prep_record.json` (actions, work order, file hashes,
 record accounting) and `prep_report.md`. See ADR-0004.
