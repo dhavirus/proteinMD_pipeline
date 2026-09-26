@@ -1,0 +1,84 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:simprep:schema:modelling",
+  "x-schema-version": "0.1.0",
+  "title": "simprep loop-modelling defaults (knowledge/modelling.yaml)",
+  "description": "Default protocol for building unobserved internal loops decided `model_loop` (TASK-007): PDBFixer places the residues, OpenMM minimizes the loop and its flanks. A study copies it into the manifest's `modelling` and may edit it there; every output records the protocol it used.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "protocol", "references", "verify_flags"],
+  "properties": {
+    "schema_version": {"const": "0.1.0"},
+    "protocol": {"$ref": "#/$defs/protocol"},
+    "references": {"type": "array", "items": {"$ref": "urn:simprep:schema:finding#/$defs/reference"}},
+    "verify_flags": {"type": "array", "items": {"type": "string", "pattern": "^\\[VERIFY\\]"}}
+  },
+  "$defs": {
+    "protocol": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["method", "placement", "minimization", "checks", "marking"],
+      "properties": {
+        "method": {"const": "pdbfixer_then_minimization"},
+        "placement": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["tool", "tool_version", "seed", "platform"],
+          "properties": {
+            "tool": {"const": "pdbfixer"},
+            "tool_version": {"const": "1.12.0", "description": "Checked against the installed PDBFixer before building."},
+            "seed": {"type": "integer", "minimum": 0, "description": "PDBFixer's Langevin integrator seed (addMissingAtoms(seed=))."},
+            "platform": {"const": "Reference", "description": "Byte-identical placement (TASK-007 decision 2)."}
+          }
+        },
+        "minimization": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "force_field_files", "mobile_atoms", "restraint_kj_per_mol_nm2",
+            "torsion_restraint_kj_per_mol_rad2", "l_chirality_improper_degree", "nonbonded", "sterics_cutoff_nm", "sterics_switch_nm", "sterics_margin_nm",
+            "tolerance_kj_per_mol_nm", "max_iterations", "nonbonded_cutoff_nm", "platform",
+            "hydrogen_ph", "seed"
+          ],
+          "properties": {
+            "force_field_files": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+            "mobile_atoms": {"const": "loop_and_flanks", "description": "Loop heavy atoms move freely; the flanking residues' heavy atoms move under the positional restraint; everything else is fixed."},
+            "restraint_kj_per_mol_nm2": {"type": "number", "minimum": 0},
+            "torsion_restraint_kj_per_mol_rad2": {"type": "number", "exclusiveMinimum": 0, "description": "Bonded-only pre-stage: trans omega and L chirality restraints."},
+            "l_chirality_improper_degree": {"type": "number", "exclusiveMinimum": 0, "exclusiveMaximum": 90, "description": "Target CA-N-C-CB improper of non-glycine loop residues in the pre-stage (positive = L)."},
+            "nonbonded": {"const": "sterics_only", "description": "Final minimization: Lennard-Jones between mobile atoms and everything else, without charges or 1-4 terms (ADR-0007)."},
+            "sterics_cutoff_nm": {"type": "number", "exclusiveMinimum": 0, "description": "Lennard-Jones cutoff of the sterics-only minimization."},
+            "sterics_switch_nm": {"type": "number", "exclusiveMinimum": 0, "description": "Start of the switching function (below the sterics cutoff)."},
+            "sterics_margin_nm": {"type": "number", "exclusiveMinimum": 0, "description": "Lennard-Jones partners are the atoms within the sterics cutoff plus this margin of a mobile atom's start; a mobile atom moving farther stops the stage."},
+            "tolerance_kj_per_mol_nm": {"type": "number", "exclusiveMinimum": 0},
+            "max_iterations": {"type": "integer", "minimum": 1},
+            "nonbonded_cutoff_nm": {"type": "number", "exclusiveMinimum": 0},
+            "platform": {"const": "Reference"},
+            "hydrogen_ph": {"type": "number", "minimum": 0, "maximum": 14},
+            "seed": {"type": "integer", "minimum": 0}
+          }
+        },
+        "checks": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["peptide_bond_angstrom", "peptide_bond_tolerance_angstrom", "ca_ca_trans_angstrom", "ca_ca_trans_tolerance_angstrom"],
+          "properties": {
+            "peptide_bond_angstrom": {"type": "number", "exclusiveMinimum": 0},
+            "peptide_bond_tolerance_angstrom": {"type": "number", "exclusiveMinimum": 0},
+            "ca_ca_trans_angstrom": {"type": "number", "exclusiveMinimum": 0},
+            "ca_ca_trans_tolerance_angstrom": {"type": "number", "exclusiveMinimum": 0}
+          }
+        },
+        "marking": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["occupancy", "b_iso_angstrom2"],
+          "properties": {
+            "occupancy": {"const": 0.0, "description": "Modelled atoms are written with occupancy 0.00 (TASK-007 decision 3)."},
+            "b_iso_angstrom2": {"type": "number", "minimum": 0}
+          }
+        }
+      }
+    }
+  }
+}

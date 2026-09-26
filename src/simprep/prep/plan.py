@@ -2,8 +2,10 @@
 
 Each finding in the manifest's snapshot becomes one :class:`Action`. Options whose
 ``prep_action`` is ``apply`` are carried out by an operation registered in
-:data:`OPERATIONS`; ``record`` and ``defer`` options become work-order items for a later
-stage; findings without a final decision are passed through unchanged and listed.
+:data:`OPERATIONS`, unless they name a ``prep_stage``: then that later stage carries them
+out (``model_loop``: the modelling stage, ADR-0007) and prep only lists them. ``record``
+and ``defer`` options, and apply options of a later stage, become work-order items;
+findings without a final decision are passed through unchanged and listed.
 """
 
 from __future__ import annotations
@@ -15,6 +17,14 @@ from simprep.rules import RuleSet
 from simprep.structure.model import Link, LinkPartner, Residue, ResidueId, Structure
 
 ADDED_LINK_TYPE = "covale"
+TRUNCATE = "truncate"
+# The fixed meaning of `truncate` for the topology stage (TASK-007): charged termini.
+TERMINUS_NOTES = {
+    "n_terminal": "charged N-terminus (NH3+) at {after}",
+    "c_terminal": "charged C-terminus (COO-) at {before}",
+    "internal": "chain break: charged C-terminus (COO-) at {before}, charged N-terminus "
+    "(NH3+) at {after}",
+}
 ADDED_LINK_PREFIX = "prep_link"
 
 
@@ -141,6 +151,9 @@ def _action(context: OperationContext, finding: dict, decision: dict | None) -> 
             "predates knowledge base 0.3.0, so re-run `simprep audit --manifest` first"
         )
         return action(option["id"], "undecided", None, "no prep_action in the snapshot")
+    if prep_action == "apply" and "prep_stage" in option:
+        stage = option["prep_stage"]
+        return action(option["id"], "apply", stage, f"{option['label']} ({stage} stage)")
     if prep_action == "apply":
         note = OPERATIONS[option["id"]](context, finding, decision)
         return action(option["id"], "apply", None, note)
@@ -157,15 +170,34 @@ def _work_item(action: Action, findings: dict) -> WorkItem | None:
             f"Decide: {finding['title']}",
             action.residues,
         )
-    if action.prep_action in ("record", "defer"):
+    if action.prep_stage is not None:
         return WorkItem(
             action.prep_stage,
             action.finding_id,
             action.option_id,
-            f"{action.note}: {finding['title']}",
+            f"{action.note}: {finding['title']}{_terminus_note(action, finding)}",
             action.residues,
         )
     return None
+
+
+def _terminus_note(action: Action, finding: dict) -> str:
+    """For `truncate` on unobserved residues: which termini the topology stage builds."""
+    position = _evidence(finding, "position")
+    if action.option_id != TRUNCATE or position not in TERMINUS_NOTES:
+        return ""
+    before, after = (_flank(finding, side) for side in ("before", "after"))
+    return "; " + TERMINUS_NOTES[position].format(before=before, after=after)
+
+
+def _flank(finding: dict, side: str) -> str | None:
+    """``THR A:34`` from the flank evidence (``THRA:34``) and the anchor residues."""
+    value = _evidence(finding, f"flank_{side}")
+    for ref in finding["anchor_residues"]:
+        label = ResidueId(ref["chain"], ref["seq_num"], ref["ins_code"]).label()
+        if value and value.endswith(label):
+            return f"{value[: -len(label)]} {label}"
+    return value
 
 
 # ---------------------------------------------------------------- apply operations

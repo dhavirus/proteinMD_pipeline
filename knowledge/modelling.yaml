@@ -1,0 +1,60 @@
+# Loop-modelling protocol defaults (TASK-007, ADR-0007). A study copies this protocol into
+# the manifest's `modelling` (when it is absent, these defaults are used) and may
+# edit it there; the protocol used is recorded in every output. Values are the defaults
+# from the TASK-007 session's measurements on 5FQL, not literature values.
+schema_version: 0.1.0
+protocol:
+  method: pdbfixer_then_minimization
+  placement:
+    tool: pdbfixer
+    tool_version: 1.12.0
+    # PDBFixer runs Langevin dynamics when new atoms come too close; its integrator seed
+    # and the Reference platform make the placement byte-identical (TASK-007 session).
+    seed: 20260926
+    platform: Reference
+  minimization:
+    force_field_files: [amber14-all.xml, amber14/tip3p.xml]
+    # Every heavy atom of the loop moves unrestrained; every heavy atom of the two
+    # flanking residues moves under the positional restraint; everything else is fixed.
+    mobile_atoms: loop_and_flanks
+    restraint_kj_per_mol_nm2: 10000.0
+    # Bonded-only pre-stage: omega of every peptide bond from flank to flank restrained to
+    # 180 degrees, and the CA-N-C-CB improper of every non-glycine loop residue to
+    # `l_chirality_improper_degree`. PDBFixer 1.12.0 placed four of the ten 5FQL linker
+    # residues as D (improper about -30 degrees) in the TASK-007 session.
+    torsion_restraint_kj_per_mol_rad2: 1000.0
+    # CA-N-C-CB improper of the observed flanks A:440-443 and A:454-457 of 5FQL: +34 to
+    # +38 degrees, median +34 (measured in the TASK-007 session). Positive = L.
+    l_chirality_improper_degree: 34.0
+    # Final minimization: Lennard-Jones between mobile atoms and everything else, no
+    # charges and no 1-4 terms. With full vacuum electrostatics the four acidic side
+    # chains of the 5FQL linker stretched it (CA-CA up to 3.96 A, C-N-CA up to 132
+    # degrees) in the TASK-007 session; electrostatics are left to solvated equilibration.
+    nonbonded: sterics_only
+    # Lennard-Jones cutoff with a switching function (sterics need short range only; the
+    # full 1.0 nm cutoff gave the same 5FQL checks at twice the cost in the session).
+    sterics_cutoff_nm: 0.6
+    sterics_switch_nm: 0.5
+    # Lennard-Jones partners: atoms within the sterics cutoff plus this margin of a mobile
+    # atom's start. A mobile atom moving farther stops the stage (the 5FQL linker moved
+    # at most about 1 nm in the TASK-007 session).
+    sterics_margin_nm: 1.5
+    tolerance_kj_per_mol_nm: 1.0
+    max_iterations: 5000
+    nonbonded_cutoff_nm: 1.0
+    platform: Reference
+    hydrogen_ph: 7.0
+    seed: 20260926
+  checks:
+    # TASK-007 acceptance: every peptide bond from flank to flank.
+    peptide_bond_angstrom: 1.33
+    peptide_bond_tolerance_angstrom: 0.05
+    ca_ca_trans_angstrom: 3.8
+    ca_ca_trans_tolerance_angstrom: 0.1
+  marking:
+    # Modelled atoms carry no experimental information (TASK-007 decision 3).
+    occupancy: 0.0
+    b_iso_angstrom2: 0.0
+references: []
+verify_flags:
+  - "[VERIFY] 1.33 A (C-N) and 3.8 A (trans CA-CA) are textbook peptide values used as the TASK-007 acceptance numbers; no citation attached in this session."

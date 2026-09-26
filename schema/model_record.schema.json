@@ -1,0 +1,120 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:simprep:schema:model_record",
+  "x-schema-version": "0.1.0",
+  "title": "simprep model record (model_record.json)",
+  "description": "What the modelling stage built (TASK-007): the protocol, every modelled loop with its residues, atoms, source and geometry, the minimization, the modelled wild-type system with record accounting against the input, the findings and the work order. A rejected model (a blocking finding) has no system.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "generated_at", "simprep", "knowledge_base", "input", "manifest_sha256",
+    "status", "protocol", "wild_type", "loops", "minimization", "system", "findings", "work_order"
+  ],
+  "properties": {
+    "schema_version": {"const": "0.1.0"},
+    "generated_at": {"type": "string", "format": "date-time"},
+    "simprep": {"$ref": "urn:simprep:schema:manifest#/$defs/simprep"},
+    "knowledge_base": {"$ref": "urn:simprep:schema:manifest#/$defs/knowledge_base"},
+    "input": {"$ref": "urn:simprep:schema:manifest#/$defs/input"},
+    "manifest_sha256": {"$ref": "urn:simprep:schema:manifest#/$defs/sha256"},
+    "status": {"enum": ["modelled", "rejected"]},
+    "protocol": {"$ref": "urn:simprep:schema:modelling#/$defs/protocol"},
+    "wild_type": {"$ref": "urn:simprep:schema:variant_record#/properties/wild_type"},
+    "loops": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/loop"}},
+    "minimization": {"$ref": "urn:simprep:schema:variant_record#/$defs/relaxation"},
+    "system": {
+      "oneOf": [
+        {"type": "null"},
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["directory", "files", "counts"],
+          "properties": {
+            "directory": {"type": "string", "minLength": 1},
+            "files": {"$ref": "urn:simprep:schema:prep_record#/$defs/system/properties/files"},
+            "counts": {"type": "array", "minItems": 1, "items": {"$ref": "urn:simprep:schema:prep_record#/$defs/count"}}
+          }
+        }
+      ]
+    },
+    "findings": {"type": "array", "items": {"$ref": "urn:simprep:schema:finding"}},
+    "work_order": {"type": "array", "items": {"$ref": "urn:simprep:schema:prep_record#/$defs/work_item"}}
+  },
+  "$defs": {
+    "residue": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["chain", "seq_num", "ins_code", "res_name"],
+      "properties": {
+        "chain": {"type": "string", "minLength": 1},
+        "seq_num": {"type": "integer"},
+        "ins_code": {"type": "string"},
+        "res_name": {"type": "string", "minLength": 1}
+      }
+    },
+    "loop": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["finding_id", "label", "flanks", "source", "note", "residues", "peptide_bonds", "backbone"],
+      "properties": {
+        "finding_id": {"type": "string", "minLength": 1},
+        "label": {"type": "string", "minLength": 1},
+        "flanks": {"type": "array", "minItems": 2, "maxItems": 2, "items": {"$ref": "#/$defs/residue"}},
+        "source": {"type": "string", "minLength": 1},
+        "note": {"type": "string", "minLength": 1},
+        "residues": {
+          "description": "Every modelled residue and atom (written with the protocol's marking).",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["chain", "seq_num", "ins_code", "res_name", "label_seq", "atoms"],
+            "properties": {
+              "chain": {"type": "string", "minLength": 1},
+              "seq_num": {"type": "integer"},
+              "ins_code": {"type": "string"},
+              "res_name": {"type": "string", "minLength": 1},
+              "label_seq": {"type": "integer", "minimum": 1},
+              "atoms": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}}
+            }
+          }
+        },
+        "peptide_bonds": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["first", "second", "c_n_angstrom", "ca_ca_angstrom", "omega_degree"],
+            "properties": {
+              "first": {"$ref": "#/$defs/residue"},
+              "second": {"$ref": "#/$defs/residue"},
+              "c_n_angstrom": {"type": "number", "minimum": 0},
+              "ca_ca_angstrom": {"type": "number", "minimum": 0},
+              "omega_degree": {"type": "number", "minimum": -180, "maximum": 180}
+            }
+          }
+        },
+        "backbone": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["chain", "seq_num", "ins_code", "res_name", "phi_degree", "psi_degree", "ca_improper_degree"],
+            "properties": {
+              "chain": {"type": "string"},
+              "seq_num": {"type": "integer"},
+              "ins_code": {"type": "string"},
+              "res_name": {"type": "string"},
+              "phi_degree": {"type": "number", "minimum": -180, "maximum": 180},
+              "psi_degree": {"type": "number", "minimum": -180, "maximum": 180},
+              "ca_improper_degree": {"type": ["number", "null"], "minimum": -180, "maximum": 180}
+            }
+          }
+        }
+      }
+    }
+  }
+}

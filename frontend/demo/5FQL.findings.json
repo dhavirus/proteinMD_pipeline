@@ -1,13 +1,13 @@
 {
   "schema_version": "0.1.0",
-  "generated_at": "2026-09-26T07:03:22Z",
+  "generated_at": "2026-09-26T09:12:43Z",
   "simprep": {
     "version": "0.1.0",
-    "git_commit": "986dccd722450c0b1e6d80a25138c77a98ffc730-dirty"
+    "git_commit": "debb899fa858913b96aec925514022a8aa6f3cb3-dirty"
   },
   "knowledge_base": {
-    "version": "0.5.0",
-    "sha256": "881d25a420103b8b7c775bea95a644cda98e3ca89439fadf129c556e6017ef78"
+    "version": "0.6.0",
+    "sha256": "3f75fcd41d9d4b27faa59436e8a5c979ebdc5b951e244ca030cd0b3547430797"
   },
   "input": {
     "path": "tests/panel/5FQL.cif.gz",
@@ -1223,7 +1223,7 @@
           "id": "truncate",
           "prep_action": "record",
           "prep_stage": "topology",
-          "label": "Truncate at the observed residue with a charged terminus",
+          "label": "Truncate at the observed residue with a charged terminus (NH3+ / COO-)",
           "cost_hint": "low",
           "trade_offs": [
             "Simplest; standard termini parameters.",
@@ -1234,7 +1234,7 @@
           "id": "model_loop",
           "prep_action": "defer",
           "prep_stage": "modelling",
-          "label": "Model the missing tail",
+          "label": "Model the missing tail (not built in v0.1; TASK-007 builds internal loops only)",
           "cost_hint": "medium",
           "trade_offs": [
             "Restores the full sequence.",
@@ -1419,20 +1419,20 @@
       "options": [
         {
           "id": "model_loop",
-          "prep_action": "defer",
+          "prep_action": "apply",
           "prep_stage": "modelling",
-          "label": "Model the missing loop",
+          "label": "Model the missing loop (simprep model / variants; prep leaves the gap)",
           "cost_hint": "medium",
           "trade_offs": [
             "Restores chain connectivity.",
-            "The modelled loop is a hypothesis; its conformation is unconstrained by density and may bias sampling nearby."
+            "The modelled loop is a hypothesis; its conformation is unconstrained by density and may bias sampling nearby. Modelled atoms are written with occupancy 0.00 and listed in the model record (TASK-007)."
           ]
         },
         {
           "id": "truncate",
           "prep_action": "record",
           "prep_stage": "topology",
-          "label": "Leave the gap as a chain break, capping both sides",
+          "label": "Leave the gap as a chain break with charged termini on both sides",
           "cost_hint": "low",
           "trade_offs": [
             "No invented coordinates.",

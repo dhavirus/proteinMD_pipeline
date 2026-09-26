@@ -17,7 +17,7 @@ x-terminal-options: &terminal_options
   - id: truncate
     prep_action: record
     prep_stage: topology
-    label: Truncate at the observed residue with a charged terminus
+    label: Truncate at the observed residue with a charged terminus (NH3+ / COO-)
     cost_hint: low
     trade_offs:
       - Simplest; standard termini parameters.
@@ -25,7 +25,7 @@ x-terminal-options: &terminal_options
   - id: model_loop
     prep_action: defer
     prep_stage: modelling
-    label: Model the missing tail
+    label: Model the missing tail (not built in v0.1; TASK-007 builds internal loops only)
     cost_hint: medium
     trade_offs:
       - Restores the full sequence.
@@ -45,18 +45,19 @@ rules:
     base_severity: warn
     options:
       - id: model_loop
-        prep_action: defer
+        prep_action: apply
         prep_stage: modelling
-        label: Model the missing loop
+        label: Model the missing loop (simprep model / variants; prep leaves the gap)
         cost_hint: medium
         trade_offs:
           - Restores chain connectivity.
           - The modelled loop is a hypothesis; its conformation is unconstrained by
-            density and may bias sampling nearby.
+            density and may bias sampling nearby. Modelled atoms are written with
+            occupancy 0.00 and listed in the model record (TASK-007).
       - id: truncate
         prep_action: record
         prep_stage: topology
-        label: Leave the gap as a chain break, capping both sides
+        label: Leave the gap as a chain break with charged termini on both sides
         cost_hint: low
         trade_offs:
           - No invented coordinates.

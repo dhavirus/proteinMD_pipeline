@@ -229,6 +229,12 @@
         },
         {
           "$ref": "#/$defs/matcher_residual_clashes"
+        },
+        {
+          "$ref": "#/$defs/matcher_loop_geometry"
+        },
+        {
+          "$ref": "#/$defs/matcher_loop_contacts"
         }
       ]
     },
@@ -700,8 +706,18 @@
             "required": [
               "prep_stage"
             ]
+          }
+        },
+        {
+          "description": "An unresolved option names no stage; an apply option may name the later stage that carries it out (ADR-0007).",
+          "if": {
+            "properties": {
+              "prep_action": {
+                "const": "unresolved"
+              }
+            }
           },
-          "else": {
+          "then": {
             "not": {
               "required": [
                 "prep_stage"
@@ -774,6 +790,23 @@
           "minLength": 1,
           "description": "Rule id whose side_chain_placement matcher defines a clash."
         }
+      }
+    },
+    "matcher_loop_geometry": {
+      "description": "Peptide geometry and chirality of a modelled loop (TASK-007); thresholds come from the modelling protocol. Evaluated by `simprep model` / `simprep variants`, not by `simprep audit`.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind"],
+      "properties": {"kind": {"const": "loop_geometry"}}
+    },
+    "matcher_loop_contacts": {
+      "description": "Clashes of a modelled loop's heavy atoms, judged with the variant_build criterion (TASK-007).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "criterion_rule"],
+      "properties": {
+        "kind": {"const": "loop_contacts"},
+        "criterion_rule": {"type": "string", "minLength": 1, "description": "Rule id whose side_chain_placement matcher defines a clash."}
       }
     }
   },

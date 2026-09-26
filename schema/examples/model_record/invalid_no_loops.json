@@ -1,0 +1,520 @@
+{
+  "findings": [],
+  "generated_at": "2026-09-26T09:07:20Z",
+  "input": {
+    "format": "mmcif",
+    "path": "tests/panel/5FQL.cif.gz",
+    "sha256": "ac5ffc6fed697e7b2659f6747ad4d0638eb949220cd7ca7c8c3b372ce183f8d5"
+  },
+  "knowledge_base": {
+    "sha256": "3f75fcd41d9d4b27faa59436e8a5c979ebdc5b951e244ca030cd0b3547430797",
+    "version": "0.6.0"
+  },
+  "loops": [],
+  "manifest_sha256": "93525cb6b9eaff8969b3deab2b84a5d92b9a0a69c825ad5a6c986a7a70ec0ce3",
+  "minimization": {
+    "clashes_after": 0,
+    "clashes_before": 42,
+    "energy_kj_per_mol": {
+      "final": 250025.1,
+      "initial": 791868.7,
+      "note": "Total potential energy of the calculation, dominated by fixed-fixed terms; not comparable between systems. Only the change and the final force on mobile atoms are meaningful."
+    },
+    "frozen": [],
+    "left_out": [
+      {
+        "chain": "A",
+        "distance_angstrom": 29.51,
+        "ins_code": "",
+        "res_name": "ALS",
+        "seq_num": 84
+      },
+      {
+        "chain": "A",
+        "distance_angstrom": 30.7,
+        "ins_code": "",
+        "res_name": "CA",
+        "seq_num": 1551
+      },
+      {
+        "chain": "A",
+        "distance_angstrom": 34.17,
+        "ins_code": "",
+        "res_name": "CL",
+        "seq_num": 1567
+      },
+      {
+        "chain": "A",
+        "distance_angstrom": 54.72,
+        "ins_code": "",
+        "res_name": "CL",
+        "seq_num": 1568
+      },
+      {
+        "chain": "A",
+        "distance_angstrom": 34.77,
+        "ins_code": "",
+        "res_name": "CL",
+        "seq_num": 1569
+      }
+    ],
+    "max_displacement_angstrom": 9.312,
+    "max_mobile_force_kj_per_mol_nm": 18.75,
+    "mobile_atoms": 109,
+    "moved_atoms": 109,
+    "moved_residues": [
+      {
+        "chain": "A",
+        "ins_code": "",
+        "seq_num": 443
+      },
+      {
+        "chain": "A",
+        "ins_code": "",
+        "seq_num": 444
+      },
+      {
+        "chain": "A",
+        "ins_code": "",
+        "seq_num": 445
+      },
+      {
+        "chain": "A",
+        "ins_code": "",
+        "seq_num": 446
+      },
+      {
+        "chain": "A",
+        "ins_code": "",
+        "seq_num": 447
+      },
+      {
+        "chain": "A",
+        "ins_code": "",
+        "seq_num": 448
+      },
+      {
+        "chain": "A",
+        "ins_code": "",
+        "seq_num": 449
+      },
+      {
+        "chain": "A",
+        "ins_code": "",
+        "seq_num": 450
+      },
+      {
+        "chain": "A",
+        "ins_code": "",
+        "seq_num": 451
+      },
+      {
+        "chain": "A",
+        "ins_code": "",
+        "seq_num": 452
+      },
+      {
+        "chain": "A",
+        "ins_code": "",
+        "seq_num": 453
+      },
+      {
+        "chain": "A",
+        "ins_code": "",
+        "seq_num": 454
+      }
+    ],
+    "openmm_version": "8.6.1",
+    "rms_displacement_angstrom": 5.044,
+    "shell_residues": 12,
+    "sites": [
+      {
+        "chain": "A",
+        "ins_code": "",
+        "seq_num": 444
+      },
+      {
+        "chain": "A",
+        "ins_code": "",
+        "seq_num": 445
+      },
+      {
+        "chain": "A",
+        "ins_code": "",
+        "seq_num": 446
+      },
+      {
+        "chain": "A",
+        "ins_code": "",
+        "seq_num": 447
+      },
+      {
+        "chain": "A",
+        "ins_code": "",
+        "seq_num": 448
+      },
+      {
+        "chain": "A",
+        "ins_code": "",
+        "seq_num": 449
+      },
+      {
+        "chain": "A",
+        "ins_code": "",
+        "seq_num": 450
+      },
+      {
+        "chain": "A",
+        "ins_code": "",
+        "seq_num": 451
+      },
+      {
+        "chain": "A",
+        "ins_code": "",
+        "seq_num": 452
+      },
+      {
+        "chain": "A",
+        "ins_code": "",
+        "seq_num": 453
+      }
+    ]
+  },
+  "protocol": {
+    "checks": {
+      "ca_ca_trans_angstrom": 3.8,
+      "ca_ca_trans_tolerance_angstrom": 0.1,
+      "peptide_bond_angstrom": 1.33,
+      "peptide_bond_tolerance_angstrom": 0.05
+    },
+    "marking": {
+      "b_iso_angstrom2": 0.0,
+      "occupancy": 0.0
+    },
+    "method": "pdbfixer_then_minimization",
+    "minimization": {
+      "force_field_files": [
+        "amber14-all.xml",
+        "amber14/tip3p.xml"
+      ],
+      "hydrogen_ph": 7.0,
+      "l_chirality_improper_degree": 34.0,
+      "max_iterations": 5000,
+      "mobile_atoms": "loop_and_flanks",
+      "nonbonded": "sterics_only",
+      "nonbonded_cutoff_nm": 1.0,
+      "platform": "Reference",
+      "restraint_kj_per_mol_nm2": 10000.0,
+      "seed": 20260926,
+      "sterics_cutoff_nm": 0.6,
+      "sterics_margin_nm": 1.5,
+      "sterics_switch_nm": 0.5,
+      "tolerance_kj_per_mol_nm": 1.0,
+      "torsion_restraint_kj_per_mol_rad2": 1000.0
+    },
+    "placement": {
+      "platform": "Reference",
+      "seed": 20260926,
+      "tool": "pdbfixer",
+      "tool_version": "1.12.0"
+    }
+  },
+  "schema_version": "0.1.0",
+  "simprep": {
+    "git_commit": "debb899fa858913b96aec925514022a8aa6f3cb3-dirty",
+    "version": "0.1.0"
+  },
+  "status": "rejected",
+  "system": {
+    "counts": [
+      {
+        "added": 10,
+        "excluded": 0,
+        "in": 507,
+        "modified": 4,
+        "out": 517,
+        "passed_through": 503,
+        "record_type": "polymer residues"
+      },
+      {
+        "added": 0,
+        "excluded": 2,
+        "in": 6,
+        "modified": 0,
+        "out": 4,
+        "passed_through": 4,
+        "record_type": "nonpolymer residues"
+      },
+      {
+        "added": 0,
+        "excluded": 13,
+        "in": 13,
+        "modified": 0,
+        "out": 0,
+        "passed_through": 0,
+        "record_type": "branched residues"
+      },
+      {
+        "added": 0,
+        "excluded": 0,
+        "in": 213,
+        "modified": 0,
+        "out": 213,
+        "passed_through": 213,
+        "record_type": "water residues"
+      },
+      {
+        "added": 91,
+        "excluded": 438,
+        "in": 8576,
+        "modified": 66,
+        "out": 8229,
+        "passed_through": 8072,
+        "record_type": "atom records"
+      },
+      {
+        "added": 0,
+        "excluded": 15,
+        "in": 26,
+        "modified": 0,
+        "out": 11,
+        "passed_through": 11,
+        "record_type": "struct_conn records"
+      },
+      {
+        "added": 0,
+        "excluded": 0,
+        "in": 8,
+        "modified": 0,
+        "out": 8,
+        "passed_through": 8,
+        "record_type": "pdbx_struct_mod_residue records"
+      },
+      {
+        "added": 0,
+        "excluded": 10,
+        "in": 18,
+        "modified": 0,
+        "out": 8,
+        "passed_through": 8,
+        "record_type": "unobserved polymer residues (annotation)"
+      }
+    ],
+    "directory": "wt_modelled",
+    "files": [
+      {
+        "format": "mmcif",
+        "path": "system.cif",
+        "sha256": "e5f2b1ab8f73a43c0f52bacb4c6c958075836ccfb08e415491c7ea5b5d0cb10d"
+      },
+      {
+        "format": "pdb",
+        "path": "system.pdb",
+        "sha256": "9fa9bc5c6248230e3fdbadaac6633f8386483d4d840e2370d1222848f0573d40"
+      }
+    ]
+  },
+  "wild_type": {
+    "directory": "wt",
+    "prep_record_sha256": "50cdb55ff7a8c98d516c84926e4fde258226de974938210cb11f0fab930438c1"
+  },
+  "work_order": [
+    {
+      "description": "Nonbonded 12-6-4 LJ-type ion model: CA site A:1551: likely_catalytic, coordination number 6",
+      "finding_id": "metals/A:1551",
+      "option_id": "nonbonded_12_6_4",
+      "residues": [
+        {
+          "chain": "A",
+          "ins_code": "",
+          "seq_num": 1551
+        }
+      ],
+      "stage": "parameterization"
+    },
+    {
+      "description": "Model FGly as the aldehyde hydrate (gem-diol, FGH): Formylglycine (sulfatase catalytic residue): ALS A:84",
+      "finding_id": "nonstandard_residues/A:84",
+      "option_id": "model_gem_diol",
+      "residues": [
+        {
+          "chain": "A",
+          "ins_code": "",
+          "seq_num": 84
+        }
+      ],
+      "stage": "chemistry"
+    },
+    {
+      "description": "Truncate at the observed residue with a charged terminus (NH3+ / COO-): Unobserved N-terminal residues: A:26-33 (8 residues); charged N-terminus (NH3+) at THR A:34",
+      "finding_id": "missing_residues/A:26-33",
+      "option_id": "truncate",
+      "residues": [
+        {
+          "chain": "A",
+          "ins_code": "",
+          "seq_num": 26
+        },
+        {
+          "chain": "A",
+          "ins_code": "",
+          "seq_num": 27
+        },
+        {
+          "chain": "A",
+          "ins_code": "",
+          "seq_num": 28
+        },
+        {
+          "chain": "A",
+          "ins_code": "",
+          "seq_num": 29
+        },
+        {
+          "chain": "A",
+          "ins_code": "",
+          "seq_num": 30
+        },
+        {
+          "chain": "A",
+          "ins_code": "",
+          "seq_num": 31
+        },
+        {
+          "chain": "A",
+          "ins_code": "",
+          "seq_num": 32
+        },
+        {
+          "chain": "A",
+          "ins_code": "",
+          "seq_num": 33
+        }
+      ],
+      "stage": "topology"
+    },
+    {
+      "description": "Keep and parameterize outside the rule system: Unrecognized chemistry: CL at A:1567",
+      "finding_id": "unrecognized/group/A:1567",
+      "option_id": "parameterize_manually",
+      "residues": [
+        {
+          "chain": "A",
+          "ins_code": "",
+          "seq_num": 1567
+        }
+      ],
+      "stage": "parameterization"
+    },
+    {
+      "description": "Keep and parameterize outside the rule system: Unrecognized chemistry: CL at A:1568",
+      "finding_id": "unrecognized/group/A:1568",
+      "option_id": "parameterize_manually",
+      "residues": [
+        {
+          "chain": "A",
+          "ins_code": "",
+          "seq_num": 1568
+        }
+      ],
+      "stage": "parameterization"
+    },
+    {
+      "description": "Keep and parameterize outside the rule system: Unrecognized chemistry: CL at A:1569",
+      "finding_id": "unrecognized/group/A:1569",
+      "option_id": "parameterize_manually",
+      "residues": [
+        {
+          "chain": "A",
+          "ins_code": "",
+          "seq_num": 1569
+        }
+      ],
+      "stage": "parameterization"
+    },
+    {
+      "description": "A:444-453: modelled residues have no hydrogens",
+      "finding_id": "missing_residues/A:444-453",
+      "option_id": "model_loop",
+      "residues": [
+        {
+          "chain": "A",
+          "ins_code": "",
+          "seq_num": 444
+        },
+        {
+          "chain": "A",
+          "ins_code": "",
+          "seq_num": 445
+        },
+        {
+          "chain": "A",
+          "ins_code": "",
+          "seq_num": 446
+        },
+        {
+          "chain": "A",
+          "ins_code": "",
+          "seq_num": 447
+        },
+        {
+          "chain": "A",
+          "ins_code": "",
+          "seq_num": 448
+        },
+        {
+          "chain": "A",
+          "ins_code": "",
+          "seq_num": 449
+        },
+        {
+          "chain": "A",
+          "ins_code": "",
+          "seq_num": 450
+        },
+        {
+          "chain": "A",
+          "ins_code": "",
+          "seq_num": 451
+        },
+        {
+          "chain": "A",
+          "ins_code": "",
+          "seq_num": 452
+        },
+        {
+          "chain": "A",
+          "ins_code": "",
+          "seq_num": 453
+        }
+      ],
+      "stage": "protonation"
+    },
+    {
+      "description": "A:443: flank moved in the loop minimization",
+      "finding_id": "missing_residues/A:444-453",
+      "option_id": "model_loop",
+      "residues": [
+        {
+          "chain": "A",
+          "ins_code": "",
+          "seq_num": 443
+        }
+      ],
+      "stage": "protonation"
+    },
+    {
+      "description": "A:454: flank moved in the loop minimization",
+      "finding_id": "missing_residues/A:444-453",
+      "option_id": "model_loop",
+      "residues": [
+        {
+          "chain": "A",
+          "ins_code": "",
+          "seq_num": 454
+        }
+      ],
+      "stage": "protonation"
+    }
+  ]
+}

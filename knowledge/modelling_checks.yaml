@@ -1,0 +1,75 @@
+schema_version: 0.1.0
+family: modelling
+description: >-
+  Checks on loops built for gaps decided `model_loop` (TASK-007). Evaluated by
+  `simprep model` and `simprep variants`, not by `simprep audit`. The thresholds live in
+  the modelling protocol (knowledge/modelling.yaml, copied into the manifest).
+
+rules:
+  - rule_id: modelling.junction_geometry
+    family: modelling
+    version: 0.1.0
+    title: Modelled loop fails the peptide-geometry checks
+    priority: 0
+    matcher:
+      kind: loop_geometry
+    base_severity: blocking
+    options:
+      - id: expert_review
+        prep_action: unresolved
+        label: Needs expert review (for example another modelling protocol)
+        cost_hint: high
+        trade_offs:
+          - The model is not accepted; no modelled system is written until a human
+            changes the protocol in the manifest or the decision on the gap.
+      - id: decide_truncate
+        prep_action: unresolved
+        label: Decide the gap `truncate` in the manifest instead, and run again
+        cost_hint: low
+        trade_offs:
+          - No invented coordinates; two artificial chain ends at the gap.
+    recommended_option:
+      default: expert_review
+      conditions: []
+    rationale: >-
+      Every peptide bond from the flank before the gap to the flank after it must have a
+      C-N distance and a CA-CA distance (trans) within the protocol's tolerances, and every
+      non-glycine modelled residue must be L (positive CA-N-C-CB improper). A model that
+      fails is not accepted (the check runs before anything is written); the finding lists
+      each failing bond or residue with its value, and the phi/psi of the modelled residues.
+    references: []
+    verify_flags: []
+
+  - rule_id: modelling.loop_contacts
+    family: modelling
+    version: 0.1.0
+    title: Close contacts of a modelled loop
+    priority: 0
+    matcher:
+      kind: loop_contacts
+      criterion_rule: variant_build.rotamer_choice
+    base_severity: warn
+    options:
+      - id: accept
+        prep_action: record
+        prep_stage: modelling
+        label: Accept the modelled loop; the contacts are left to equilibration
+        cost_hint: low
+        trade_offs:
+          - The contacts stay listed in the record for later review.
+      - id: expert_review
+        prep_action: unresolved
+        label: Needs expert review (for example another modelling protocol)
+        cost_hint: high
+        trade_offs:
+          - A human decides whether the protocol should change.
+    recommended_option:
+      default: accept
+      conditions: []
+    rationale: >-
+      Heavy atoms of the modelled residues are checked against every other heavy atom
+      with the variant_build clash criterion, except pairs within one residue or between
+      sequence neighbours (bonded). Remaining clashes are reported with atoms and
+      distances; clashes only flag (maintainer, TASK-005 review).
+    references: []
+    verify_flags: []

@@ -52,6 +52,16 @@
         },
         "prep_record_sha256": {
           "$ref": "urn:simprep:schema:manifest#/$defs/sha256"
+        },
+        "modelled": {
+          "description": "The modelled wild type the variants are built on (TASK-007), when gaps were decided model_loop.",
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["directory", "model_record_sha256"],
+          "properties": {
+            "directory": {"type": "string", "minLength": 1},
+            "model_record_sha256": {"$ref": "urn:simprep:schema:manifest#/$defs/sha256"}
+          }
         }
       }
     },

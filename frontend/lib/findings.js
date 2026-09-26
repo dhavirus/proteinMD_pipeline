@@ -10,6 +10,7 @@ export const FAMILY_LABELS = {
   unrecognized: "Unrecognized chemistry",
   variant_build: "Variant side chains",
   relaxation: "Relaxation",
+  modelling: "Loop modelling",
 };
 // Evidence items whose atoms are drawn as context around the selected finding.
 const CONTEXT_EVIDENCE = ["ligand_distance", "attachment", "link", "contact_distance", "candidate"];
