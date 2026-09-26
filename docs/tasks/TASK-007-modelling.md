@@ -14,8 +14,8 @@ This task is the modelling stage. It is the first task that adds atoms with no e
 support, so it has to say where they come from, mark them, and use the same model in the
 wild type and every variant.
 
-Status: **draft** for maintainer review. Items marked (Q) are open questions (end of
-file). Do not start implementation until they are answered or accepted as defaults.
+Status: **accepted** (maintainer, 2026-09-26: defaults accepted for every open
+question; the resolved decisions are listed at the end of this file).
 
 ## What the primary publication says (read in this session)
 
@@ -144,33 +144,28 @@ Loop conformational sampling or ensembles, the processed two-chain form as a sep
 system (unless decision 1 picks it), caps, the FGly chemistry edit, parameterization,
 protonation, MD.
 
-## Open questions for the maintainer
-1. **Which form of IDS is the study's system (default: the intact single chain, linker
-   modelled).** This is the crystallized, secreted precursor, and the form that folds in
-   the ER. The alternative is the lysosomal two-chain form: no linker, a chain break
-   with charged ends after 443 and before the light chain. The exact processing sites
-   are not given in the paper ("fragments"; SD2 starts at 455), so they would need a
-   source, `[VERIFY]`.
-2. **Loop source (default: PDBFixer 1.12.0 to place the residues, then our OpenMM
-   minimization with a mobile loop backbone and restrained flanks, Reference platform,
-   all random sources seeded).** Determinism is not proven yet (the spike differed by
-   6.7 A); the first implementation step is to find and seed PDBFixer's randomness, and
-   the task stops and reports if that fails. Alternatives:
-   - MODELLER loop modelling (free for academics, licence key, conda-only);
-   - grafting the loop from the AlphaFold DB model of P22304 (network blocked here: you
-     would upload the file; a disordered linker is likely low-confidence there,
-     `[VERIFY]`);
-   - an in-house loop closure (large).
-3. **How modelled atoms are marked (default: occupancy 0.00 in the written files,
-   B-factor unchanged at a recorded value, plus the explicit list in the record).**
-   The alternative is to keep occupancy 1.00 and rely on the record only. Some MD tools
-   ignore occupancy, others treat 0 as absent, so the choice is recorded.
-4. **Caps (default: not in v0.1).** IDS needs none if A:26-33 is `truncate`, following
-   the paper's propeptide cleavage. The panel fixtures that chose `cap_termini` stay
-   deferred.
-5. **Pipeline placement (default: an in-process stage before variants, plus
-   `simprep model`).** The alternative is modelling inside `simprep prep`, which would
-   end ADR-0004's "prep never invents coordinates".
-6. **The IDS study manifest (default: I update nothing).** Recording the study's own
-   decisions (`truncate` for A:26-33 citing the paper, `model_loop` for 444-453) is for
-   the maintainer; the test fixtures stay test inputs.
+## Resolved decisions (maintainer, 2026-09-26)
+1. **System form**: the intact single chain, with the 444-453 linker modelled. This is the
+   crystallized, secreted precursor, and the form that folds in the ER (Demydchuk et al.
+   2017). The lysosomal two-chain form is not built in v0.1; building it later needs a
+   source for the processing sites (`[VERIFY]`).
+2. **Loop source**: PDBFixer 1.12.0 places the residues, then an OpenMM minimization
+   (Reference platform) runs with the loop backbone and side chains mobile and the
+   flanking residues restrained. Every random source is seeded. The first
+   implementation step is to find and seed PDBFixer's randomness (the spike differed by
+   6.7 A between runs); if byte-identical output cannot be achieved, the task stops and
+   reports instead of shipping a non-deterministic builder. MODELLER, an AlphaFold DB
+   graft and in-house loop closure are not used. Recorded in an ADR.
+3. **Marking modelled atoms**: occupancy 0.00 in the written files. B-factors are set to
+   a recorded value. The record lists every modelled residue and atom with its source
+   and protocol.
+4. **Caps**: none in v0.1. `cap_termini` stays `defer`; IDS needs no caps once A:26-33
+   is decided `truncate` (the propeptide is cleaved; Demydchuk et al. 2017).
+5. **Pipeline placement**: modelling is its own stage between prep and variants:
+   prep (select) -> model (add) -> variants (build) -> relax. It is used in-process by
+   `simprep variants` and exposed as `simprep model` for the wild type alone. `simprep
+   prep` still never invents coordinates (ADR-0004).
+6. **IDS study manifest**: not changed by this task. Recording the study's decisions
+   (`truncate` for A:26-33 citing the paper, `model_loop` for 444-453) is for the
+   maintainer; the test fixtures stay test inputs, and the acceptance tests use their
+   own manifests with those decisions.
