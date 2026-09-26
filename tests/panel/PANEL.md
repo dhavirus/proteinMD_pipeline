@@ -49,7 +49,10 @@ prep fixture and states the expected outcomes by hand: the UniProt position (fro
 `_struct_ref_seq`), whether every rotamer candidate clashes, and the recommended option.
 It also holds side-chain placements made independently of simprep (PDBFixer 1.12.0,
 TASK-005 spike): the Trp placement must be flagged as a clash with Ser470, the Gln one
-must not. `reviewed: false` until the maintainer reviews it.
+must not. Its `relaxation` block holds the TASK-006 limits written from the spike
+(relaxed WT moves at most 0.5 A, R468Q stays clash-free, R468W drops from 10 site clashes
+to at most 4); `test_relaxation_panel.py` checks them. `reviewed: false` until the
+maintainer reviews it.
 
 ## Candidates considered
 

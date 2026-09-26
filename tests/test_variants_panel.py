@@ -1,6 +1,7 @@
-"""`simprep variants` on 5FQL (TASK-005): WT vs R468Q vs R468W. Expected outcomes come
-from tests/panel/variant_fixtures/5FQL.yaml (written by hand, with placements made
-independently of simprep's builder)."""
+"""`simprep variants` on 5FQL (TASK-005): WT vs R468Q vs R468W, rigid builds (the
+manifest switches relaxation off; test_relaxation_panel.py covers TASK-006). Expected
+outcomes come from tests/panel/variant_fixtures/5FQL.yaml (written by hand, with
+placements made independently of simprep's builder)."""
 
 from __future__ import annotations
 
@@ -32,10 +33,11 @@ def cli(*args) -> int:
     return main([str(a) for a in args])
 
 
-def manifest_with(variants: list[dict], path: Path) -> Path:
+def manifest_with(variants: list[dict], path: Path, relaxation: bool = False) -> Path:
     decided_manifest(STRUCTURE, PREP_DECISIONS, path)
     document = json.loads(path.read_text())
     document["variants"] = variants
+    document["relaxation"] = {**load_ruleset().relaxation, "enabled": relaxation}
     path.write_text(json.dumps(document))
     return path
 
@@ -119,15 +121,16 @@ def test_independent_pdbfixer_placements_are_judged_as_expected(
         assert ResidueId("A", 470) in {c.residue.id for c in found}
 
 
-def test_clashing_or_open_rotamer_choices_are_refused(pass_one, capsys):
+def test_clashing_rotamers_are_built_and_open_choices_refused(pass_one, capsys):
+    """Clashes only flag (maintainer, TASK-005 review): a clashing rotamer is built."""
     _, manifest_path, root = pass_one
     forced = decide(
         manifest_path,
         {"R468Q": ("choose_rotamer", "mm-40"), "R468W": ("choose_rotamer", "m95")},
         root / "forced.json",
     )
-    assert cli("variants", STRUCTURE, "--manifest", forced, "--out", root / "forced") == 3
-    assert "rotamer m95 has" in capsys.readouterr().err
+    assert cli("variants", STRUCTURE, "--manifest", forced, "--out", root / "forced") == 0
+    assert (root / "forced" / "R468W" / "system.cif").is_file()
     opened = decide(
         manifest_path,
         {"R468Q": ("choose_rotamer", "mm-40"), "R468W": ("expert_review", None)},
@@ -136,7 +139,6 @@ def test_clashing_or_open_rotamer_choices_are_refused(pass_one, capsys):
     assert cli("variants", STRUCTURE, "--manifest", opened, "--out", root / "open") == 3
     assert "expert_review is not a final decision" in capsys.readouterr().err
     assert cli("manifest", "status", opened) == 3
-    assert not (root / "forced" / "R468W").exists()
 
 
 @pytest.fixture(scope="module")

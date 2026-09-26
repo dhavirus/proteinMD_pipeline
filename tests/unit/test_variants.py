@@ -137,9 +137,11 @@ def manifest(option_id, rotamer=None):
     return {"decisions": [decision]}
 
 
-def test_a_clean_decided_rotamer_is_chosen():
-    chosen = chosen_candidates(manifest("choose_rotamer", "a"), results())
-    assert chosen["variant_build/R2Q/A:2"].candidate.rotamer_id == "a"
+@pytest.mark.parametrize("rotamer", ["a", "b"])
+def test_a_decided_rotamer_is_chosen_even_when_it_clashes(rotamer):
+    """Clashes only flag (maintainer, TASK-005 review); relaxation follows (TASK-006)."""
+    chosen = chosen_candidates(manifest("choose_rotamer", rotamer), results())
+    assert chosen["variant_build/R2Q/A:2"].candidate.rotamer_id == rotamer
 
 
 @pytest.mark.parametrize(
@@ -148,10 +150,9 @@ def test_a_clean_decided_rotamer_is_chosen():
         ({"decisions": []}, "undecided"),
         (manifest("expert_review"), "expert_review is not a final decision"),
         (manifest("choose_rotamer", "zz"), "parameters.rotamer must be one of a, b"),
-        (manifest("choose_rotamer", "b"), "rotamer b has 2 clash"),
     ],
 )
-def test_missing_open_unknown_or_clashing_choices_are_refused(document, message):
+def test_missing_open_or_unknown_choices_are_refused(document, message):
     with pytest.raises(VariantDecisionError, match=message):
         chosen_candidates(document, results())
 
