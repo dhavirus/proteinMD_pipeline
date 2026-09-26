@@ -35,7 +35,7 @@
   },
   "findings_snapshot": {
     "generated_at": "2026-09-25T01:36:52Z",
-    "findings_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+    "findings_sha256": "b0fbbc4698d74e354d3ede451ab7d9c2ac256c1e54392b950be8cfdad2175510",
     "findings": [
       {
         "anchor_residues": [

@@ -6,6 +6,7 @@ import hashlib
 import json
 from pathlib import Path
 
+from simprep.canonical import sha256_canonical
 from simprep.config import AuditConfig, region_from_dict, thresholds_from_dict
 from simprep.rules import RuleSet
 from simprep.schemas import SCHEMA_VERSION, validate
@@ -15,7 +16,8 @@ class ManifestError(ValueError):
     """The manifest is inconsistent with its input file or its own findings."""
 
 
-def canonical_json(document: object) -> str:
+def pretty_json(document: object) -> str:
+    """Readable, stable file layout (hashes use :mod:`simprep.canonical`, not this)."""
     return json.dumps(document, indent=2, sort_keys=True) + "\n"
 
 
@@ -24,13 +26,14 @@ def sha256_text(text: str) -> str:
 
 
 def write_json(document: object, path: Path) -> None:
-    path.write_text(canonical_json(document))
+    path.write_text(pretty_json(document))
 
 
 def load_manifest(path: Path) -> dict:
-    """Read and schema-validate a manifest; decisions are checked against its snapshot."""
+    """Read and schema-validate a manifest; snapshot hash and decisions are checked too."""
     manifest = json.loads(path.read_text())
     validate(manifest, "manifest")
+    check_snapshot(manifest)
     check_decisions(manifest)
     return manifest
 
@@ -71,23 +74,55 @@ def config_from_manifest(manifest: dict, manifest_sha256: str) -> AuditConfig:
     )
 
 
+def check_snapshot(manifest: dict) -> None:
+    """The snapshot's findings must hash to its recorded ``findings_sha256`` (RFC 8785)."""
+    snapshot = manifest["findings_snapshot"]
+    if snapshot is None:
+        return
+    actual = sha256_canonical(snapshot["findings"])
+    if actual != snapshot["findings_sha256"]:
+        raise ManifestError(
+            f"findings snapshot was modified: recorded SHA-256 {snapshot['findings_sha256']}, "
+            f"actual {actual}. Re-run `simprep audit --manifest` to refresh the snapshot."
+        )
+
+
 def check_decisions(manifest: dict) -> None:
-    """Every decision must name a snapshot finding and one of that finding's options."""
+    """Every decision must name a snapshot finding, once, with one of its options.
+
+    All problems are reported together, so orphaned decisions after a re-audit are
+    listed in full rather than one at a time.
+    """
     snapshot = manifest["findings_snapshot"]
     if not manifest["decisions"]:
         return
     if snapshot is None:
         raise ManifestError("manifest has decisions but no findings snapshot to decide on")
     options = {f["id"]: {o["id"] for o in f["options"]} for f in snapshot["findings"]}
-    for decision in manifest["decisions"]:
-        finding_id = decision["finding_id"]
+    problems = decision_problems(manifest["decisions"], options)
+    if problems:
+        raise ManifestError(
+            f"{len(problems)} decision problem(s):\n  "
+            + "\n  ".join(problems)
+            + "\nRemove or re-decide these findings in the front end, then export again."
+        )
+
+
+def decision_problems(decisions: list[dict], options: dict[str, set[str]]) -> list[str]:
+    """Human-readable problems: orphaned findings, unknown options, duplicate decisions."""
+    problems, seen = [], set()
+    for decision in decisions:
+        finding_id, option_id = decision["finding_id"], decision["option_id"]
+        who = f"(option {option_id!r}, decided by {decision['decided_by']})"
+        if finding_id in seen:
+            problems.append(f"{finding_id}: more than one decision {who}")
+        seen.add(finding_id)
         if finding_id not in options:
-            raise ManifestError(f"decision refers to unknown finding {finding_id!r}")
-        if decision["option_id"] not in options[finding_id]:
-            raise ManifestError(
-                f"decision for {finding_id!r} picks unknown option {decision['option_id']!r}; "
-                f"valid: {sorted(options[finding_id])}"
-            )
+            problems.append(f"{finding_id}: finding not in the snapshot (orphaned) {who}")
+        elif option_id not in options[finding_id]:
+            valid = ", ".join(sorted(options[finding_id]))
+            problems.append(f"{finding_id}: unknown option {who}; valid: {valid}")
+    return problems
 
 
 def attach_snapshot(manifest: dict, report: dict) -> dict:
@@ -97,7 +132,7 @@ def attach_snapshot(manifest: dict, report: dict) -> dict:
         **manifest,
         "findings_snapshot": {
             "generated_at": report["generated_at"],
-            "findings_sha256": sha256_text(canonical_json(findings)),
+            "findings_sha256": sha256_canonical(findings),
             "findings": findings,
         },
     }

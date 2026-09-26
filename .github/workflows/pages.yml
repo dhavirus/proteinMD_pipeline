@@ -1,0 +1,49 @@
+name: Pages
+
+# Publishes the review page (frontend/) with the schemas and the demo structure.
+# The site keeps the repository layout, so the page's relative paths (../schema/,
+# ../tests/panel/) work the same locally and on GitHub Pages.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Assemble site
+        run: |
+          mkdir -p _site/tests/panel
+          cp -r frontend schema _site/
+          rm -rf _site/frontend/tests _site/frontend/demo/build_demo.py
+          cp tests/panel/5FQL.cif.gz _site/tests/panel/
+          cat > _site/index.html <<'HTML'
+          <!doctype html>
+          <meta charset="utf-8">
+          <meta http-equiv="refresh" content="0; url=frontend/">
+          <title>simprep</title>
+          <a href="frontend/">simprep review</a>
+          HTML
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+  deploy:
+    needs: build
+    runs-on: ubuntu-24.04
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

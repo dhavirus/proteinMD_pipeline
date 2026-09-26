@@ -115,3 +115,57 @@ def test_audit_is_deterministic(mini_path, tmp_path):
         reports.append(json.loads((tmp_path / name / "findings.json").read_text()))
     assert reports[0]["findings"] == reports[1]["findings"]
     assert reports[0]["counts"] == reports[1]["counts"]
+
+
+def audited_manifest(mini_path, tmp_path):
+    """Manifest with a findings snapshot for the mini structure."""
+    run_cli("manifest", "init", mini_path, "--out", tmp_path / "m0.json")
+    run_cli("audit", mini_path, "--manifest", tmp_path / "m0.json", "--out", tmp_path / "a")
+    return json.loads((tmp_path / "a" / "manifest.json").read_text())
+
+
+def decide_blocking(manifest):
+    manifest["decisions"] = [
+        {
+            "finding_id": f["id"],
+            "option_id": f["recommended_option"],
+            "rationale": "test",
+            "decided_by": "test",
+            "timestamp": "2026-01-01T00:00:00Z",
+        }
+        for f in manifest["findings_snapshot"]["findings"]
+        if f["effective_severity"] == "blocking"
+    ]
+    return manifest
+
+
+def test_manifest_status_exit_codes(mini_path, tmp_path, capsys):
+    manifest = audited_manifest(mini_path, tmp_path)
+    path = tmp_path / "m.json"
+    path.write_text(json.dumps(manifest))
+    assert run_cli("manifest", "status", path, "--structure", mini_path) == 3
+    assert "unrecognized/group/A:902" in capsys.readouterr().out
+    path.write_text(json.dumps(decide_blocking(manifest)))
+    assert run_cli("manifest", "status", path, "--structure", mini_path) == 0
+    other = tmp_path / "other.cif"
+    other.write_text(mini_cif_text().replace("MINI", "MINJ"))
+    assert run_cli("manifest", "status", path, "--structure", other) == 2
+
+
+def test_reaudit_lists_every_orphaned_decision(mini_path, tmp_path, capsys):
+    from simprep.canonical import sha256_canonical
+
+    manifest = decide_blocking(audited_manifest(mini_path, tmp_path))
+    snapshot = manifest["findings_snapshot"]
+    ghosts = [dict(snapshot["findings"][0], id=f"metals/Z:{n}") for n in (1, 2)]
+    snapshot["findings"] += ghosts
+    snapshot["findings_sha256"] = sha256_canonical(snapshot["findings"])
+    manifest["decisions"] += [
+        dict(manifest["decisions"][0], finding_id=g["id"], option_id=g["recommended_option"])
+        for g in ghosts
+    ]
+    path = tmp_path / "m.json"
+    path.write_text(json.dumps(manifest))
+    assert run_cli("audit", mini_path, "--manifest", path, "--out", tmp_path / "b") == 2
+    error = capsys.readouterr().err
+    assert "metals/Z:1" in error and "metals/Z:2" in error and "orphaned" in error

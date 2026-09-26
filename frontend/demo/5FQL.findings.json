@@ -1,0 +1,3215 @@
+{
+  "schema_version": "0.1.0",
+  "generated_at": "2026-09-26T04:05:03Z",
+  "simprep": {
+    "version": "0.1.0",
+    "git_commit": "c72dc6b6a64207bdb27b9eeda725a1ee825f4184"
+  },
+  "knowledge_base": {
+    "version": "0.1.0",
+    "sha256": "133060539b2a260a1d8f9ce7c840c4a86ecba407b5e0d27b2ed11317df08d981"
+  },
+  "input": {
+    "path": "tests/panel/5FQL.cif.gz",
+    "sha256": "ac5ffc6fed697e7b2659f6747ad4d0638eb949220cd7ca7c8c3b372ce183f8d5",
+    "format": "mmcif"
+  },
+  "audit_config": {
+    "manifest_sha256": null,
+    "regions": [],
+    "severity_escalation": {
+      "thresholds": [
+        {
+          "max_distance_angstrom": 6.0,
+          "raise_levels": 2
+        },
+        {
+          "max_distance_angstrom": 12.0,
+          "raise_levels": 1
+        }
+      ]
+    }
+  },
+  "structure_summary": {
+    "name": "5FQL",
+    "scope": "Model 1 of the deposited asymmetric unit as parsed; no biological assembly is generated and no coordinates are modified by an audit.",
+    "annotation_categories_present": [
+      "pdbx_struct_mod_residue",
+      "pdbx_unobs_or_zero_occ_residues",
+      "struct_conn"
+    ],
+    "annotation_categories_absent": []
+  },
+  "counts": [
+    {
+      "record_type": "polymer residues",
+      "in": 507,
+      "passed_through": 504,
+      "flagged": 3,
+      "excluded": 0
+    },
+    {
+      "record_type": "nonpolymer residues",
+      "in": 6,
+      "passed_through": 0,
+      "flagged": 6,
+      "excluded": 0
+    },
+    {
+      "record_type": "branched residues",
+      "in": 13,
+      "passed_through": 0,
+      "flagged": 13,
+      "excluded": 0
+    },
+    {
+      "record_type": "water residues",
+      "in": 213,
+      "passed_through": 213,
+      "flagged": 0,
+      "excluded": 0
+    },
+    {
+      "record_type": "atom records",
+      "in": 8576,
+      "passed_through": 8095,
+      "flagged": 481,
+      "excluded": 0
+    },
+    {
+      "record_type": "unobserved polymer residues (annotation)",
+      "in": 18,
+      "passed_through": 0,
+      "flagged": 18,
+      "excluded": 0
+    },
+    {
+      "record_type": "struct_conn records",
+      "in": 26,
+      "passed_through": 4,
+      "flagged": 22,
+      "excluded": 0
+    },
+    {
+      "record_type": "pdbx_struct_mod_residue records",
+      "in": 8,
+      "passed_through": 0,
+      "flagged": 8,
+      "excluded": 0
+    }
+  ],
+  "findings": [
+    {
+      "id": "metals/A:1551",
+      "rule_id": "metals.calcium",
+      "rule_family": "metals",
+      "title": "CA site A:1551: likely_catalytic, coordination number 6",
+      "base_severity": "warn",
+      "effective_severity": "warn",
+      "severity_context": {
+        "proximity": "no_regions",
+        "nearest_region": null,
+        "min_distance_angstrom": null,
+        "raise_levels": 0
+      },
+      "locus": {
+        "chain": "A",
+        "seq_num": 1551,
+        "ins_code": "",
+        "res_name": "CA",
+        "atom_names": [
+          "CA"
+        ],
+        "extent": [
+          {
+            "chain": "A",
+            "seq_num": 1551,
+            "ins_code": "",
+            "res_name": "CA"
+          }
+        ]
+      },
+      "anchor_residues": [
+        {
+          "chain": "A",
+          "seq_num": 1551,
+          "ins_code": ""
+        }
+      ],
+      "evidence": [
+        {
+          "key": "metal_occupancy",
+          "type": "occupancy",
+          "value": 1.0
+        },
+        {
+          "key": "metal_b_factor",
+          "type": "b_factor",
+          "value": 54.96,
+          "unit": "angstrom_squared"
+        },
+        {
+          "key": "coordination_cutoff",
+          "type": "number",
+          "value": 3.0,
+          "unit": "angstrom"
+        },
+        {
+          "key": "min_donor_occupancy",
+          "type": "number",
+          "value": 0.5,
+          "unit": "fraction"
+        },
+        {
+          "key": "coordination_number",
+          "type": "count",
+          "value": 6
+        },
+        {
+          "key": "protein_donors",
+          "type": "count",
+          "value": 4
+        },
+        {
+          "key": "water_donors",
+          "type": "count",
+          "value": 0
+        },
+        {
+          "key": "nonstandard_polymer_residue_donors",
+          "type": "count",
+          "value": 2
+        },
+        {
+          "key": "nonpolymer_ligand_donors",
+          "type": "count",
+          "value": 0
+        },
+        {
+          "key": "mean_ligand_distance",
+          "type": "number",
+          "value": 2.346,
+          "unit": "angstrom"
+        },
+        {
+          "key": "geometry",
+          "type": "label",
+          "value": "octahedral"
+        },
+        {
+          "key": "geometry_rms_angle_deviation",
+          "type": "number",
+          "value": 20.509,
+          "unit": "degree"
+        },
+        {
+          "key": "classification",
+          "type": "label",
+          "value": "likely_catalytic",
+          "note": "shell contains nonstandard_polymer_residue"
+        },
+        {
+          "key": "ligand_distance",
+          "type": "distance",
+          "value": 2.293,
+          "unit": "angstrom",
+          "atoms": [
+            {
+              "chain": "A",
+              "seq_num": 1551,
+              "ins_code": "",
+              "res_name": "CA",
+              "atom_name": "CA",
+              "altloc": ""
+            },
+            {
+              "chain": "A",
+              "seq_num": 335,
+              "ins_code": "",
+              "res_name": "HIS",
+              "atom_name": "NE2",
+              "altloc": ""
+            }
+          ],
+          "note": "protein"
+        },
+        {
+          "key": "ligand_distance",
+          "type": "distance",
+          "value": 2.295,
+          "unit": "angstrom",
+          "atoms": [
+            {
+              "chain": "A",
+              "seq_num": 1551,
+              "ins_code": "",
+              "res_name": "CA",
+              "atom_name": "CA",
+              "altloc": ""
+            },
+            {
+              "chain": "A",
+              "seq_num": 46,
+              "ins_code": "",
+              "res_name": "ASP",
+              "atom_name": "OD1",
+              "altloc": ""
+            }
+          ],
+          "note": "protein"
+        },
+        {
+          "key": "ligand_distance",
+          "type": "distance",
+          "value": 2.323,
+          "unit": "angstrom",
+          "atoms": [
+            {
+              "chain": "A",
+              "seq_num": 1551,
+              "ins_code": "",
+              "res_name": "CA",
+              "atom_name": "CA",
+              "altloc": ""
+            },
+            {
+              "chain": "A",
+              "seq_num": 84,
+              "ins_code": "",
+              "res_name": "ALS",
+              "atom_name": "OS1",
+              "altloc": ""
+            }
+          ],
+          "note": "nonstandard_polymer_residue"
+        },
+        {
+          "key": "ligand_distance",
+          "type": "distance",
+          "value": 2.324,
+          "unit": "angstrom",
+          "atoms": [
+            {
+              "chain": "A",
+              "seq_num": 1551,
+              "ins_code": "",
+              "res_name": "CA",
+              "atom_name": "CA",
+              "altloc": ""
+            },
+            {
+              "chain": "A",
+              "seq_num": 334,
+              "ins_code": "",
+              "res_name": "ASP",
+              "atom_name": "OD2",
+              "altloc": ""
+            }
+          ],
+          "note": "protein"
+        },
+        {
+          "key": "ligand_distance",
+          "type": "distance",
+          "value": 2.374,
+          "unit": "angstrom",
+          "atoms": [
+            {
+              "chain": "A",
+              "seq_num": 1551,
+              "ins_code": "",
+              "res_name": "CA",
+              "atom_name": "CA",
+              "altloc": ""
+            },
+            {
+              "chain": "A",
+              "seq_num": 45,
+              "ins_code": "",
+              "res_name": "ASP",
+              "atom_name": "OD1",
+              "altloc": ""
+            }
+          ],
+          "note": "protein"
+        },
+        {
+          "key": "ligand_distance",
+          "type": "distance",
+          "value": 2.47,
+          "unit": "angstrom",
+          "atoms": [
+            {
+              "chain": "A",
+              "seq_num": 1551,
+              "ins_code": "",
+              "res_name": "CA",
+              "atom_name": "CA",
+              "altloc": ""
+            },
+            {
+              "chain": "A",
+              "seq_num": 84,
+              "ins_code": "",
+              "res_name": "ALS",
+              "atom_name": "OS4",
+              "altloc": ""
+            }
+          ],
+          "note": "nonstandard_polymer_residue"
+        },
+        {
+          "key": "annotated_metal_link",
+          "type": "source_record",
+          "category": "struct_conn",
+          "fields": {
+            "id": "metalc1",
+            "conn_type": "metalc",
+            "distance_angstrom": 2.374
+          },
+          "atoms": [
+            {
+              "chain": "A",
+              "seq_num": 45,
+              "ins_code": "",
+              "res_name": "ASP",
+              "atom_name": "OD1",
+              "altloc": ""
+            },
+            {
+              "chain": "A",
+              "seq_num": 1551,
+              "ins_code": "",
+              "res_name": "CA",
+              "atom_name": "CA",
+              "altloc": ""
+            }
+          ]
+        },
+        {
+          "key": "annotated_metal_link",
+          "type": "source_record",
+          "category": "struct_conn",
+          "fields": {
+            "id": "metalc2",
+            "conn_type": "metalc",
+            "distance_angstrom": 2.295
+          },
+          "atoms": [
+            {
+              "chain": "A",
+              "seq_num": 46,
+              "ins_code": "",
+              "res_name": "ASP",
+              "atom_name": "OD1",
+              "altloc": ""
+            },
+            {
+              "chain": "A",
+              "seq_num": 1551,
+              "ins_code": "",
+              "res_name": "CA",
+              "atom_name": "CA",
+              "altloc": ""
+            }
+          ]
+        },
+        {
+          "key": "annotated_metal_link",
+          "type": "source_record",
+          "category": "struct_conn",
+          "fields": {
+            "id": "metalc3",
+            "conn_type": "metalc",
+            "distance_angstrom": 2.323
+          },
+          "atoms": [
+            {
+              "chain": "A",
+              "seq_num": 84,
+              "ins_code": "",
+              "res_name": "ALS",
+              "atom_name": "OS1",
+              "altloc": ""
+            },
+            {
+              "chain": "A",
+              "seq_num": 1551,
+              "ins_code": "",
+              "res_name": "CA",
+              "atom_name": "CA",
+              "altloc": ""
+            }
+          ]
+        },
+        {
+          "key": "annotated_metal_link",
+          "type": "source_record",
+          "category": "struct_conn",
+          "fields": {
+            "id": "metalc4",
+            "conn_type": "metalc",
+            "distance_angstrom": 2.897
+          },
+          "atoms": [
+            {
+              "chain": "A",
+              "seq_num": 84,
+              "ins_code": "",
+              "res_name": "ALS",
+              "atom_name": "S",
+              "altloc": ""
+            },
+            {
+              "chain": "A",
+              "seq_num": 1551,
+              "ins_code": "",
+              "res_name": "CA",
+              "atom_name": "CA",
+              "altloc": ""
+            }
+          ]
+        },
+        {
+          "key": "annotated_metal_link",
+          "type": "source_record",
+          "category": "struct_conn",
+          "fields": {
+            "id": "metalc5",
+            "conn_type": "metalc",
+            "distance_angstrom": 2.47
+          },
+          "atoms": [
+            {
+              "chain": "A",
+              "seq_num": 84,
+              "ins_code": "",
+              "res_name": "ALS",
+              "atom_name": "OS4",
+              "altloc": ""
+            },
+            {
+              "chain": "A",
+              "seq_num": 1551,
+              "ins_code": "",
+              "res_name": "CA",
+              "atom_name": "CA",
+              "altloc": ""
+            }
+          ]
+        },
+        {
+          "key": "annotated_metal_link",
+          "type": "source_record",
+          "category": "struct_conn",
+          "fields": {
+            "id": "metalc6",
+            "conn_type": "metalc",
+            "distance_angstrom": 2.324
+          },
+          "atoms": [
+            {
+              "chain": "A",
+              "seq_num": 334,
+              "ins_code": "",
+              "res_name": "ASP",
+              "atom_name": "OD2",
+              "altloc": ""
+            },
+            {
+              "chain": "A",
+              "seq_num": 1551,
+              "ins_code": "",
+              "res_name": "CA",
+              "atom_name": "CA",
+              "altloc": ""
+            }
+          ]
+        },
+        {
+          "key": "annotated_metal_link",
+          "type": "source_record",
+          "category": "struct_conn",
+          "fields": {
+            "id": "metalc7",
+            "conn_type": "metalc",
+            "distance_angstrom": 2.293
+          },
+          "atoms": [
+            {
+              "chain": "A",
+              "seq_num": 335,
+              "ins_code": "",
+              "res_name": "HIS",
+              "atom_name": "NE2",
+              "altloc": ""
+            },
+            {
+              "chain": "A",
+              "seq_num": 1551,
+              "ins_code": "",
+              "res_name": "CA",
+              "atom_name": "CA",
+              "altloc": ""
+            }
+          ]
+        },
+        {
+          "key": "crystallization_conditions",
+          "type": "source_record",
+          "category": "exptl_crystal_grow",
+          "fields": {
+            "pdbx_details": "0.1 M MES PH=6.1 1.0 M LICL 20% PEG6K"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "nonbonded_12_6",
+          "label": "Nonbonded 12-6 LJ ion model",
+          "cost_hint": "low",
+          "trade_offs": [
+            "Cheapest and fully transferable; ligands may exchange freely.",
+            "For divalent ions a single 12-6 parameter set cannot reproduce hydration free energy, ion-oxygen distance and coordination number at once (Li & Merz 2014), so the first shell may rearrange or collapse during sampling."
+          ]
+        },
+        {
+          "id": "nonbonded_12_6_4",
+          "label": "Nonbonded 12-6-4 LJ-type ion model",
+          "cost_hint": "low",
+          "trade_offs": [
+            "Adds an ion-induced-dipole (1/r^4) term; reproduces hydration free energy, ion-oxygen distance and coordination number for +2 ions (Li & Merz 2014).",
+            "Modest overhead; needs C4 terms for each ion/atom-type pair; does not treat charge transfer explicitly."
+          ]
+        },
+        {
+          "id": "bonded_mcpb",
+          "label": "Bonded model (MCPB.py-style)",
+          "cost_hint": "high",
+          "trade_offs": [
+            "Keeps the crystallographic coordination geometry by construction.",
+            "Needs QM calculations for force constants and charges (Li & Merz 2016); ligand exchange is impossible, which biases any landscape where site rearrangement matters; must be rebuilt if a variant changes a ligand."
+          ]
+        },
+        {
+          "id": "restrained",
+          "label": "Nonbonded ion plus distance restraints to crystal ligands",
+          "cost_hint": "low",
+          "trade_offs": [
+            "Cheap way to hold the site together without QM parameterization.",
+            "Restraints add a bias to every free energy computed; the restraint set must be recorded and identical across WT and variants to keep comparisons fair."
+          ]
+        }
+      ],
+      "recommended_option": "nonbonded_12_6_4",
+      "recommendation_basis": "default",
+      "rationale": "A metal site cannot be simulated without choosing an ion model, and the choice changes the site's behaviour. The coordination shell (donor atoms within the cutoff), a geometry descriptor (RMS deviation of L-M-L angles from ideal polyhedra) and the classification are reported as evidence. Classification criteria, in order: the shell contains a non-standard polymer residue or a non-polymer ligand -> likely catalytic; an open site (few protein donors plus water) -> likely catalytic; at least the structural minimum of protein donors -> likely structural; otherwise ambiguous.",
+      "references": [
+        {
+          "citation": "Harding MM. Small revisions to predicted distances around metal sites in proteins. Acta Crystallogr D Biol Crystallogr. 2006;62(Pt 6):678-682.",
+          "doi": "10.1107/S0907444906014594",
+          "pmid": "16699196"
+        },
+        {
+          "citation": "Li P, Merz KM Jr. Taking into account the ion-induced dipole interaction in the nonbonded model of ions. J Chem Theory Comput. 2014;10(1):289-297.",
+          "doi": "10.1021/ct400751u",
+          "pmid": "24659926"
+        },
+        {
+          "citation": "Li P, Merz KM Jr. MCPB.py: a Python based metal center parameter builder. J Chem Inf Model. 2016;56(4):599-604.",
+          "doi": "10.1021/acs.jcim.5b00674",
+          "pmid": "26913476"
+        }
+      ],
+      "verify_flags": [
+        "[VERIFY] 3.0 A shell cutoff: margin above Ca-O target distances (about 2.4 A, with wide scatter) in Harding 2006; not re-read from the full text in this session.",
+        "[VERIFY] structural_min_protein_donors = 5 is a working heuristic, not a literature value; no open-site criterion is applied to Ca."
+      ]
+    },
+    {
+      "id": "nonstandard_residues/A:84",
+      "rule_id": "nonstandard_residues.formylglycine",
+      "rule_family": "nonstandard_residues",
+      "title": "Formylglycine (sulfatase catalytic residue): ALS A:84",
+      "base_severity": "blocking",
+      "effective_severity": "blocking",
+      "severity_context": {
+        "proximity": "no_regions",
+        "nearest_region": null,
+        "min_distance_angstrom": null,
+        "raise_levels": 0
+      },
+      "locus": {
+        "chain": "A",
+        "seq_num": 84,
+        "ins_code": "",
+        "res_name": "ALS",
+        "atom_names": [],
+        "extent": [
+          {
+            "chain": "A",
+            "seq_num": 84,
+            "ins_code": "",
+            "res_name": "ALS"
+          }
+        ]
+      },
+      "anchor_residues": [
+        {
+          "chain": "A",
+          "seq_num": 84,
+          "ins_code": ""
+        }
+      ],
+      "evidence": [
+        {
+          "key": "detected_by",
+          "type": "label",
+          "value": "residue_name,modification_annotation"
+        },
+        {
+          "key": "atom_records",
+          "type": "count",
+          "value": 11
+        },
+        {
+          "key": "atom_names",
+          "type": "label",
+          "value": "C CA CB N O OG OS1 OS2 OS3 OS4 S"
+        },
+        {
+          "key": "mean_occupancy",
+          "type": "occupancy",
+          "value": 1.0
+        },
+        {
+          "key": "mean_b_factor",
+          "type": "b_factor",
+          "value": 59.37,
+          "unit": "angstrom_squared"
+        },
+        {
+          "key": "modeled_form",
+          "type": "label",
+          "value": "sulfate_ester",
+          "note": "from the atoms present in the deposited residue"
+        },
+        {
+          "key": "modification_record",
+          "type": "source_record",
+          "category": "pdbx_struct_mod_residue",
+          "fields": {
+            "residue": "A:84",
+            "res_name": "ALS",
+            "parent_comp_id": "ALA",
+            "details": "(3S)-3-(SULFOOXY)-L-SERINE"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "model_gem_diol",
+          "label": "Model FGly as the aldehyde hydrate (gem-diol, FGH)",
+          "cost_hint": "medium",
+          "trade_offs": [
+            "The species proposed to perform the nucleophilic attack in the transesterification-elimination mechanism (Demydchuk et al. 2017).",
+            "Needs a parameterized non-standard residue; replaces the deposited sulfate ester, so the covalent sulfate is removed (record that decision too)."
+          ]
+        },
+        {
+          "id": "model_aldehyde",
+          "label": "Model FGly as the free aldehyde",
+          "cost_hint": "medium",
+          "trade_offs": [
+            "The form produced by FGE and regenerated after sulfate elimination.",
+            "Not the catalytically active hydrate; needs its own parameters."
+          ]
+        },
+        {
+          "id": "keep_sulfate_ester",
+          "label": "Keep the deposited FGly sulfate ester (covalent intermediate)",
+          "cost_hint": "medium",
+          "trade_offs": [
+            "Matches the deposited coordinates and the Ca2+ coordination by sulfate oxygens.",
+            "Simulates an intermediate, not the resting enzyme; the authors note the density could alternatively be a phosphate ester."
+          ]
+        },
+        {
+          "id": "revert_to_parent",
+          "label": "Revert to cysteine (the unmodified precursor)",
+          "cost_hint": "low",
+          "requires_explicit_choice": true,
+          "trade_offs": [
+            "Standard parameters.",
+            "Removes the catalytic chemistry; only defensible for questions that do not involve the active site."
+          ]
+        }
+      ],
+      "recommended_option": "model_gem_diol",
+      "recommendation_basis": "default",
+      "rationale": "Eukaryotic sulfatases carry C-alpha-formylglycine, post-translationally formed from a cysteine, as the catalytic residue. Its hydration / esterification state (free aldehyde, gem-diol hydrate, or sulfate/phosphate ester intermediate) changes the active site's chemistry and the metal coordination, so it is an explicit decision and never a silent default.",
+      "references": [
+        {
+          "citation": "Demydchuk M, Hill CH, Zhou A, et al. Insights into Hunter syndrome from the structure of iduronate-2-sulfatase. Nat Commun. 2017;8:15786.",
+          "doi": "10.1038/ncomms15786",
+          "pmid": "28593992"
+        },
+        {
+          "citation": "Dierks T, Schmidt B, Borissenko LV, et al. Multiple sulfatase deficiency is caused by mutations in the gene encoding the human C(alpha)-formylglycine generating enzyme. Cell. 2003;113(4):435-444.",
+          "doi": "10.1016/s0092-8674(03)00347-7",
+          "pmid": "12757705"
+        }
+      ],
+      "verify_flags": [
+        "[VERIFY] DDZ is taken from Demydchuk et al. 2017 ('Protein Data Bank code DDZ: 3,3-dihydroxy-alanine'); not checked against the wwPDB Chemical Component Dictionary in this session. ALS was checked only against the 5FQL file's own chem_comp record.",
+        "[VERIFY] Treating ALS as formylglycine sulfate ester is a chemical identification ((3S)-3-(sulfooxy)-L-serine = C-alpha-formylglycine hydrate monosulfate); ALS in another entry could be a genuine sulfated serine, so check the context when another structure matches.",
+        "[VERIFY] No component ID for free formylglycine aldehyde is included; add one only after checking the CCD.",
+        "[VERIFY] Recommending the gem-diol follows the paper's statement that FGly acts catalytically as the aldehyde hydrate; whether that is the right state for a given free-energy question is a study decision."
+      ]
+    },
+    {
+      "id": "altlocs/A:294",
+      "rule_id": "altlocs.major_spread",
+      "rule_family": "altlocs",
+      "title": "Alternative locations with large spread: ARG A:294 (6.19 A)",
+      "base_severity": "warn",
+      "effective_severity": "warn",
+      "severity_context": {
+        "proximity": "no_regions",
+        "nearest_region": null,
+        "min_distance_angstrom": null,
+        "raise_levels": 0
+      },
+      "locus": {
+        "chain": "A",
+        "seq_num": 294,
+        "ins_code": "",
+        "res_name": "ARG",
+        "atom_names": [
+          "CA",
+          "CB",
+          "CD",
+          "CG",
+          "CZ",
+          "H",
+          "HA",
+          "HB2",
+          "HB3",
+          "HD2",
+          "HD3",
+          "HE",
+          "HG2",
+          "HG3",
+          "HH11",
+          "HH12",
+          "HH21",
+          "HH22",
+          "NE",
+          "NH1",
+          "NH2"
+        ],
+        "extent": [
+          {
+            "chain": "A",
+            "seq_num": 294,
+            "ins_code": "",
+            "res_name": "ARG"
+          }
+        ]
+      },
+      "anchor_residues": [
+        {
+          "chain": "A",
+          "seq_num": 294,
+          "ins_code": ""
+        }
+      ],
+      "evidence": [
+        {
+          "key": "altloc_ids",
+          "type": "label",
+          "value": "A,B"
+        },
+        {
+          "key": "atoms_with_altlocs",
+          "type": "count",
+          "value": 21
+        },
+        {
+          "key": "occupancy_a",
+          "type": "occupancy",
+          "value": 0.48,
+          "note": "mean over altloc A"
+        },
+        {
+          "key": "b_factor_a",
+          "type": "b_factor",
+          "value": 78.12,
+          "unit": "angstrom_squared",
+          "note": "mean over altloc A"
+        },
+        {
+          "key": "occupancy_b",
+          "type": "occupancy",
+          "value": 0.52,
+          "note": "mean over altloc B"
+        },
+        {
+          "key": "b_factor_b",
+          "type": "b_factor",
+          "value": 78.58,
+          "unit": "angstrom_squared",
+          "note": "mean over altloc B"
+        },
+        {
+          "key": "max_spread",
+          "type": "distance",
+          "value": 6.189,
+          "unit": "angstrom",
+          "atoms": [
+            {
+              "chain": "A",
+              "seq_num": 294,
+              "ins_code": "",
+              "res_name": "ARG",
+              "atom_name": "HH12",
+              "altloc": "A"
+            },
+            {
+              "chain": "A",
+              "seq_num": 294,
+              "ins_code": "",
+              "res_name": "ARG",
+              "atom_name": "HH12",
+              "altloc": "B"
+            }
+          ]
+        }
+      ],
+      "options": [
+        {
+          "id": "highest_occupancy",
+          "label": "Keep the highest-occupancy altloc",
+          "cost_hint": "low",
+          "trade_offs": [
+            "Simple and reproducible; ties are broken by altloc identifier (A before B).",
+            "Discards the minor state, which may be the functionally relevant one."
+          ]
+        },
+        {
+          "id": "specific_altloc",
+          "label": "Keep a specific altloc (named in the decision)",
+          "cost_hint": "low",
+          "trade_offs": [
+            "Lets the human choose the state relevant to the question.",
+            "Mixing altloc letters across residues can create clashes when the letters were not refined as a consistent set; check neighbours."
+          ]
+        },
+        {
+          "id": "keep_ensemble",
+          "label": "Keep each altloc as a separate system (ensemble)",
+          "cost_hint": "high",
+          "trade_offs": [
+            "Samples both deposited states; the difference becomes part of the result.",
+            "Multiplies the number of systems to prepare and simulate."
+          ]
+        }
+      ],
+      "recommended_option": "highest_occupancy",
+      "recommendation_basis": "default",
+      "rationale": "Altlocs that move atoms by 1 A or more are distinct conformations; which one is simulated can change the outcome near a region of interest.",
+      "references": [],
+      "verify_flags": []
+    },
+    {
+      "id": "altlocs/A:421",
+      "rule_id": "altlocs.major_spread",
+      "rule_family": "altlocs",
+      "title": "Alternative locations with large spread: ARG A:421 (5.80 A)",
+      "base_severity": "warn",
+      "effective_severity": "warn",
+      "severity_context": {
+        "proximity": "no_regions",
+        "nearest_region": null,
+        "min_distance_angstrom": null,
+        "raise_levels": 0
+      },
+      "locus": {
+        "chain": "A",
+        "seq_num": 421,
+        "ins_code": "",
+        "res_name": "ARG",
+        "atom_names": [
+          "CA",
+          "CB",
+          "CD",
+          "CG",
+          "CZ",
+          "H",
+          "HA",
+          "HB2",
+          "HB3",
+          "HD2",
+          "HD3",
+          "HE",
+          "HG2",
+          "HG3",
+          "HH11",
+          "HH12",
+          "HH21",
+          "HH22",
+          "NE",
+          "NH1",
+          "NH2"
+        ],
+        "extent": [
+          {
+            "chain": "A",
+            "seq_num": 421,
+            "ins_code": "",
+            "res_name": "ARG"
+          }
+        ]
+      },
+      "anchor_residues": [
+        {
+          "chain": "A",
+          "seq_num": 421,
+          "ins_code": ""
+        }
+      ],
+      "evidence": [
+        {
+          "key": "altloc_ids",
+          "type": "label",
+          "value": "A,B"
+        },
+        {
+          "key": "atoms_with_altlocs",
+          "type": "count",
+          "value": 21
+        },
+        {
+          "key": "occupancy_a",
+          "type": "occupancy",
+          "value": 0.63,
+          "note": "mean over altloc A"
+        },
+        {
+          "key": "b_factor_a",
+          "type": "b_factor",
+          "value": 85.0,
+          "unit": "angstrom_squared",
+          "note": "mean over altloc A"
+        },
+        {
+          "key": "occupancy_b",
+          "type": "occupancy",
+          "value": 0.37,
+          "note": "mean over altloc B"
+        },
+        {
+          "key": "b_factor_b",
+          "type": "b_factor",
+          "value": 83.38,
+          "unit": "angstrom_squared",
+          "note": "mean over altloc B"
+        },
+        {
+          "key": "max_spread",
+          "type": "distance",
+          "value": 5.804,
+          "unit": "angstrom",
+          "atoms": [
+            {
+              "chain": "A",
+              "seq_num": 421,
+              "ins_code": "",
+              "res_name": "ARG",
+              "atom_name": "HH22",
+              "altloc": "A"
+            },
+            {
+              "chain": "A",
+              "seq_num": 421,
+              "ins_code": "",
+              "res_name": "ARG",
+              "atom_name": "HH22",
+              "altloc": "B"
+            }
+          ]
+        }
+      ],
+      "options": [
+        {
+          "id": "highest_occupancy",
+          "label": "Keep the highest-occupancy altloc",
+          "cost_hint": "low",
+          "trade_offs": [
+            "Simple and reproducible; ties are broken by altloc identifier (A before B).",
+            "Discards the minor state, which may be the functionally relevant one."
+          ]
+        },
+        {
+          "id": "specific_altloc",
+          "label": "Keep a specific altloc (named in the decision)",
+          "cost_hint": "low",
+          "trade_offs": [
+            "Lets the human choose the state relevant to the question.",
+            "Mixing altloc letters across residues can create clashes when the letters were not refined as a consistent set; check neighbours."
+          ]
+        },
+        {
+          "id": "keep_ensemble",
+          "label": "Keep each altloc as a separate system (ensemble)",
+          "cost_hint": "high",
+          "trade_offs": [
+            "Samples both deposited states; the difference becomes part of the result.",
+            "Multiplies the number of systems to prepare and simulate."
+          ]
+        }
+      ],
+      "recommended_option": "highest_occupancy",
+      "recommendation_basis": "default",
+      "rationale": "Altlocs that move atoms by 1 A or more are distinct conformations; which one is simulated can change the outcome near a region of interest.",
+      "references": [],
+      "verify_flags": []
+    },
+    {
+      "id": "missing_residues/A:26-33",
+      "rule_id": "missing_residues.n_terminal",
+      "rule_family": "missing_residues",
+      "title": "Unobserved N-terminal residues: A:26-33 (8 residues)",
+      "base_severity": "info",
+      "effective_severity": "info",
+      "severity_context": {
+        "proximity": "no_regions",
+        "nearest_region": null,
+        "min_distance_angstrom": null,
+        "raise_levels": 0
+      },
+      "locus": {
+        "chain": "A",
+        "seq_num": 26,
+        "ins_code": "",
+        "res_name": "SER",
+        "atom_names": [],
+        "extent": [
+          {
+            "chain": "A",
+            "seq_num": 26,
+            "ins_code": "",
+            "res_name": "SER"
+          },
+          {
+            "chain": "A",
+            "seq_num": 27,
+            "ins_code": "",
+            "res_name": "GLU"
+          },
+          {
+            "chain": "A",
+            "seq_num": 28,
+            "ins_code": "",
+            "res_name": "THR"
+          },
+          {
+            "chain": "A",
+            "seq_num": 29,
+            "ins_code": "",
+            "res_name": "GLN"
+          },
+          {
+            "chain": "A",
+            "seq_num": 30,
+            "ins_code": "",
+            "res_name": "ALA"
+          },
+          {
+            "chain": "A",
+            "seq_num": 31,
+            "ins_code": "",
+            "res_name": "ASN"
+          },
+          {
+            "chain": "A",
+            "seq_num": 32,
+            "ins_code": "",
+            "res_name": "SER"
+          },
+          {
+            "chain": "A",
+            "seq_num": 33,
+            "ins_code": "",
+            "res_name": "THR"
+          }
+        ]
+      },
+      "anchor_residues": [
+        {
+          "chain": "A",
+          "seq_num": 34,
+          "ins_code": ""
+        }
+      ],
+      "evidence": [
+        {
+          "key": "position",
+          "type": "label",
+          "value": "n_terminal"
+        },
+        {
+          "key": "gap_length",
+          "type": "count",
+          "value": 8
+        },
+        {
+          "key": "missing_sequence",
+          "type": "label",
+          "value": "SER-GLU-THR-GLN-ALA-ASN-SER-THR"
+        },
+        {
+          "key": "unobserved_record",
+          "type": "source_record",
+          "category": "pdbx_unobs_or_zero_occ_residues",
+          "fields": {
+            "first": "A:26",
+            "last": "A:33",
+            "first_label_seq": 1,
+            "last_label_seq": 8
+          }
+        },
+        {
+          "key": "flank_after",
+          "type": "label",
+          "value": "THRA:34"
+        }
+      ],
+      "options": [
+        {
+          "id": "cap_termini",
+          "label": "Cap the first/last observed residue (neutral ACE/NME-style caps)",
+          "cost_hint": "low",
+          "trade_offs": [
+            "Avoids an artificial charged terminus where the real chain continues.",
+            "The missing tail's interactions are absent."
+          ]
+        },
+        {
+          "id": "truncate",
+          "label": "Truncate at the observed residue with a charged terminus",
+          "cost_hint": "low",
+          "trade_offs": [
+            "Simplest; standard termini parameters.",
+            "Introduces a charge the real protein does not have at that position."
+          ]
+        },
+        {
+          "id": "model_loop",
+          "label": "Model the missing tail",
+          "cost_hint": "medium",
+          "trade_offs": [
+            "Restores the full sequence.",
+            "Modelled tails are unconstrained by density and may dominate conformational sampling if they are long and disordered."
+          ]
+        }
+      ],
+      "recommended_option": "cap_termini",
+      "recommendation_basis": "default",
+      "rationale": "Unobserved N-terminal residues (often tags, signal peptides or disordered tails).",
+      "references": [],
+      "verify_flags": []
+    },
+    {
+      "id": "missing_residues/A:444-453",
+      "rule_id": "missing_residues.internal",
+      "rule_family": "missing_residues",
+      "title": "Internal gap (unobserved residues between observed ones): A:444-453 (10 residues)",
+      "base_severity": "warn",
+      "effective_severity": "warn",
+      "severity_context": {
+        "proximity": "no_regions",
+        "nearest_region": null,
+        "min_distance_angstrom": null,
+        "raise_levels": 0
+      },
+      "locus": {
+        "chain": "A",
+        "seq_num": 444,
+        "ins_code": "",
+        "res_name": "PHE",
+        "atom_names": [],
+        "extent": [
+          {
+            "chain": "A",
+            "seq_num": 444,
+            "ins_code": "",
+            "res_name": "PHE"
+          },
+          {
+            "chain": "A",
+            "seq_num": 445,
+            "ins_code": "",
+            "res_name": "ARG"
+          },
+          {
+            "chain": "A",
+            "seq_num": 446,
+            "ins_code": "",
+            "res_name": "ASP"
+          },
+          {
+            "chain": "A",
+            "seq_num": 447,
+            "ins_code": "",
+            "res_name": "LEU"
+          },
+          {
+            "chain": "A",
+            "seq_num": 448,
+            "ins_code": "",
+            "res_name": "GLU"
+          },
+          {
+            "chain": "A",
+            "seq_num": 449,
+            "ins_code": "",
+            "res_name": "GLU"
+          },
+          {
+            "chain": "A",
+            "seq_num": 450,
+            "ins_code": "",
+            "res_name": "ASP"
+          },
+          {
+            "chain": "A",
+            "seq_num": 451,
+            "ins_code": "",
+            "res_name": "PRO"
+          },
+          {
+            "chain": "A",
+            "seq_num": 452,
+            "ins_code": "",
+            "res_name": "TYR"
+          },
+          {
+            "chain": "A",
+            "seq_num": 453,
+            "ins_code": "",
+            "res_name": "LEU"
+          }
+        ]
+      },
+      "anchor_residues": [
+        {
+          "chain": "A",
+          "seq_num": 443,
+          "ins_code": ""
+        },
+        {
+          "chain": "A",
+          "seq_num": 454,
+          "ins_code": ""
+        }
+      ],
+      "evidence": [
+        {
+          "key": "position",
+          "type": "label",
+          "value": "internal"
+        },
+        {
+          "key": "gap_length",
+          "type": "count",
+          "value": 10
+        },
+        {
+          "key": "missing_sequence",
+          "type": "label",
+          "value": "PHE-ARG-ASP-LEU-GLU-GLU-ASP-PRO-TYR-LEU"
+        },
+        {
+          "key": "unobserved_record",
+          "type": "source_record",
+          "category": "pdbx_unobs_or_zero_occ_residues",
+          "fields": {
+            "first": "A:444",
+            "last": "A:453",
+            "first_label_seq": 419,
+            "last_label_seq": 428
+          }
+        },
+        {
+          "key": "flank_before",
+          "type": "label",
+          "value": "ARGA:443"
+        },
+        {
+          "key": "flank_after",
+          "type": "label",
+          "value": "PROA:454"
+        },
+        {
+          "key": "flank_ca_distance",
+          "type": "distance",
+          "value": 17.431,
+          "unit": "angstrom",
+          "atoms": [
+            {
+              "chain": "A",
+              "seq_num": 443,
+              "ins_code": "",
+              "res_name": "ARG",
+              "atom_name": "CA",
+              "altloc": ""
+            },
+            {
+              "chain": "A",
+              "seq_num": 454,
+              "ins_code": "",
+              "res_name": "PRO",
+              "atom_name": "CA",
+              "altloc": ""
+            }
+          ]
+        },
+        {
+          "key": "max_bridgeable_span",
+          "type": "number",
+          "value": 41.8,
+          "unit": "angstrom",
+          "note": "3.8 A x (gap length + 1)"
+        },
+        {
+          "key": "bridgeable",
+          "type": "flag",
+          "value": true
+        }
+      ],
+      "options": [
+        {
+          "id": "model_loop",
+          "label": "Model the missing loop",
+          "cost_hint": "medium",
+          "trade_offs": [
+            "Restores chain connectivity.",
+            "The modelled loop is a hypothesis; its conformation is unconstrained by density and may bias sampling nearby."
+          ]
+        },
+        {
+          "id": "truncate",
+          "label": "Leave the gap as a chain break, capping both sides",
+          "cost_hint": "low",
+          "trade_offs": [
+            "No invented coordinates.",
+            "Two artificial termini; the flanking segments can drift apart."
+          ]
+        }
+      ],
+      "recommended_option": "model_loop",
+      "recommendation_basis": "default",
+      "rationale": "An internal gap leaves two artificial chain ends. Evidence gives the gap length and the flanking CA-CA distance, compared with the maximum span of the missing residues (3.8 A per peptide unit, the approximate trans CA-CA distance).",
+      "references": [],
+      "verify_flags": [
+        "[VERIFY] 3.8 A CA-CA distance per residue is the textbook trans-peptide value; no citation attached in this session."
+      ]
+    },
+    {
+      "id": "unrecognized/group/A:1558",
+      "rule_id": "unrecognized.chemistry_group",
+      "rule_family": "unrecognized",
+      "title": "Unrecognized chemistry: NAG at A:1558 (1 external link(s))",
+      "base_severity": "blocking",
+      "effective_severity": "blocking",
+      "severity_context": {
+        "proximity": "no_regions",
+        "nearest_region": null,
+        "min_distance_angstrom": null,
+        "raise_levels": 0
+      },
+      "locus": {
+        "chain": "A",
+        "seq_num": 1558,
+        "ins_code": "",
+        "res_name": "NAG",
+        "atom_names": [],
+        "extent": [
+          {
+            "chain": "A",
+            "seq_num": 1558,
+            "ins_code": "",
+            "res_name": "NAG"
+          }
+        ]
+      },
+      "anchor_residues": [
+        {
+          "chain": "A",
+          "seq_num": 1558,
+          "ins_code": ""
+        }
+      ],
+      "evidence": [
+        {
+          "key": "components",
+          "type": "label",
+          "value": "NAG"
+        },
+        {
+          "key": "residue_classes",
+          "type": "label",
+          "value": "nonpolymer"
+        },
+        {
+          "key": "residues",
+          "type": "count",
+          "value": 1
+        },
+        {
+          "key": "atom_records",
+          "type": "count",
+          "value": 27
+        },
+        {
+          "key": "internal_links",
+          "type": "count",
+          "value": 0
+        },
+        {
+          "key": "mean_occupancy",
+          "type": "occupancy",
+          "value": 1.0
+        },
+        {
+          "key": "mean_b_factor",
+          "type": "b_factor",
+          "value": 169.61,
+          "unit": "angstrom_squared"
+        },
+        {
+          "key": "decision_required",
+          "type": "label",
+          "value": "expert decision required"
+        },
+        {
+          "key": "attachment",
+          "type": "source_record",
+          "category": "struct_conn",
+          "fields": {
+            "id": "covale5",
+            "conn_type": "covale",
+            "distance_angstrom": 1.444
+          },
+          "atoms": [
+            {
+              "chain": "A",
+              "seq_num": 246,
+              "ins_code": "",
+              "res_name": "ASN",
+              "atom_name": "ND2",
+              "altloc": ""
+            },
+            {
+              "chain": "A",
+              "seq_num": 1558,
+              "ins_code": "",
+              "res_name": "NAG",
+              "atom_name": "C1",
+              "altloc": ""
+            }
+          ]
+        },
+        {
+          "key": "attachment_site_annotation",
+          "type": "source_record",
+          "category": "pdbx_struct_mod_residue",
+          "fields": {
+            "residue": "A:246",
+            "res_name": "ASN",
+            "parent_comp_id": "ASN",
+            "details": "GLYCOSYLATION SITE"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "expert_review",
+          "label": "Expert decision required",
+          "cost_hint": "medium",
+          "trade_offs": [
+            "Nothing proceeds until a human decides how to treat the chemistry."
+          ]
+        },
+        {
+          "id": "add_rule",
+          "label": "Add a knowledge-base rule for this chemistry, then re-audit",
+          "cost_hint": "medium",
+          "trade_offs": [
+            "Makes the treatment reusable and documented.",
+            "Requires a rule with sources and a panel structure that exercises it."
+          ]
+        },
+        {
+          "id": "exclude",
+          "label": "Exclude from the system (recorded decision)",
+          "cost_hint": "low",
+          "trade_offs": [
+            "Removes the unknown chemistry.",
+            "Anything it contributes (contacts, charge, covalent attachment) is lost."
+          ]
+        },
+        {
+          "id": "parameterize_manually",
+          "label": "Keep and parameterize outside the rule system",
+          "cost_hint": "high",
+          "trade_offs": [
+            "Keeps the deposited chemistry.",
+            "The treatment is not captured by a rule, so it must be fully described in the decision rationale."
+          ]
+        }
+      ],
+      "recommended_option": "expert_review",
+      "recommendation_basis": "default",
+      "rationale": "Residues that no rule claims: ligands, glycans, ions without a rule, and polymer residues outside the standard set that no non-standard rule matched. Residues joined by annotated covalent connections are reported as one group, together with their attachment to the polymer.",
+      "references": [],
+      "verify_flags": []
+    },
+    {
+      "id": "unrecognized/group/A:1559",
+      "rule_id": "unrecognized.chemistry_group",
+      "rule_family": "unrecognized",
+      "title": "Unrecognized chemistry: NAG at A:1559 (1 external link(s))",
+      "base_severity": "blocking",
+      "effective_severity": "blocking",
+      "severity_context": {
+        "proximity": "no_regions",
+        "nearest_region": null,
+        "min_distance_angstrom": null,
+        "raise_levels": 0
+      },
+      "locus": {
+        "chain": "A",
+        "seq_num": 1559,
+        "ins_code": "",
+        "res_name": "NAG",
+        "atom_names": [],
+        "extent": [
+          {
+            "chain": "A",
+            "seq_num": 1559,
+            "ins_code": "",
+            "res_name": "NAG"
+          }
+        ]
+      },
+      "anchor_residues": [
+        {
+          "chain": "A",
+          "seq_num": 1559,
+          "ins_code": ""
+        }
+      ],
+      "evidence": [
+        {
+          "key": "components",
+          "type": "label",
+          "value": "NAG"
+        },
+        {
+          "key": "residue_classes",
+          "type": "label",
+          "value": "nonpolymer"
+        },
+        {
+          "key": "residues",
+          "type": "count",
+          "value": 1
+        },
+        {
+          "key": "atom_records",
+          "type": "count",
+          "value": 27
+        },
+        {
+          "key": "internal_links",
+          "type": "count",
+          "value": 0
+        },
+        {
+          "key": "mean_occupancy",
+          "type": "occupancy",
+          "value": 1.0
+        },
+        {
+          "key": "mean_b_factor",
+          "type": "b_factor",
+          "value": 212.19,
+          "unit": "angstrom_squared"
+        },
+        {
+          "key": "decision_required",
+          "type": "label",
+          "value": "expert decision required"
+        },
+        {
+          "key": "attachment",
+          "type": "source_record",
+          "category": "struct_conn",
+          "fields": {
+            "id": "covale6",
+            "conn_type": "covale",
+            "distance_angstrom": 1.439
+          },
+          "atoms": [
+            {
+              "chain": "A",
+              "seq_num": 280,
+              "ins_code": "",
+              "res_name": "ASN",
+              "atom_name": "ND2",
+              "altloc": ""
+            },
+            {
+              "chain": "A",
+              "seq_num": 1559,
+              "ins_code": "",
+              "res_name": "NAG",
+              "atom_name": "C1",
+              "altloc": ""
+            }
+          ]
+        },
+        {
+          "key": "attachment_site_annotation",
+          "type": "source_record",
+          "category": "pdbx_struct_mod_residue",
+          "fields": {
+            "residue": "A:280",
+            "res_name": "ASN",
+            "parent_comp_id": "ASN",
+            "details": "GLYCOSYLATION SITE"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "expert_review",
+          "label": "Expert decision required",
+          "cost_hint": "medium",
+          "trade_offs": [
+            "Nothing proceeds until a human decides how to treat the chemistry."
+          ]
+        },
+        {
+          "id": "add_rule",
+          "label": "Add a knowledge-base rule for this chemistry, then re-audit",
+          "cost_hint": "medium",
+          "trade_offs": [
+            "Makes the treatment reusable and documented.",
+            "Requires a rule with sources and a panel structure that exercises it."
+          ]
+        },
+        {
+          "id": "exclude",
+          "label": "Exclude from the system (recorded decision)",
+          "cost_hint": "low",
+          "trade_offs": [
+            "Removes the unknown chemistry.",
+            "Anything it contributes (contacts, charge, covalent attachment) is lost."
+          ]
+        },
+        {
+          "id": "parameterize_manually",
+          "label": "Keep and parameterize outside the rule system",
+          "cost_hint": "high",
+          "trade_offs": [
+            "Keeps the deposited chemistry.",
+            "The treatment is not captured by a rule, so it must be fully described in the decision rationale."
+          ]
+        }
+      ],
+      "recommended_option": "expert_review",
+      "recommendation_basis": "default",
+      "rationale": "Residues that no rule claims: ligands, glycans, ions without a rule, and polymer residues outside the standard set that no non-standard rule matched. Residues joined by annotated covalent connections are reported as one group, together with their attachment to the polymer.",
+      "references": [],
+      "verify_flags": []
+    },
+    {
+      "id": "unrecognized/group/A:1567",
+      "rule_id": "unrecognized.chemistry_group",
+      "rule_family": "unrecognized",
+      "title": "Unrecognized chemistry: CL at A:1567",
+      "base_severity": "blocking",
+      "effective_severity": "blocking",
+      "severity_context": {
+        "proximity": "no_regions",
+        "nearest_region": null,
+        "min_distance_angstrom": null,
+        "raise_levels": 0
+      },
+      "locus": {
+        "chain": "A",
+        "seq_num": 1567,
+        "ins_code": "",
+        "res_name": "CL",
+        "atom_names": [],
+        "extent": [
+          {
+            "chain": "A",
+            "seq_num": 1567,
+            "ins_code": "",
+            "res_name": "CL"
+          }
+        ]
+      },
+      "anchor_residues": [
+        {
+          "chain": "A",
+          "seq_num": 1567,
+          "ins_code": ""
+        }
+      ],
+      "evidence": [
+        {
+          "key": "components",
+          "type": "label",
+          "value": "CL"
+        },
+        {
+          "key": "residue_classes",
+          "type": "label",
+          "value": "nonpolymer"
+        },
+        {
+          "key": "residues",
+          "type": "count",
+          "value": 1
+        },
+        {
+          "key": "atom_records",
+          "type": "count",
+          "value": 1
+        },
+        {
+          "key": "internal_links",
+          "type": "count",
+          "value": 0
+        },
+        {
+          "key": "mean_occupancy",
+          "type": "occupancy",
+          "value": 1.0
+        },
+        {
+          "key": "mean_b_factor",
+          "type": "b_factor",
+          "value": 47.58,
+          "unit": "angstrom_squared"
+        },
+        {
+          "key": "decision_required",
+          "type": "label",
+          "value": "expert decision required"
+        }
+      ],
+      "options": [
+        {
+          "id": "expert_review",
+          "label": "Expert decision required",
+          "cost_hint": "medium",
+          "trade_offs": [
+            "Nothing proceeds until a human decides how to treat the chemistry."
+          ]
+        },
+        {
+          "id": "add_rule",
+          "label": "Add a knowledge-base rule for this chemistry, then re-audit",
+          "cost_hint": "medium",
+          "trade_offs": [
+            "Makes the treatment reusable and documented.",
+            "Requires a rule with sources and a panel structure that exercises it."
+          ]
+        },
+        {
+          "id": "exclude",
+          "label": "Exclude from the system (recorded decision)",
+          "cost_hint": "low",
+          "trade_offs": [
+            "Removes the unknown chemistry.",
+            "Anything it contributes (contacts, charge, covalent attachment) is lost."
+          ]
+        },
+        {
+          "id": "parameterize_manually",
+          "label": "Keep and parameterize outside the rule system",
+          "cost_hint": "high",
+          "trade_offs": [
+            "Keeps the deposited chemistry.",
+            "The treatment is not captured by a rule, so it must be fully described in the decision rationale."
+          ]
+        }
+      ],
+      "recommended_option": "expert_review",
+      "recommendation_basis": "default",
+      "rationale": "Residues that no rule claims: ligands, glycans, ions without a rule, and polymer residues outside the standard set that no non-standard rule matched. Residues joined by annotated covalent connections are reported as one group, together with their attachment to the polymer.",
+      "references": [],
+      "verify_flags": []
+    },
+    {
+      "id": "unrecognized/group/A:1568",
+      "rule_id": "unrecognized.chemistry_group",
+      "rule_family": "unrecognized",
+      "title": "Unrecognized chemistry: CL at A:1568",
+      "base_severity": "blocking",
+      "effective_severity": "blocking",
+      "severity_context": {
+        "proximity": "no_regions",
+        "nearest_region": null,
+        "min_distance_angstrom": null,
+        "raise_levels": 0
+      },
+      "locus": {
+        "chain": "A",
+        "seq_num": 1568,
+        "ins_code": "",
+        "res_name": "CL",
+        "atom_names": [],
+        "extent": [
+          {
+            "chain": "A",
+            "seq_num": 1568,
+            "ins_code": "",
+            "res_name": "CL"
+          }
+        ]
+      },
+      "anchor_residues": [
+        {
+          "chain": "A",
+          "seq_num": 1568,
+          "ins_code": ""
+        }
+      ],
+      "evidence": [
+        {
+          "key": "components",
+          "type": "label",
+          "value": "CL"
+        },
+        {
+          "key": "residue_classes",
+          "type": "label",
+          "value": "nonpolymer"
+        },
+        {
+          "key": "residues",
+          "type": "count",
+          "value": 1
+        },
+        {
+          "key": "atom_records",
+          "type": "count",
+          "value": 1
+        },
+        {
+          "key": "internal_links",
+          "type": "count",
+          "value": 0
+        },
+        {
+          "key": "mean_occupancy",
+          "type": "occupancy",
+          "value": 1.0
+        },
+        {
+          "key": "mean_b_factor",
+          "type": "b_factor",
+          "value": 61.19,
+          "unit": "angstrom_squared"
+        },
+        {
+          "key": "decision_required",
+          "type": "label",
+          "value": "expert decision required"
+        }
+      ],
+      "options": [
+        {
+          "id": "expert_review",
+          "label": "Expert decision required",
+          "cost_hint": "medium",
+          "trade_offs": [
+            "Nothing proceeds until a human decides how to treat the chemistry."
+          ]
+        },
+        {
+          "id": "add_rule",
+          "label": "Add a knowledge-base rule for this chemistry, then re-audit",
+          "cost_hint": "medium",
+          "trade_offs": [
+            "Makes the treatment reusable and documented.",
+            "Requires a rule with sources and a panel structure that exercises it."
+          ]
+        },
+        {
+          "id": "exclude",
+          "label": "Exclude from the system (recorded decision)",
+          "cost_hint": "low",
+          "trade_offs": [
+            "Removes the unknown chemistry.",
+            "Anything it contributes (contacts, charge, covalent attachment) is lost."
+          ]
+        },
+        {
+          "id": "parameterize_manually",
+          "label": "Keep and parameterize outside the rule system",
+          "cost_hint": "high",
+          "trade_offs": [
+            "Keeps the deposited chemistry.",
+            "The treatment is not captured by a rule, so it must be fully described in the decision rationale."
+          ]
+        }
+      ],
+      "recommended_option": "expert_review",
+      "recommendation_basis": "default",
+      "rationale": "Residues that no rule claims: ligands, glycans, ions without a rule, and polymer residues outside the standard set that no non-standard rule matched. Residues joined by annotated covalent connections are reported as one group, together with their attachment to the polymer.",
+      "references": [],
+      "verify_flags": []
+    },
+    {
+      "id": "unrecognized/group/A:1569",
+      "rule_id": "unrecognized.chemistry_group",
+      "rule_family": "unrecognized",
+      "title": "Unrecognized chemistry: CL at A:1569",
+      "base_severity": "blocking",
+      "effective_severity": "blocking",
+      "severity_context": {
+        "proximity": "no_regions",
+        "nearest_region": null,
+        "min_distance_angstrom": null,
+        "raise_levels": 0
+      },
+      "locus": {
+        "chain": "A",
+        "seq_num": 1569,
+        "ins_code": "",
+        "res_name": "CL",
+        "atom_names": [],
+        "extent": [
+          {
+            "chain": "A",
+            "seq_num": 1569,
+            "ins_code": "",
+            "res_name": "CL"
+          }
+        ]
+      },
+      "anchor_residues": [
+        {
+          "chain": "A",
+          "seq_num": 1569,
+          "ins_code": ""
+        }
+      ],
+      "evidence": [
+        {
+          "key": "components",
+          "type": "label",
+          "value": "CL"
+        },
+        {
+          "key": "residue_classes",
+          "type": "label",
+          "value": "nonpolymer"
+        },
+        {
+          "key": "residues",
+          "type": "count",
+          "value": 1
+        },
+        {
+          "key": "atom_records",
+          "type": "count",
+          "value": 1
+        },
+        {
+          "key": "internal_links",
+          "type": "count",
+          "value": 0
+        },
+        {
+          "key": "mean_occupancy",
+          "type": "occupancy",
+          "value": 1.0
+        },
+        {
+          "key": "mean_b_factor",
+          "type": "b_factor",
+          "value": 72.86,
+          "unit": "angstrom_squared"
+        },
+        {
+          "key": "decision_required",
+          "type": "label",
+          "value": "expert decision required"
+        }
+      ],
+      "options": [
+        {
+          "id": "expert_review",
+          "label": "Expert decision required",
+          "cost_hint": "medium",
+          "trade_offs": [
+            "Nothing proceeds until a human decides how to treat the chemistry."
+          ]
+        },
+        {
+          "id": "add_rule",
+          "label": "Add a knowledge-base rule for this chemistry, then re-audit",
+          "cost_hint": "medium",
+          "trade_offs": [
+            "Makes the treatment reusable and documented.",
+            "Requires a rule with sources and a panel structure that exercises it."
+          ]
+        },
+        {
+          "id": "exclude",
+          "label": "Exclude from the system (recorded decision)",
+          "cost_hint": "low",
+          "trade_offs": [
+            "Removes the unknown chemistry.",
+            "Anything it contributes (contacts, charge, covalent attachment) is lost."
+          ]
+        },
+        {
+          "id": "parameterize_manually",
+          "label": "Keep and parameterize outside the rule system",
+          "cost_hint": "high",
+          "trade_offs": [
+            "Keeps the deposited chemistry.",
+            "The treatment is not captured by a rule, so it must be fully described in the decision rationale."
+          ]
+        }
+      ],
+      "recommended_option": "expert_review",
+      "recommendation_basis": "default",
+      "rationale": "Residues that no rule claims: ligands, glycans, ions without a rule, and polymer residues outside the standard set that no non-standard rule matched. Residues joined by annotated covalent connections are reported as one group, together with their attachment to the polymer.",
+      "references": [],
+      "verify_flags": []
+    },
+    {
+      "id": "unrecognized/group/B:1",
+      "rule_id": "unrecognized.chemistry_group",
+      "rule_family": "unrecognized",
+      "title": "Unrecognized chemistry: NAG-NAG-FUC at B:1 (1 external link(s))",
+      "base_severity": "blocking",
+      "effective_severity": "blocking",
+      "severity_context": {
+        "proximity": "no_regions",
+        "nearest_region": null,
+        "min_distance_angstrom": null,
+        "raise_levels": 0
+      },
+      "locus": {
+        "chain": "B",
+        "seq_num": 1,
+        "ins_code": "",
+        "res_name": "NAG",
+        "atom_names": [],
+        "extent": [
+          {
+            "chain": "B",
+            "seq_num": 1,
+            "ins_code": "",
+            "res_name": "NAG"
+          },
+          {
+            "chain": "B",
+            "seq_num": 2,
+            "ins_code": "",
+            "res_name": "NAG"
+          },
+          {
+            "chain": "B",
+            "seq_num": 3,
+            "ins_code": "",
+            "res_name": "FUC"
+          }
+        ]
+      },
+      "anchor_residues": [
+        {
+          "chain": "B",
+          "seq_num": 1,
+          "ins_code": ""
+        },
+        {
+          "chain": "B",
+          "seq_num": 2,
+          "ins_code": ""
+        },
+        {
+          "chain": "B",
+          "seq_num": 3,
+          "ins_code": ""
+        }
+      ],
+      "evidence": [
+        {
+          "key": "components",
+          "type": "label",
+          "value": "NAG-NAG-FUC"
+        },
+        {
+          "key": "residue_classes",
+          "type": "label",
+          "value": "branched"
+        },
+        {
+          "key": "residues",
+          "type": "count",
+          "value": 3
+        },
+        {
+          "key": "atom_records",
+          "type": "count",
+          "value": 72
+        },
+        {
+          "key": "internal_links",
+          "type": "count",
+          "value": 2
+        },
+        {
+          "key": "mean_occupancy",
+          "type": "occupancy",
+          "value": 1.0
+        },
+        {
+          "key": "mean_b_factor",
+          "type": "b_factor",
+          "value": 168.87,
+          "unit": "angstrom_squared"
+        },
+        {
+          "key": "decision_required",
+          "type": "label",
+          "value": "expert decision required"
+        },
+        {
+          "key": "attachment",
+          "type": "source_record",
+          "category": "struct_conn",
+          "fields": {
+            "id": "covale3",
+            "conn_type": "covale",
+            "distance_angstrom": 1.439
+          },
+          "atoms": [
+            {
+              "chain": "A",
+              "seq_num": 115,
+              "ins_code": "",
+              "res_name": "ASN",
+              "atom_name": "ND2",
+              "altloc": ""
+            },
+            {
+              "chain": "B",
+              "seq_num": 1,
+              "ins_code": "",
+              "res_name": "NAG",
+              "atom_name": "C1",
+              "altloc": ""
+            }
+          ]
+        },
+        {
+          "key": "internal_link",
+          "type": "source_record",
+          "category": "struct_conn",
+          "fields": {
+            "id": "covale10",
+            "conn_type": "covale",
+            "distance_angstrom": 1.439
+          },
+          "atoms": [
+            {
+              "chain": "B",
+              "seq_num": 1,
+              "ins_code": "",
+              "res_name": "NAG",
+              "atom_name": "O4",
+              "altloc": ""
+            },
+            {
+              "chain": "B",
+              "seq_num": 2,
+              "ins_code": "",
+              "res_name": "NAG",
+              "atom_name": "C1",
+              "altloc": ""
+            }
+          ]
+        },
+        {
+          "key": "internal_link",
+          "type": "source_record",
+          "category": "struct_conn",
+          "fields": {
+            "id": "covale11",
+            "conn_type": "covale",
+            "distance_angstrom": 1.445
+          },
+          "atoms": [
+            {
+              "chain": "B",
+              "seq_num": 1,
+              "ins_code": "",
+              "res_name": "NAG",
+              "atom_name": "O6",
+              "altloc": ""
+            },
+            {
+              "chain": "B",
+              "seq_num": 3,
+              "ins_code": "",
+              "res_name": "FUC",
+              "atom_name": "C1",
+              "altloc": ""
+            }
+          ]
+        },
+        {
+          "key": "attachment_site_annotation",
+          "type": "source_record",
+          "category": "pdbx_struct_mod_residue",
+          "fields": {
+            "residue": "A:115",
+            "res_name": "ASN",
+            "parent_comp_id": "ASN",
+            "details": "GLYCOSYLATION SITE"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "expert_review",
+          "label": "Expert decision required",
+          "cost_hint": "medium",
+          "trade_offs": [
+            "Nothing proceeds until a human decides how to treat the chemistry."
+          ]
+        },
+        {
+          "id": "add_rule",
+          "label": "Add a knowledge-base rule for this chemistry, then re-audit",
+          "cost_hint": "medium",
+          "trade_offs": [
+            "Makes the treatment reusable and documented.",
+            "Requires a rule with sources and a panel structure that exercises it."
+          ]
+        },
+        {
+          "id": "exclude",
+          "label": "Exclude from the system (recorded decision)",
+          "cost_hint": "low",
+          "trade_offs": [
+            "Removes the unknown chemistry.",
+            "Anything it contributes (contacts, charge, covalent attachment) is lost."
+          ]
+        },
+        {
+          "id": "parameterize_manually",
+          "label": "Keep and parameterize outside the rule system",
+          "cost_hint": "high",
+          "trade_offs": [
+            "Keeps the deposited chemistry.",
+            "The treatment is not captured by a rule, so it must be fully described in the decision rationale."
+          ]
+        }
+      ],
+      "recommended_option": "expert_review",
+      "recommendation_basis": "default",
+      "rationale": "Residues that no rule claims: ligands, glycans, ions without a rule, and polymer residues outside the standard set that no non-standard rule matched. Residues joined by annotated covalent connections are reported as one group, together with their attachment to the polymer.",
+      "references": [],
+      "verify_flags": []
+    },
+    {
+      "id": "unrecognized/group/C:1",
+      "rule_id": "unrecognized.chemistry_group",
+      "rule_family": "unrecognized",
+      "title": "Unrecognized chemistry: NAG-NAG-FUC at C:1 (1 external link(s))",
+      "base_severity": "blocking",
+      "effective_severity": "blocking",
+      "severity_context": {
+        "proximity": "no_regions",
+        "nearest_region": null,
+        "min_distance_angstrom": null,
+        "raise_levels": 0
+      },
+      "locus": {
+        "chain": "C",
+        "seq_num": 1,
+        "ins_code": "",
+        "res_name": "NAG",
+        "atom_names": [],
+        "extent": [
+          {
+            "chain": "C",
+            "seq_num": 1,
+            "ins_code": "",
+            "res_name": "NAG"
+          },
+          {
+            "chain": "C",
+            "seq_num": 2,
+            "ins_code": "",
+            "res_name": "NAG"
+          },
+          {
+            "chain": "C",
+            "seq_num": 3,
+            "ins_code": "",
+            "res_name": "FUC"
+          }
+        ]
+      },
+      "anchor_residues": [
+        {
+          "chain": "C",
+          "seq_num": 1,
+          "ins_code": ""
+        },
+        {
+          "chain": "C",
+          "seq_num": 2,
+          "ins_code": ""
+        },
+        {
+          "chain": "C",
+          "seq_num": 3,
+          "ins_code": ""
+        }
+      ],
+      "evidence": [
+        {
+          "key": "components",
+          "type": "label",
+          "value": "NAG-NAG-FUC"
+        },
+        {
+          "key": "residue_classes",
+          "type": "label",
+          "value": "branched"
+        },
+        {
+          "key": "residues",
+          "type": "count",
+          "value": 3
+        },
+        {
+          "key": "atom_records",
+          "type": "count",
+          "value": 72
+        },
+        {
+          "key": "internal_links",
+          "type": "count",
+          "value": 2
+        },
+        {
+          "key": "mean_occupancy",
+          "type": "occupancy",
+          "value": 1.0
+        },
+        {
+          "key": "mean_b_factor",
+          "type": "b_factor",
+          "value": 158.35,
+          "unit": "angstrom_squared"
+        },
+        {
+          "key": "decision_required",
+          "type": "label",
+          "value": "expert decision required"
+        },
+        {
+          "key": "attachment",
+          "type": "source_record",
+          "category": "struct_conn",
+          "fields": {
+            "id": "covale4",
+            "conn_type": "covale",
+            "distance_angstrom": 1.446
+          },
+          "atoms": [
+            {
+              "chain": "A",
+              "seq_num": 144,
+              "ins_code": "",
+              "res_name": "ASN",
+              "atom_name": "ND2",
+              "altloc": ""
+            },
+            {
+              "chain": "C",
+              "seq_num": 1,
+              "ins_code": "",
+              "res_name": "NAG",
+              "atom_name": "C1",
+              "altloc": ""
+            }
+          ]
+        },
+        {
+          "key": "internal_link",
+          "type": "source_record",
+          "category": "struct_conn",
+          "fields": {
+            "id": "covale12",
+            "conn_type": "covale",
+            "distance_angstrom": 1.44
+          },
+          "atoms": [
+            {
+              "chain": "C",
+              "seq_num": 1,
+              "ins_code": "",
+              "res_name": "NAG",
+              "atom_name": "O4",
+              "altloc": ""
+            },
+            {
+              "chain": "C",
+              "seq_num": 2,
+              "ins_code": "",
+              "res_name": "NAG",
+              "atom_name": "C1",
+              "altloc": ""
+            }
+          ]
+        },
+        {
+          "key": "internal_link",
+          "type": "source_record",
+          "category": "struct_conn",
+          "fields": {
+            "id": "covale13",
+            "conn_type": "covale",
+            "distance_angstrom": 1.442
+          },
+          "atoms": [
+            {
+              "chain": "C",
+              "seq_num": 1,
+              "ins_code": "",
+              "res_name": "NAG",
+              "atom_name": "O6",
+              "altloc": ""
+            },
+            {
+              "chain": "C",
+              "seq_num": 3,
+              "ins_code": "",
+              "res_name": "FUC",
+              "atom_name": "C1",
+              "altloc": ""
+            }
+          ]
+        },
+        {
+          "key": "attachment_site_annotation",
+          "type": "source_record",
+          "category": "pdbx_struct_mod_residue",
+          "fields": {
+            "residue": "A:144",
+            "res_name": "ASN",
+            "parent_comp_id": "ASN",
+            "details": "GLYCOSYLATION SITE"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "expert_review",
+          "label": "Expert decision required",
+          "cost_hint": "medium",
+          "trade_offs": [
+            "Nothing proceeds until a human decides how to treat the chemistry."
+          ]
+        },
+        {
+          "id": "add_rule",
+          "label": "Add a knowledge-base rule for this chemistry, then re-audit",
+          "cost_hint": "medium",
+          "trade_offs": [
+            "Makes the treatment reusable and documented.",
+            "Requires a rule with sources and a panel structure that exercises it."
+          ]
+        },
+        {
+          "id": "exclude",
+          "label": "Exclude from the system (recorded decision)",
+          "cost_hint": "low",
+          "trade_offs": [
+            "Removes the unknown chemistry.",
+            "Anything it contributes (contacts, charge, covalent attachment) is lost."
+          ]
+        },
+        {
+          "id": "parameterize_manually",
+          "label": "Keep and parameterize outside the rule system",
+          "cost_hint": "high",
+          "trade_offs": [
+            "Keeps the deposited chemistry.",
+            "The treatment is not captured by a rule, so it must be fully described in the decision rationale."
+          ]
+        }
+      ],
+      "recommended_option": "expert_review",
+      "recommendation_basis": "default",
+      "rationale": "Residues that no rule claims: ligands, glycans, ions without a rule, and polymer residues outside the standard set that no non-standard rule matched. Residues joined by annotated covalent connections are reported as one group, together with their attachment to the polymer.",
+      "references": [],
+      "verify_flags": []
+    },
+    {
+      "id": "unrecognized/group/D:1",
+      "rule_id": "unrecognized.chemistry_group",
+      "rule_family": "unrecognized",
+      "title": "Unrecognized chemistry: NAG-NAG at D:1 (1 external link(s))",
+      "base_severity": "blocking",
+      "effective_severity": "blocking",
+      "severity_context": {
+        "proximity": "no_regions",
+        "nearest_region": null,
+        "min_distance_angstrom": null,
+        "raise_levels": 0
+      },
+      "locus": {
+        "chain": "D",
+        "seq_num": 1,
+        "ins_code": "",
+        "res_name": "NAG",
+        "atom_names": [],
+        "extent": [
+          {
+            "chain": "D",
+            "seq_num": 1,
+            "ins_code": "",
+            "res_name": "NAG"
+          },
+          {
+            "chain": "D",
+            "seq_num": 2,
+            "ins_code": "",
+            "res_name": "NAG"
+          }
+        ]
+      },
+      "anchor_residues": [
+        {
+          "chain": "D",
+          "seq_num": 1,
+          "ins_code": ""
+        },
+        {
+          "chain": "D",
+          "seq_num": 2,
+          "ins_code": ""
+        }
+      ],
+      "evidence": [
+        {
+          "key": "components",
+          "type": "label",
+          "value": "NAG-NAG"
+        },
+        {
+          "key": "residue_classes",
+          "type": "label",
+          "value": "branched"
+        },
+        {
+          "key": "residues",
+          "type": "count",
+          "value": 2
+        },
+        {
+          "key": "atom_records",
+          "type": "count",
+          "value": 53
+        },
+        {
+          "key": "internal_links",
+          "type": "count",
+          "value": 1
+        },
+        {
+          "key": "mean_occupancy",
+          "type": "occupancy",
+          "value": 1.0
+        },
+        {
+          "key": "mean_b_factor",
+          "type": "b_factor",
+          "value": 174.15,
+          "unit": "angstrom_squared"
+        },
+        {
+          "key": "decision_required",
+          "type": "label",
+          "value": "expert decision required"
+        },
+        {
+          "key": "attachment",
+          "type": "source_record",
+          "category": "struct_conn",
+          "fields": {
+            "id": "covale7",
+            "conn_type": "covale",
+            "distance_angstrom": 1.437
+          },
+          "atoms": [
+            {
+              "chain": "A",
+              "seq_num": 325,
+              "ins_code": "",
+              "res_name": "ASN",
+              "atom_name": "ND2",
+              "altloc": ""
+            },
+            {
+              "chain": "D",
+              "seq_num": 1,
+              "ins_code": "",
+              "res_name": "NAG",
+              "atom_name": "C1",
+              "altloc": ""
+            }
+          ]
+        },
+        {
+          "key": "internal_link",
+          "type": "source_record",
+          "category": "struct_conn",
+          "fields": {
+            "id": "covale14",
+            "conn_type": "covale",
+            "distance_angstrom": 1.44
+          },
+          "atoms": [
+            {
+              "chain": "D",
+              "seq_num": 1,
+              "ins_code": "",
+              "res_name": "NAG",
+              "atom_name": "O4",
+              "altloc": ""
+            },
+            {
+              "chain": "D",
+              "seq_num": 2,
+              "ins_code": "",
+              "res_name": "NAG",
+              "atom_name": "C1",
+              "altloc": ""
+            }
+          ]
+        },
+        {
+          "key": "attachment_site_annotation",
+          "type": "source_record",
+          "category": "pdbx_struct_mod_residue",
+          "fields": {
+            "residue": "A:325",
+            "res_name": "ASN",
+            "parent_comp_id": "ASN",
+            "details": "GLYCOSYLATION SITE"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "expert_review",
+          "label": "Expert decision required",
+          "cost_hint": "medium",
+          "trade_offs": [
+            "Nothing proceeds until a human decides how to treat the chemistry."
+          ]
+        },
+        {
+          "id": "add_rule",
+          "label": "Add a knowledge-base rule for this chemistry, then re-audit",
+          "cost_hint": "medium",
+          "trade_offs": [
+            "Makes the treatment reusable and documented.",
+            "Requires a rule with sources and a panel structure that exercises it."
+          ]
+        },
+        {
+          "id": "exclude",
+          "label": "Exclude from the system (recorded decision)",
+          "cost_hint": "low",
+          "trade_offs": [
+            "Removes the unknown chemistry.",
+            "Anything it contributes (contacts, charge, covalent attachment) is lost."
+          ]
+        },
+        {
+          "id": "parameterize_manually",
+          "label": "Keep and parameterize outside the rule system",
+          "cost_hint": "high",
+          "trade_offs": [
+            "Keeps the deposited chemistry.",
+            "The treatment is not captured by a rule, so it must be fully described in the decision rationale."
+          ]
+        }
+      ],
+      "recommended_option": "expert_review",
+      "recommendation_basis": "default",
+      "rationale": "Residues that no rule claims: ligands, glycans, ions without a rule, and polymer residues outside the standard set that no non-standard rule matched. Residues joined by annotated covalent connections are reported as one group, together with their attachment to the polymer.",
+      "references": [],
+      "verify_flags": []
+    },
+    {
+      "id": "unrecognized/group/E:1",
+      "rule_id": "unrecognized.chemistry_group",
+      "rule_family": "unrecognized",
+      "title": "Unrecognized chemistry: NAG-NAG-FUC at E:1 (1 external link(s))",
+      "base_severity": "blocking",
+      "effective_severity": "blocking",
+      "severity_context": {
+        "proximity": "no_regions",
+        "nearest_region": null,
+        "min_distance_angstrom": null,
+        "raise_levels": 0
+      },
+      "locus": {
+        "chain": "E",
+        "seq_num": 1,
+        "ins_code": "",
+        "res_name": "NAG",
+        "atom_names": [],
+        "extent": [
+          {
+            "chain": "E",
+            "seq_num": 1,
+            "ins_code": "",
+            "res_name": "NAG"
+          },
+          {
+            "chain": "E",
+            "seq_num": 2,
+            "ins_code": "",
+            "res_name": "NAG"
+          },
+          {
+            "chain": "E",
+            "seq_num": 3,
+            "ins_code": "",
+            "res_name": "FUC"
+          }
+        ]
+      },
+      "anchor_residues": [
+        {
+          "chain": "E",
+          "seq_num": 1,
+          "ins_code": ""
+        },
+        {
+          "chain": "E",
+          "seq_num": 2,
+          "ins_code": ""
+        },
+        {
+          "chain": "E",
+          "seq_num": 3,
+          "ins_code": ""
+        }
+      ],
+      "evidence": [
+        {
+          "key": "components",
+          "type": "label",
+          "value": "NAG-NAG-FUC"
+        },
+        {
+          "key": "residue_classes",
+          "type": "label",
+          "value": "branched"
+        },
+        {
+          "key": "residues",
+          "type": "count",
+          "value": 3
+        },
+        {
+          "key": "atom_records",
+          "type": "count",
+          "value": 72
+        },
+        {
+          "key": "internal_links",
+          "type": "count",
+          "value": 2
+        },
+        {
+          "key": "mean_occupancy",
+          "type": "occupancy",
+          "value": 1.0
+        },
+        {
+          "key": "mean_b_factor",
+          "type": "b_factor",
+          "value": 144.4,
+          "unit": "angstrom_squared"
+        },
+        {
+          "key": "decision_required",
+          "type": "label",
+          "value": "expert decision required"
+        },
+        {
+          "key": "attachment",
+          "type": "source_record",
+          "category": "struct_conn",
+          "fields": {
+            "id": "covale8",
+            "conn_type": "covale",
+            "distance_angstrom": 1.439
+          },
+          "atoms": [
+            {
+              "chain": "A",
+              "seq_num": 513,
+              "ins_code": "",
+              "res_name": "ASN",
+              "atom_name": "ND2",
+              "altloc": ""
+            },
+            {
+              "chain": "E",
+              "seq_num": 1,
+              "ins_code": "",
+              "res_name": "NAG",
+              "atom_name": "C1",
+              "altloc": ""
+            }
+          ]
+        },
+        {
+          "key": "internal_link",
+          "type": "source_record",
+          "category": "struct_conn",
+          "fields": {
+            "id": "covale15",
+            "conn_type": "covale",
+            "distance_angstrom": 1.442
+          },
+          "atoms": [
+            {
+              "chain": "E",
+              "seq_num": 1,
+              "ins_code": "",
+              "res_name": "NAG",
+              "atom_name": "O4",
+              "altloc": ""
+            },
+            {
+              "chain": "E",
+              "seq_num": 2,
+              "ins_code": "",
+              "res_name": "NAG",
+              "atom_name": "C1",
+              "altloc": ""
+            }
+          ]
+        },
+        {
+          "key": "internal_link",
+          "type": "source_record",
+          "category": "struct_conn",
+          "fields": {
+            "id": "covale16",
+            "conn_type": "covale",
+            "distance_angstrom": 1.442
+          },
+          "atoms": [
+            {
+              "chain": "E",
+              "seq_num": 1,
+              "ins_code": "",
+              "res_name": "NAG",
+              "atom_name": "O6",
+              "altloc": ""
+            },
+            {
+              "chain": "E",
+              "seq_num": 3,
+              "ins_code": "",
+              "res_name": "FUC",
+              "atom_name": "C1",
+              "altloc": ""
+            }
+          ]
+        },
+        {
+          "key": "attachment_site_annotation",
+          "type": "source_record",
+          "category": "pdbx_struct_mod_residue",
+          "fields": {
+            "residue": "A:513",
+            "res_name": "ASN",
+            "parent_comp_id": "ASN",
+            "details": "GLYCOSYLATION SITE"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "expert_review",
+          "label": "Expert decision required",
+          "cost_hint": "medium",
+          "trade_offs": [
+            "Nothing proceeds until a human decides how to treat the chemistry."
+          ]
+        },
+        {
+          "id": "add_rule",
+          "label": "Add a knowledge-base rule for this chemistry, then re-audit",
+          "cost_hint": "medium",
+          "trade_offs": [
+            "Makes the treatment reusable and documented.",
+            "Requires a rule with sources and a panel structure that exercises it."
+          ]
+        },
+        {
+          "id": "exclude",
+          "label": "Exclude from the system (recorded decision)",
+          "cost_hint": "low",
+          "trade_offs": [
+            "Removes the unknown chemistry.",
+            "Anything it contributes (contacts, charge, covalent attachment) is lost."
+          ]
+        },
+        {
+          "id": "parameterize_manually",
+          "label": "Keep and parameterize outside the rule system",
+          "cost_hint": "high",
+          "trade_offs": [
+            "Keeps the deposited chemistry.",
+            "The treatment is not captured by a rule, so it must be fully described in the decision rationale."
+          ]
+        }
+      ],
+      "recommended_option": "expert_review",
+      "recommendation_basis": "default",
+      "rationale": "Residues that no rule claims: ligands, glycans, ions without a rule, and polymer residues outside the standard set that no non-standard rule matched. Residues joined by annotated covalent connections are reported as one group, together with their attachment to the polymer.",
+      "references": [],
+      "verify_flags": []
+    },
+    {
+      "id": "unrecognized/group/F:1",
+      "rule_id": "unrecognized.chemistry_group",
+      "rule_family": "unrecognized",
+      "title": "Unrecognized chemistry: NAG-NAG at F:1 (1 external link(s))",
+      "base_severity": "blocking",
+      "effective_severity": "blocking",
+      "severity_context": {
+        "proximity": "no_regions",
+        "nearest_region": null,
+        "min_distance_angstrom": null,
+        "raise_levels": 0
+      },
+      "locus": {
+        "chain": "F",
+        "seq_num": 1,
+        "ins_code": "",
+        "res_name": "NAG",
+        "atom_names": [],
+        "extent": [
+          {
+            "chain": "F",
+            "seq_num": 1,
+            "ins_code": "",
+            "res_name": "NAG"
+          },
+          {
+            "chain": "F",
+            "seq_num": 2,
+            "ins_code": "",
+            "res_name": "NAG"
+          }
+        ]
+      },
+      "anchor_residues": [
+        {
+          "chain": "F",
+          "seq_num": 1,
+          "ins_code": ""
+        },
+        {
+          "chain": "F",
+          "seq_num": 2,
+          "ins_code": ""
+        }
+      ],
+      "evidence": [
+        {
+          "key": "components",
+          "type": "label",
+          "value": "NAG-NAG"
+        },
+        {
+          "key": "residue_classes",
+          "type": "label",
+          "value": "branched"
+        },
+        {
+          "key": "residues",
+          "type": "count",
+          "value": 2
+        },
+        {
+          "key": "atom_records",
+          "type": "count",
+          "value": 53
+        },
+        {
+          "key": "internal_links",
+          "type": "count",
+          "value": 1
+        },
+        {
+          "key": "mean_occupancy",
+          "type": "occupancy",
+          "value": 1.0
+        },
+        {
+          "key": "mean_b_factor",
+          "type": "b_factor",
+          "value": 188.13,
+          "unit": "angstrom_squared"
+        },
+        {
+          "key": "decision_required",
+          "type": "label",
+          "value": "expert decision required"
+        },
+        {
+          "key": "attachment",
+          "type": "source_record",
+          "category": "struct_conn",
+          "fields": {
+            "id": "covale9",
+            "conn_type": "covale",
+            "distance_angstrom": 1.439
+          },
+          "atoms": [
+            {
+              "chain": "A",
+              "seq_num": 537,
+              "ins_code": "",
+              "res_name": "ASN",
+              "atom_name": "ND2",
+              "altloc": ""
+            },
+            {
+              "chain": "F",
+              "seq_num": 1,
+              "ins_code": "",
+              "res_name": "NAG",
+              "atom_name": "C1",
+              "altloc": ""
+            }
+          ]
+        },
+        {
+          "key": "internal_link",
+          "type": "source_record",
+          "category": "struct_conn",
+          "fields": {
+            "id": "covale17",
+            "conn_type": "covale",
+            "distance_angstrom": 1.443
+          },
+          "atoms": [
+            {
+              "chain": "F",
+              "seq_num": 1,
+              "ins_code": "",
+              "res_name": "NAG",
+              "atom_name": "O4",
+              "altloc": ""
+            },
+            {
+              "chain": "F",
+              "seq_num": 2,
+              "ins_code": "",
+              "res_name": "NAG",
+              "atom_name": "C1",
+              "altloc": ""
+            }
+          ]
+        },
+        {
+          "key": "attachment_site_annotation",
+          "type": "source_record",
+          "category": "pdbx_struct_mod_residue",
+          "fields": {
+            "residue": "A:537",
+            "res_name": "ASN",
+            "parent_comp_id": "ASN",
+            "details": "GLYCOSYLATION SITE"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "expert_review",
+          "label": "Expert decision required",
+          "cost_hint": "medium",
+          "trade_offs": [
+            "Nothing proceeds until a human decides how to treat the chemistry."
+          ]
+        },
+        {
+          "id": "add_rule",
+          "label": "Add a knowledge-base rule for this chemistry, then re-audit",
+          "cost_hint": "medium",
+          "trade_offs": [
+            "Makes the treatment reusable and documented.",
+            "Requires a rule with sources and a panel structure that exercises it."
+          ]
+        },
+        {
+          "id": "exclude",
+          "label": "Exclude from the system (recorded decision)",
+          "cost_hint": "low",
+          "trade_offs": [
+            "Removes the unknown chemistry.",
+            "Anything it contributes (contacts, charge, covalent attachment) is lost."
+          ]
+        },
+        {
+          "id": "parameterize_manually",
+          "label": "Keep and parameterize outside the rule system",
+          "cost_hint": "high",
+          "trade_offs": [
+            "Keeps the deposited chemistry.",
+            "The treatment is not captured by a rule, so it must be fully described in the decision rationale."
+          ]
+        }
+      ],
+      "recommended_option": "expert_review",
+      "recommendation_basis": "default",
+      "rationale": "Residues that no rule claims: ligands, glycans, ions without a rule, and polymer residues outside the standard set that no non-standard rule matched. Residues joined by annotated covalent connections are reported as one group, together with their attachment to the polymer.",
+      "references": [],
+      "verify_flags": []
+    }
+  ]
+}
