@@ -136,6 +136,7 @@ def test_moved_residues_lose_hydrogens_and_get_protonation_items(relaxed):
 def test_frozen_and_left_out_chemistry_is_recorded(relaxed):
     record, _ = relaxed
     relaxation = entry(record, "R468W")["relaxation"]
-    assert {r["res_name"] for r in relaxation["left_out"]} >= {"ALS", "CA"}
-    assert all(f["near"].startswith("ALS") for f in relaxation["frozen"])
+    # A:84 is the gem-diol DDZ after prep (TASK-008); neither it nor Ca2+ has a template.
+    assert {r["res_name"] for r in relaxation["left_out"]} >= {"DDZ", "CA"}
+    assert all(f["near"].startswith("DDZ") for f in relaxation["frozen"])
     assert relaxation["frozen"] == record["relaxed_wild_types"][0]["relaxation"]["frozen"]

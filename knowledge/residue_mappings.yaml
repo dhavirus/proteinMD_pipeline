@@ -1,7 +1,28 @@
-# Atom mappings that allow prep to apply revert_to_parent (TASK-004 decision 3).
-# None ship in v0.1: the panel's only non-standard residue is ALS (5FQL), whose file
-# names ALA as parent while the formylglycine rule describes reverting to CYS; that
-# choice stays with a human. Add an entry here (with rationale and references) to
-# enable a revert, then re-run prep.
+# Atom mappings that let prep change a residue by deleting and renaming atoms (never by
+# adding any): revert_to_parent (TASK-004 decision 3) and model_gem_diol (TASK-008).
+# One mapping per (from, option). No revert_to_parent mapping ships: the panel's only
+# non-standard residue is ALS (5FQL), whose file names ALA as parent while the
+# formylglycine rule describes reverting to CYS; that choice stays with a human.
 schema_version: 0.1.0
-mappings: []
+mappings:
+  - from: ALS
+    to: DDZ
+    option: model_gem_diol
+    to_parent: ALA  # CCD DDZ mon_nstd_parent_comp_id (read in the TASK-008 session)
+    # ALS (3S)-3-(sulfooxy)-L-serine: CB carries OG and the ester oxygen OS1 (bonded to S).
+    # Removing the sulfate leaves the gem-diol: OG is the paper's "free geminal
+    # hydroxyl" (contacts H138, R88); OS1 is the Ca2+-bound one. DDZ's CB is not a
+    # stereocentre, so the OG1 / OG2 assignment is naming only (TASK-008 decision 3).
+    rename: {OG: OG1, OS1: OG2}
+    delete: [S, OS2, OS3, OS4]
+    rationale: >-
+      Formylglycine acts catalytically as the aldehyde hydrate (gem-diol); 5FQL deposits
+      the covalent sulfate-ester intermediate. The authors made the same replacement
+      (FGS84 -> FGH, PDB component DDZ) for their docking. CCD ALS and DDZ atom names
+      were read from RCSB in the TASK-008 session.
+    references:
+      - citation: >-
+          Demydchuk M, Hill CH, Zhou A, et al. Insights into Hunter syndrome from the
+          structure of iduronate-2-sulfatase. Nat Commun. 2017;8:15786.
+        doi: 10.1038/ncomms15786
+        pmid: "28593992"

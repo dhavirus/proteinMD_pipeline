@@ -17,6 +17,7 @@ from simprep.rules import RuleSet
 from simprep.structure.model import Link, LinkPartner, Residue, ResidueId, Structure
 
 ADDED_LINK_TYPE = "covale"
+METAL_LINK = "metalc"
 TRUNCATE = "truncate"
 # The fixed meaning of `truncate` for the topology stage (TASK-007): charged termini.
 TERMINUS_NOTES = {
@@ -294,18 +295,43 @@ def _add_link(context: OperationContext, finding: dict, decision: dict) -> str:
     return f"added {ADDED_LINK_TYPE} link {conn_id}: {ends}"
 
 
-def _revert_to_parent(context: OperationContext, finding: dict, decision: dict) -> str:
-    mappings = {m["from"]: m for m in context.ruleset.residue_mappings}
-    residues = _present(context, finding_residues(finding))
-    for residue in residues:
-        if residue.name not in mappings:
+def _mapped(context: OperationContext, finding: dict, decision: dict) -> str:
+    """Delete and rename atoms per the mapping for (component, option) in
+    knowledge/residue_mappings.yaml (revert_to_parent, model_gem_diol)."""
+    option = decision["option_id"]
+    mappings = {(m["from"], m["option"]): m for m in context.ruleset.residue_mappings}
+    notes = []
+    for residue in _present(context, finding_residues(finding)):
+        mapping = mappings.get((residue.name, option))
+        if mapping is None:
             context.draft.problems.append(
-                f"{finding['id']}: revert_to_parent needs an atom mapping for {residue.name} in "
+                f"{finding['id']}: {option} needs an atom mapping for {residue.name} in "
                 "knowledge/residue_mappings.yaml; none exists, so prep will not guess"
             )
-        else:
-            context.draft.reverts[residue.id] = mappings[residue.name]
-    return "reverted " + ", ".join(f"{r.name} {r.id.label()}" for r in residues)
+            continue
+        context.draft.reverts[residue.id] = mapping
+        notes.append(_mapping_note(residue, mapping, context.structure.links))
+    return "; ".join(notes)
+
+
+def _mapping_note(residue: Residue, mapping: dict, links: tuple[Link, ...]) -> str:
+    """What the mapping does to ``residue``, including links it removes; a removed metal
+    link means the metal site's coordination changes (TASK-008 decision 4)."""
+    renamed = ", ".join(f"{old}->{new}" for old, new in mapping["rename"].items())
+    note = f"{residue.name} {residue.id.label()} -> {mapping['to']}"
+    deleted = ", ".join(mapping["delete"]) or "nothing"
+    note += f" (deleted {deleted}; renamed {renamed or 'nothing'})"
+    removed = [
+        (link, other)
+        for link in links
+        for mine, other in ((link.partner1, link.partner2), (link.partner2, link.partner1))
+        if mine.residue == residue.id and mine.atom_name in mapping["delete"]
+    ]
+    for link, other in removed:
+        note += f"; link {link.conn_id} to {other.res_name} {other.residue.label()} removed"
+        if link.conn_type == METAL_LINK:
+            note += " (metal coordination changed; the metal decision stands)"
+    return note
 
 
 def _evidence(finding: dict, key: str):
@@ -320,7 +346,8 @@ OPERATIONS = {
     "exclude_segment": _exclude,
     "exclude_group": _exclude_group,
     "add_link": _add_link,
-    "revert_to_parent": _revert_to_parent,
+    "revert_to_parent": _mapped,
+    "model_gem_diol": _mapped,
 }
 
 
