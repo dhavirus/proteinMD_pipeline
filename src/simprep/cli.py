@@ -19,6 +19,7 @@ from simprep.manifest import (
     write_json,
 )
 from simprep.manifest.manifest import sha256_text
+from simprep.manifest.status import decision_status, render_status
 from simprep.paths import KNOWLEDGE_DIR
 from simprep.provenance import sha256_file, simprep_provenance, utc_now
 from simprep.report import render_report
@@ -83,6 +84,19 @@ def manifest_init(args: argparse.Namespace) -> int:
     return 0
 
 
+EXIT_BLOCKING_UNDECIDED = 3
+
+
+def manifest_status(args: argparse.Namespace) -> int:
+    """Exit 0 when every blocking finding is decided, 3 when any is undecided."""
+    manifest = load_manifest(args.manifest)
+    if args.structure:
+        check_input(manifest, sha256_file(args.structure))
+    status = decision_status(manifest)
+    print(render_status(status))
+    return EXIT_BLOCKING_UNDECIDED if status.blocking_undecided else 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="simprep")
     parser.add_argument(
@@ -105,6 +119,13 @@ def build_parser() -> argparse.ArgumentParser:
     init_parser.add_argument("file", type=Path)
     init_parser.add_argument("--out", type=Path, required=True)
     init_parser.set_defaults(handler=manifest_init)
+    status_parser = manifest_commands.add_parser(
+        "status",
+        help="decision coverage; exit 0 = all blocking findings decided, 3 = some undecided",
+    )
+    status_parser.add_argument("manifest", type=Path)
+    status_parser.add_argument("--structure", type=Path, help="check the input file's SHA-256")
+    status_parser.set_defaults(handler=manifest_status)
     return parser
 
 
