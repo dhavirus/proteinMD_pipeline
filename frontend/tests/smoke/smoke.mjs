@@ -100,6 +100,22 @@ async function run(page, base, outDir) {
   return manifestPath;
 }
 
+async function checkManifestWithDraft(page, base, manifestPath) {
+  // The browser still holds a draft from run(); opening the exported manifest must show
+  // the manifest and offer the draft, not apply it.
+  await page.goto(`${base}/frontend/`);
+  await page.setInputFiles("#file-structure", join(ROOT, "tests/panel/5FQL.cif.gz"));
+  await page.setInputFiles("#file-findings", join(ROOT, "frontend/demo/5FQL.findings.json"));
+  await page.setInputFiles("#file-manifest", manifestPath);
+  await page.click('#open-form button[type="submit"]');
+  await page.waitForSelector("#review:not([hidden])", { timeout: 30000 });
+  const offered = page.locator(".notice", { hasText: "unsaved work" });
+  check("opened manifest is shown and the browser draft only offered", (await offered.isVisible())
+    && (await page.textContent("#summary")).includes("16 of 16 decided"));
+  await offered.getByRole("button", { name: "Discard it" }).click();
+  check("discarding the draft removes the offer", !(await page.locator(".notice", { hasText: "unsaved work" }).count()));
+}
+
 async function checkMismatch(page, base) {
   await page.goto(`${base}/frontend/`);
   await page.setInputFiles("#file-structure", join(ROOT, "tests/panel/3KS3.cif.gz"));
@@ -133,6 +149,7 @@ try {
   const page = await context.newPage();
   if (process.env.SIMPREP_CDN_DIR) await routeCdn(page, process.env.SIMPREP_CDN_DIR);
   const manifestPath = await run(page, base, outDir);
+  await checkManifestWithDraft(page, base, manifestPath);
   await checkMismatch(page, base);
   checkWithSimprep(manifestPath, outDir);
 } finally {

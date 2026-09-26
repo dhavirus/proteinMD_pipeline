@@ -79,9 +79,14 @@ class DocumentError extends Error {
 
 async function start(documents) {
   structure = documents.opened;
-  const opened = { ...createState(documents.report, documents.manifest), restoredDraft: null };
+  // A loaded manifest is the record: an older browser draft is offered, never applied
+  // over it (and not overwritten until the user chooses). Without a manifest the draft
+  // is the only copy of earlier work, so it is restored.
+  const opened = { ...createState(documents.report, documents.manifest), restoredDraft: null, pendingDraft: null };
   const draft = loadDraft(documents.report.input.sha256);
-  state = draft ? { ...applyDraft(opened, draft), restoredDraft: draft.savedAt } : opened;
+  if (!draft) state = opened;
+  else if (documents.manifest) state = { ...opened, pendingDraft: draft };
+  else state = { ...applyDraft(opened, draft), restoredDraft: draft.savedAt };
   $("open-panel").hidden = true;
   $("review").hidden = false;
   $("top-actions").hidden = false;
@@ -158,7 +163,7 @@ const currentFinding = () => state.report.findings.find((f) => f.id === state.se
 
 function update(next, { redraw = false } = {}) {
   state = next;
-  saveDraft(state.report.input.sha256, state, isoSeconds(new Date()));
+  if (!state.pendingDraft) saveDraft(state.report.input.sha256, state, isoSeconds(new Date()));
   render();
   if (redraw) refreshView();
 }
@@ -191,6 +196,15 @@ function renderNotices() {
   if (state.restoredDraft) {
     notices.push(el("div", { class: "notice" },
       `Restored unsaved work from ${state.restoredDraft} (kept in this browser only; the exported manifest is the record). `,
+      el("button", { class: "btn", type: "button", text: "Discard it", onclick: onDiscardDraft })));
+  }
+  if (state.pendingDraft) {
+    const draft = state.pendingDraft;
+    notices.push(el("div", { class: "notice stale" },
+      `This browser also has unsaved work for this structure from ${draft.savedAt} (${Object.keys(draft.decisions).length} decisions). `
+      + "The opened manifest is shown. Restoring replaces its decisions and regions with the unsaved work. ",
+      el("button", { class: "btn", type: "button", text: "Restore it",
+        onclick: () => update({ ...applyDraft(state, draft), pendingDraft: null, restoredDraft: draft.savedAt }, { redraw: true }) }), " ",
       el("button", { class: "btn", type: "button", text: "Discard it", onclick: onDiscardDraft })));
   }
   if (severityIsStale(state)) {
@@ -374,7 +388,7 @@ function onSaveDecision(event, finding) {
 function onDiscardDraft() {
   clearDraft(state.report.input.sha256);
   const reopened = createState(state.report, state.baseManifest);
-  state = { ...reopened, selectedId: state.selectedId, restoredDraft: null };
+  state = { ...reopened, selectedId: state.selectedId, restoredDraft: null, pendingDraft: null };
   render();
   refreshView();
 }
