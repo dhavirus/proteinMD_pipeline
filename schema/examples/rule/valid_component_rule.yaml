@@ -14,6 +14,8 @@ rules:
     base_severity: warn
     options:
       - id: route_to_topology_builder
+        prep_action: defer
+        prep_stage: parameterization
         label: Build a topology
         cost_hint: medium
         trade_offs: [Keeps the deposited chemistry.]

@@ -54,7 +54,11 @@ async function decideAll(page) {
   const count = await rows.count();
   for (let index = 0; index < count; index += 1) {
     await rows.nth(index).click();
-    await page.fill("#decision-rationale", "smoke test: recommended option");
+    // Keep the recommended option when it is final, otherwise take the first final one.
+    if (!(await page.locator('input[name="option"]:checked[data-final="true"]').count())) {
+      await page.locator('input[name="option"][data-final="true"]').first().check();
+    }
+    await page.fill("#decision-rationale", "smoke test: recommended or first final option");
     await page.fill("#decision-by", "smoke-test");
     await page.click('#decision-form button[type="submit"]');
     await page.waitForSelector("#decision-status.ok");
@@ -112,8 +116,20 @@ async function checkManifestWithDraft(page, base, manifestPath) {
   const offered = page.locator(".notice", { hasText: "unsaved work" });
   check("opened manifest is shown and the browser draft only offered", (await offered.isVisible())
     && (await page.textContent("#summary")).includes("16 of 16 decided"));
+  check("expert review is shown as not final", await expertReviewIsNotFinal(page));
   await offered.getByRole("button", { name: "Discard it" }).click();
   check("discarding the draft removes the offer", !(await page.locator(".notice", { hasText: "unsaved work" }).count()));
+}
+
+async function expertReviewIsNotFinal(page) {
+  await page.locator(".row", { hasText: "unrecognized/group/A:1567" }).click();
+  await page.check("#option-expert_review");
+  const note = await page.locator("#decision-extra").textContent();
+  await page.fill("#decision-rationale", "smoke test: still open");
+  await page.click('#decision-form button[type="submit"]');
+  const chip = await page.locator(".row", { hasText: "unrecognized/group/A:1567" }).textContent();
+  return note.includes("stays undecided") && chip.includes("not final")
+    && (await page.textContent("#summary")).includes("15 of 16 decided");
 }
 
 async function checkMismatch(page, base) {

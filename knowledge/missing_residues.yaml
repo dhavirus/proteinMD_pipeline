@@ -7,18 +7,24 @@ description: >-
 
 x-terminal-options: &terminal_options
   - id: cap_termini
+    prep_action: defer
+    prep_stage: modelling
     label: Cap the first/last observed residue (neutral ACE/NME-style caps)
     cost_hint: low
     trade_offs:
       - Avoids an artificial charged terminus where the real chain continues.
       - The missing tail's interactions are absent.
   - id: truncate
+    prep_action: record
+    prep_stage: topology
     label: Truncate at the observed residue with a charged terminus
     cost_hint: low
     trade_offs:
       - Simplest; standard termini parameters.
       - Introduces a charge the real protein does not have at that position.
   - id: model_loop
+    prep_action: defer
+    prep_stage: modelling
     label: Model the missing tail
     cost_hint: medium
     trade_offs:
@@ -39,6 +45,8 @@ rules:
     base_severity: warn
     options:
       - id: model_loop
+        prep_action: defer
+        prep_stage: modelling
         label: Model the missing loop
         cost_hint: medium
         trade_offs:
@@ -46,6 +54,8 @@ rules:
           - The modelled loop is a hypothesis; its conformation is unconstrained by
             density and may bias sampling nearby.
       - id: truncate
+        prep_action: record
+        prep_stage: topology
         label: Leave the gap as a chain break, capping both sides
         cost_hint: low
         trade_offs:
@@ -119,12 +129,16 @@ rules:
     base_severity: blocking
     options:
       - id: exclude_chain
+        prep_action: record
+        prep_stage: topology
         label: Leave the chain out
         cost_hint: low
         trade_offs:
           - Nothing to model; the chain is absent from the system.
           - Any role of that chain in the question is lost.
       - id: model_loop
+        prep_action: defer
+        prep_stage: modelling
         label: Model the whole chain
         cost_hint: high
         trade_offs:

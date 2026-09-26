@@ -1,0 +1,394 @@
+{
+  "actions": [
+    {
+      "finding_id": "metals/A:301",
+      "note": "Nonbonded 12-6 LJ ion model",
+      "option_id": "nonbonded_12_6",
+      "prep_action": "defer",
+      "prep_stage": "parameterization",
+      "residues": [
+        {
+          "chain": "A",
+          "ins_code": "",
+          "seq_num": 301
+        }
+      ],
+      "rule_id": "metals.magnesium"
+    },
+    {
+      "finding_id": "missing_residues/A:-13--1",
+      "note": "Truncate at the observed residue with a charged terminus",
+      "option_id": "truncate",
+      "prep_action": "record",
+      "prep_stage": "topology",
+      "residues": [
+        {
+          "chain": "A",
+          "ins_code": "",
+          "seq_num": -13
+        },
+        {
+          "chain": "A",
+          "ins_code": "",
+          "seq_num": -12
+        },
+        {
+          "chain": "A",
+          "ins_code": "",
+          "seq_num": -11
+        },
+        {
+          "chain": "A",
+          "ins_code": "",
+          "seq_num": -10
+        },
+        {
+          "chain": "A",
+          "ins_code": "",
+          "seq_num": -9
+        },
+        {
+          "chain": "A",
+          "ins_code": "",
+          "seq_num": -8
+        },
+        {
+          "chain": "A",
+          "ins_code": "",
+          "seq_num": -7
+        },
+        {
+          "chain": "A",
+          "ins_code": "",
+          "seq_num": -6
+        },
+        {
+          "chain": "A",
+          "ins_code": "",
+          "seq_num": -5
+        },
+        {
+          "chain": "A",
+          "ins_code": "",
+          "seq_num": -4
+        },
+        {
+          "chain": "A",
+          "ins_code": "",
+          "seq_num": -3
+        },
+        {
+          "chain": "A",
+          "ins_code": "",
+          "seq_num": -2
+        },
+        {
+          "chain": "A",
+          "ins_code": "",
+          "seq_num": -1
+        }
+      ],
+      "rule_id": "missing_residues.n_terminal"
+    },
+    {
+      "finding_id": "missing_residues/A:105-107",
+      "note": "Model the missing loop",
+      "option_id": "model_loop",
+      "prep_action": "defer",
+      "prep_stage": "modelling",
+      "residues": [
+        {
+          "chain": "A",
+          "ins_code": "",
+          "seq_num": 105
+        },
+        {
+          "chain": "A",
+          "ins_code": "",
+          "seq_num": 106
+        },
+        {
+          "chain": "A",
+          "ins_code": "",
+          "seq_num": 107
+        }
+      ],
+      "rule_id": "missing_residues.internal"
+    },
+    {
+      "finding_id": "unrecognized/group/A:302",
+      "note": "Keep and parameterize outside the rule system",
+      "option_id": "parameterize_manually",
+      "prep_action": "defer",
+      "prep_stage": "parameterization",
+      "residues": [
+        {
+          "chain": "A",
+          "ins_code": "",
+          "seq_num": 302
+        }
+      ],
+      "rule_id": "unrecognized.chemistry_group"
+    },
+    {
+      "finding_id": "unrecognized/group/A:303",
+      "note": "Keep and parameterize outside the rule system",
+      "option_id": "parameterize_manually",
+      "prep_action": "defer",
+      "prep_stage": "parameterization",
+      "residues": [
+        {
+          "chain": "A",
+          "ins_code": "",
+          "seq_num": 303
+        }
+      ],
+      "rule_id": "unrecognized.chemistry_group"
+    }
+  ],
+  "generated_at": "2026-09-26T00:00:00Z",
+  "input": {
+    "format": "mmcif",
+    "path": "tests/panel/6OIM.cif.gz",
+    "sha256": "fb1594808cb5ce47fe60260b8b28ac3bb8fb1d10dfd6759ca96bade5d4b67241"
+  },
+  "knowledge_base": {
+    "sha256": "179e3fd40d51f2366837129edc3d8ea7016bc251ce7008ed3413006728ca3308",
+    "version": "0.3.0"
+  },
+  "manifest_sha256": "abe8ed6223f6a94c9f267c2b397330530776be668a60d19a116cadce43c9de3e",
+  "schema_version": "0.1.0",
+  "simprep": {
+    "git_commit": null,
+    "version": "0.1.0"
+  },
+  "systems": [
+    {
+      "altloc": null,
+      "counts": [
+        {
+          "added": 0,
+          "excluded": 0,
+          "in": 167,
+          "modified": 0,
+          "out": 167,
+          "passed_through": 167,
+          "record_type": "polymer residues"
+        },
+        {
+          "added": 0,
+          "excluded": 0,
+          "in": 3,
+          "modified": 0,
+          "out": 3,
+          "passed_through": 3,
+          "record_type": "nonpolymer residues"
+        },
+        {
+          "added": 0,
+          "excluded": 0,
+          "in": 0,
+          "modified": 0,
+          "out": 0,
+          "passed_through": 0,
+          "record_type": "branched residues"
+        },
+        {
+          "added": 0,
+          "excluded": 0,
+          "in": 207,
+          "modified": 0,
+          "out": 207,
+          "passed_through": 207,
+          "record_type": "water residues"
+        },
+        {
+          "added": 0,
+          "excluded": 0,
+          "in": 1613,
+          "modified": 0,
+          "out": 1613,
+          "passed_through": 1613,
+          "record_type": "atom records"
+        },
+        {
+          "added": 0,
+          "excluded": 0,
+          "in": 7,
+          "modified": 0,
+          "out": 7,
+          "passed_through": 7,
+          "record_type": "struct_conn records"
+        },
+        {
+          "added": 0,
+          "excluded": 0,
+          "in": 0,
+          "modified": 0,
+          "out": 0,
+          "passed_through": 0,
+          "record_type": "pdbx_struct_mod_residue records"
+        },
+        {
+          "added": 0,
+          "excluded": 0,
+          "in": 16,
+          "modified": 0,
+          "out": 16,
+          "passed_through": 16,
+          "record_type": "unobserved polymer residues (annotation)"
+        }
+      ],
+      "files": [
+        {
+          "format": "mmcif",
+          "path": "system.cif",
+          "sha256": "a06c7b013f516a80ca22749701acb0fc33bf66b3bddcbbfb5d2f0ba4b2521fa3"
+        },
+        {
+          "format": "pdb",
+          "path": "system.pdb",
+          "sha256": "707afc21cb96d8643daf558d9aaff909a6e32d67e160e1b43ad11e306f36fae6"
+        }
+      ],
+      "name": "system"
+    }
+  ],
+  "work_order": [
+    {
+      "description": "Nonbonded 12-6 LJ ion model: MG site A:301: ambiguous, coordination number 6",
+      "finding_id": "metals/A:301",
+      "option_id": "nonbonded_12_6",
+      "residues": [
+        {
+          "chain": "A",
+          "ins_code": "",
+          "seq_num": 301
+        }
+      ],
+      "stage": "parameterization"
+    },
+    {
+      "description": "Truncate at the observed residue with a charged terminus: Unobserved N-terminal residues: A:-13--1 (13 residues)",
+      "finding_id": "missing_residues/A:-13--1",
+      "option_id": "truncate",
+      "residues": [
+        {
+          "chain": "A",
+          "ins_code": "",
+          "seq_num": -13
+        },
+        {
+          "chain": "A",
+          "ins_code": "",
+          "seq_num": -12
+        },
+        {
+          "chain": "A",
+          "ins_code": "",
+          "seq_num": -11
+        },
+        {
+          "chain": "A",
+          "ins_code": "",
+          "seq_num": -10
+        },
+        {
+          "chain": "A",
+          "ins_code": "",
+          "seq_num": -9
+        },
+        {
+          "chain": "A",
+          "ins_code": "",
+          "seq_num": -8
+        },
+        {
+          "chain": "A",
+          "ins_code": "",
+          "seq_num": -7
+        },
+        {
+          "chain": "A",
+          "ins_code": "",
+          "seq_num": -6
+        },
+        {
+          "chain": "A",
+          "ins_code": "",
+          "seq_num": -5
+        },
+        {
+          "chain": "A",
+          "ins_code": "",
+          "seq_num": -4
+        },
+        {
+          "chain": "A",
+          "ins_code": "",
+          "seq_num": -3
+        },
+        {
+          "chain": "A",
+          "ins_code": "",
+          "seq_num": -2
+        },
+        {
+          "chain": "A",
+          "ins_code": "",
+          "seq_num": -1
+        }
+      ],
+      "stage": "topology"
+    },
+    {
+      "description": "Model the missing loop: Internal gap (unobserved residues between observed ones): A:105-107 (3 residues)",
+      "finding_id": "missing_residues/A:105-107",
+      "option_id": "model_loop",
+      "residues": [
+        {
+          "chain": "A",
+          "ins_code": "",
+          "seq_num": 105
+        },
+        {
+          "chain": "A",
+          "ins_code": "",
+          "seq_num": 106
+        },
+        {
+          "chain": "A",
+          "ins_code": "",
+          "seq_num": 107
+        }
+      ],
+      "stage": "modelling"
+    },
+    {
+      "description": "Keep and parameterize outside the rule system: Unrecognized chemistry: GDP at A:302 (1 external link(s))",
+      "finding_id": "unrecognized/group/A:302",
+      "option_id": "parameterize_manually",
+      "residues": [
+        {
+          "chain": "A",
+          "ins_code": "",
+          "seq_num": 302
+        }
+      ],
+      "stage": "parameterization"
+    },
+    {
+      "description": "Keep and parameterize outside the rule system: Unrecognized chemistry: MOV at A:303 (1 external link(s))",
+      "finding_id": "unrecognized/group/A:303",
+      "option_id": "parameterize_manually",
+      "residues": [
+        {
+          "chain": "A",
+          "ins_code": "",
+          "seq_num": 303
+        }
+      ],
+      "stage": "parameterization"
+    }
+  ]
+}

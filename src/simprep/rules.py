@@ -46,6 +46,7 @@ class RuleSet:
     sha256: str
     rules: tuple[Rule, ...]
     audit_defaults: dict
+    residue_mappings: tuple[dict, ...] = ()
 
     def family(self, family: str) -> tuple[Rule, ...]:
         """Rules of ``family``, highest priority first, then by rule id (deterministic)."""

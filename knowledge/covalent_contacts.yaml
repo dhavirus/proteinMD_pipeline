@@ -34,6 +34,7 @@ rules:
     base_severity: blocking
     options:
       - id: add_link
+        prep_action: apply
         label: Treat as a covalent bond (record the link)
         cost_hint: medium
         trade_offs:
@@ -41,18 +42,22 @@ rules:
           - Asserts a bond the depositors did not annotate; the modelled geometry around it
             (here longer than a real bond) will be regularized.
       - id: treat_noncovalent
+        prep_action: record
+        prep_stage: topology
         label: Keep the groups as separate molecules
         cost_hint: low
         trade_offs:
           - Follows the file's annotations exactly.
           - A sugar or ligand that is really attached can drift away during sampling.
       - id: exclude_group
+        prep_action: apply
         label: Exclude the ligand or glycan
         cost_hint: low
         trade_offs:
           - Removes the question.
           - Loses whatever the group contributes (contacts, shielding, charge).
       - id: expert_review
+        prep_action: unresolved
         label: Expert decision required
         cost_hint: medium
         trade_offs:

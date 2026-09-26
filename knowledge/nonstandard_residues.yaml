@@ -7,6 +7,8 @@ description: >-
 
 x-generic-options: &generic_options
   - id: route_to_topology_builder
+    prep_action: defer
+    prep_stage: parameterization
     label: Build a topology for the residue as deposited
     cost_hint: medium
     trade_offs:
@@ -14,6 +16,7 @@ x-generic-options: &generic_options
       - Needs parameters (existing library or new derivation) and a check of the
         protonation / hydration state.
   - id: revert_to_parent
+    prep_action: apply
     label: Replace with the parent standard residue
     cost_hint: low
     requires_explicit_choice: true
@@ -22,6 +25,7 @@ x-generic-options: &generic_options
       - Changes the chemistry; only defensible when the modification is irrelevant to
         the question (e.g. a crystallization aid). Never applied by default.
   - id: exclude_segment
+    prep_action: apply
     label: Exclude the residue (and break the chain there)
     cost_hint: low
     trade_offs:
@@ -49,6 +53,8 @@ rules:
     base_severity: blocking
     options:
       - id: model_gem_diol
+        prep_action: defer
+        prep_stage: chemistry
         label: Model FGly as the aldehyde hydrate (gem-diol, FGH)
         cost_hint: medium
         trade_offs:
@@ -57,12 +63,16 @@ rules:
           - Needs a parameterized non-standard residue; replaces the deposited sulfate
             ester, so the covalent sulfate is removed (record that decision too).
       - id: model_aldehyde
+        prep_action: defer
+        prep_stage: chemistry
         label: Model FGly as the free aldehyde
         cost_hint: medium
         trade_offs:
           - The form produced by FGE and regenerated after sulfate elimination.
           - Not the catalytically active hydrate; needs its own parameters.
       - id: keep_sulfate_ester
+        prep_action: defer
+        prep_stage: parameterization
         label: Keep the deposited FGly sulfate ester (covalent intermediate)
         cost_hint: medium
         trade_offs:
@@ -71,6 +81,7 @@ rules:
           - Simulates an intermediate, not the resting enzyme; the authors note the
             density could alternatively be a phosphate ester.
       - id: revert_to_parent
+        prep_action: apply
         label: Revert to cysteine (the unmodified precursor)
         cost_hint: low
         requires_explicit_choice: true

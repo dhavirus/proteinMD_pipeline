@@ -1,0 +1,29 @@
+# Prep fixture (TASK-004): decides every 1FO8 finding with a deliberate mix of options.
+# Decisions are test inputs, not scientific recommendations.
+structure: 1FO8.cif.gz
+reviewed: false
+decisions:
+  altlocs/water: {option: highest_occupancy, rationale: "fixture"}
+  altlocs/A:123: {option: highest_occupancy, rationale: "fixture"}
+  altlocs/A:159: {option: highest_occupancy, rationale: "fixture"}
+  altlocs/A:198: {option: highest_occupancy, rationale: "fixture"}
+  altlocs/A:201: {option: highest_occupancy, rationale: "fixture"}
+  altlocs/A:254: {option: highest_occupancy, rationale: "fixture"}
+  altlocs/A:298: {option: highest_occupancy, rationale: "fixture"}
+  altlocs/A:301: {option: highest_occupancy, rationale: "fixture"}
+  altlocs/A:311: {option: highest_occupancy, rationale: "fixture"}
+  altlocs/A:316: {option: keep_ensemble, rationale: "fixture: Phe316 overlaps the methylmercury altloc; both states"}
+  altlocs/A:406: {option: highest_occupancy, rationale: "fixture"}
+  altlocs/A:1448: {option: highest_occupancy, rationale: "fixture"}
+  missing_residues/A:318-330: {option: model_loop, rationale: "fixture"}
+  unrecognized/group/A:1448: {option: exclude, rationale: "heavy-atom derivative (methylmercury) excluded"}
+expected:
+  # TASK-004 acceptance: keep_ensemble on one residue gives two systems that differ
+  # only in that residue.
+  systems: [system_altloc_A, system_altloc_B]
+  excluded_residues: {chains: [], residues: ["A:1448"]}
+  excluded_by_class: {branched: 0, nonpolymer: 1, polymer: 0, water: 0}
+  collapsed_altloc_residues: {}
+  ensemble_residues: ["A:316"]
+  added_links: []
+  work_order: {modelling: 1}

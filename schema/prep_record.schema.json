@@ -1,0 +1,94 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:simprep:schema:prep_record",
+  "x-schema-version": "0.1.0",
+  "title": "simprep prep record (prep_record.json)",
+  "description": "What `simprep prep` did to a structure under a manifest: every action per finding, the work order for later stages, the files written, and record accounting per output system (in = passed_through + modified + excluded; out = passed_through + modified + added).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "generated_at", "simprep", "knowledge_base", "input", "manifest_sha256",
+    "actions", "work_order", "systems"
+  ],
+  "properties": {
+    "schema_version": {"const": "0.1.0"},
+    "generated_at": {"type": "string", "format": "date-time"},
+    "simprep": {"$ref": "urn:simprep:schema:manifest#/$defs/simprep"},
+    "knowledge_base": {"$ref": "urn:simprep:schema:manifest#/$defs/knowledge_base"},
+    "input": {"$ref": "urn:simprep:schema:manifest#/$defs/input"},
+    "manifest_sha256": {"$ref": "urn:simprep:schema:manifest#/$defs/sha256"},
+    "actions": {"type": "array", "items": {"$ref": "#/$defs/action"}},
+    "work_order": {"type": "array", "items": {"$ref": "#/$defs/work_item"}},
+    "systems": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/system"}}
+  },
+  "$defs": {
+    "residues": {"type": "array", "items": {"$ref": "urn:simprep:schema:finding#/$defs/residue_ref"}},
+    "action": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["finding_id", "rule_id", "option_id", "prep_action", "prep_stage", "residues", "note"],
+      "properties": {
+        "finding_id": {"type": "string", "minLength": 1},
+        "rule_id": {"type": "string", "minLength": 1},
+        "option_id": {"type": ["string", "null"]},
+        "prep_action": {"enum": ["apply", "record", "defer", "undecided"]},
+        "prep_stage": {"enum": ["modelling", "chemistry", "parameterization", "topology", null]},
+        "residues": {"$ref": "#/$defs/residues"},
+        "note": {"type": "string"}
+      }
+    },
+    "work_item": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["stage", "finding_id", "option_id", "description", "residues"],
+      "properties": {
+        "stage": {"enum": ["modelling", "chemistry", "parameterization", "topology", "decision"]},
+        "finding_id": {"type": "string", "minLength": 1},
+        "option_id": {"type": ["string", "null"]},
+        "description": {"type": "string", "minLength": 1},
+        "residues": {"$ref": "#/$defs/residues"}
+      }
+    },
+    "count": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["record_type", "in", "passed_through", "modified", "excluded", "added", "out"],
+      "properties": {
+        "record_type": {"type": "string", "minLength": 1},
+        "in": {"type": "integer", "minimum": 0},
+        "passed_through": {"type": "integer", "minimum": 0},
+        "modified": {"type": "integer", "minimum": 0},
+        "excluded": {"type": "integer", "minimum": 0},
+        "added": {"type": "integer", "minimum": 0},
+        "out": {"type": "integer", "minimum": 0}
+      }
+    },
+    "system": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "altloc", "files", "counts"],
+      "properties": {
+        "name": {"type": "string", "pattern": "^[A-Za-z0-9_-]+$"},
+        "altloc": {
+          "description": "Altloc id this system keeps for keep_ensemble residues; null when there is no ensemble.",
+          "type": ["string", "null"]
+        },
+        "files": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["path", "format", "sha256"],
+            "properties": {
+              "path": {"type": "string", "minLength": 1},
+              "format": {"enum": ["mmcif", "pdb"]},
+              "sha256": {"$ref": "urn:simprep:schema:manifest#/$defs/sha256"}
+            }
+          }
+        },
+        "counts": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/count"}}
+      }
+    }
+  }
+}

@@ -15,6 +15,8 @@ simprep manifest init tests/panel/5FQL.cif.gz --out m.json
 # edit m.json: add regions of interest (named residue sets)
 simprep audit tests/panel/5FQL.cif.gz --manifest m.json --out out/5fql_roi
 simprep manifest status out/5fql_roi/manifest.json        # exit 3 while blocking findings are undecided
+# decide every finding (review page below), then apply the decisions:
+simprep prep tests/panel/5FQL.cif.gz --manifest decided.json --out out/5fql_prep
 pytest                                                   # unit + panel regression + contract tests
 (cd frontend && node --test "tests/*.test.mjs")           # front-end logic (Node 22, no dependencies)
 ruff check . && ruff format --check .
@@ -33,6 +35,21 @@ python frontend/demo/build_demo.py  # regenerate the 5FQL example after rule cha
 node frontend/tests/smoke/smoke.mjs  # browser smoke test (needs Playwright and network)
 ```
 
+## Prep
+
+`simprep prep` applies a manifest in which every blocking finding has a final decision
+(`expert_review` / `add_rule` are not final). It selects altlocs, deletes excluded
+residues, writes `add_link` bonds into `struct_conn`, and never invents coordinates:
+loop modelling, capping, chemistry edits and parameterization go into the work order in
+`prep_record.json` for later stages. Outputs: `system.cif` + `system.pdb` (or one pair
+per altloc with `keep_ensemble`), `prep_record.json` (actions, work order, file hashes,
+record accounting) and `prep_report.md`. See ADR-0004.
+
+On Colab, `notebooks/01_prep.ipynb` wraps the same function with the run layout from
+`CLAUDE.md` (`modules/prep_module.py`).
+
 Layout: `schema/` (JSON Schemas, the source of truth), `knowledge/` (versioned YAML
-rules), `src/simprep/` (parser, detectors, severity, manifest, CLI), `frontend/` (review
-page), `tests/panel/` (regression structures and independently derived expected findings).
+rules and residue mappings), `src/simprep/` (parser, detectors, severity, manifest, prep,
+CLI), `frontend/` (review page), `modules/` + `notebooks/` (Colab back end),
+`tests/panel/` (regression structures, independently derived expected findings, prep
+fixtures).

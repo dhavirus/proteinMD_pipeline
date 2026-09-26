@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:simprep:schema:residue_mappings",
+  "x-schema-version": "0.1.0",
+  "title": "simprep residue mappings (revert_to_parent)",
+  "description": "Explicit atom mappings that let prep revert a non-standard residue to a parent residue. Prep refuses revert_to_parent for any component without an entry here (TASK-004 decision 3).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "mappings"],
+  "properties": {
+    "schema_version": {"const": "0.1.0"},
+    "mappings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["from", "to", "rename", "delete", "rationale", "references"],
+        "properties": {
+          "from": {"type": "string", "pattern": "^[A-Z0-9]{1,5}$"},
+          "to": {"type": "string", "pattern": "^[A-Z0-9]{1,5}$"},
+          "rename": {
+            "description": "Atom renames (old name -> new name); atoms not named here keep their names.",
+            "type": "object",
+            "additionalProperties": {"type": "string", "pattern": "^[A-Z0-9']{1,4}$"}
+          },
+          "rename_elements": {
+            "description": "Element changes for renamed atoms (new name -> element), e.g. SE -> S.",
+            "type": "object",
+            "additionalProperties": {"type": "string", "pattern": "^[A-Z]{1,2}$"}
+          },
+          "delete": {"type": "array", "items": {"type": "string", "pattern": "^[A-Z0-9']{1,4}$"}},
+          "rationale": {"type": "string", "minLength": 1},
+          "references": {"type": "array", "items": {"$ref": "urn:simprep:schema:finding#/$defs/reference"}}
+        }
+      }
+    }
+  }
+}

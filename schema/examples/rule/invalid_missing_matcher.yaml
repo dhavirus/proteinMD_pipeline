@@ -8,7 +8,7 @@ rules:
     priority: 0
     base_severity: info
     options:
-      - {id: highest_occupancy, label: Keep A, cost_hint: low, trade_offs: [Simple.]}
+      - {id: highest_occupancy, prep_action: apply, label: Keep A, cost_hint: low, trade_offs: [Simple.]}
     recommended_option: {default: highest_occupancy, conditions: []}
     rationale: Example.
     references: []

@@ -23,6 +23,25 @@ proposed from memory, not from a search.
 
 All five: X-RAY DIFFRACTION, one model.
 
+## Prep fixtures (TASK-004)
+
+`prep_fixtures/<ID>.yaml` decides every finding of each entry with a deliberate mix of
+options (test inputs, not scientific recommendations) and states the expected prep
+outcome by hand: which residues are excluded (per entity class), which altloc is kept
+where it is not the highest-occupancy one, the added links, the output systems and the
+work-order stages. `tests/test_prep_panel.py` builds the manifest from the fixture,
+runs prep, and checks the outputs against the fixture and against expected atom counts
+derived from the raw `atom_site` table (gemmi.cif, no simprep code). Also
+`reviewed: false` until the maintainer reviews them.
+
+| ID | what the fixture exercises |
+|---|---|
+| 5FQL | glycans excluded: the five branched groups (chains B-F, 13 residues) and the two single NAG residues (A:1558, A:1559); nothing else removed; FGly deferred to chemistry |
+| 3KS3 | altloc collapse on 13 residues and 3 waters (one `specific_altloc`); glycerol excluded; Zn deferred |
+| 1HZH | `add_link` for both unannotated ASN-NAG attachments (TASK-003); glycans kept for parameterization |
+| 6OIM | everything deferred or recorded; output equals input apart from format |
+| 1FO8 | `keep_ensemble` on Phe316 gives two systems that differ only there; methylmercury excluded with its metalc links |
+
 ## Candidates considered
 
 | slot | candidates proposed | outcome |

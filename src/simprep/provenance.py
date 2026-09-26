@@ -11,6 +11,7 @@ from simprep import __version__
 from simprep.paths import REPO_ROOT
 
 HASH_CHUNK_BYTES = 1 << 20
+FORMAT_BY_EXTENSION = {".cif": "mmcif", ".mmcif": "mmcif", ".pdb": "pdb", ".ent": "pdb"}
 
 
 def sha256_file(path: Path) -> str:
@@ -19,6 +20,15 @@ def sha256_file(path: Path) -> str:
         for chunk in iter(lambda: handle.read(HASH_CHUNK_BYTES), b""):
             digest.update(chunk)
     return digest.hexdigest()
+
+
+def input_info(path: Path) -> dict:
+    """Path, SHA-256 and format (from the extension, ignoring a trailing .gz)."""
+    suffixes = [s.lower() for s in path.suffixes if s.lower() != ".gz"]
+    fmt = FORMAT_BY_EXTENSION.get(suffixes[-1] if suffixes else "")
+    if fmt is None:
+        raise ValueError(f"{path}: unsupported extension; expected .cif/.mmcif/.pdb/.ent[.gz]")
+    return {"path": str(path), "sha256": sha256_file(path), "format": fmt}
 
 
 def git_commit(repo: Path = REPO_ROOT) -> str | None:

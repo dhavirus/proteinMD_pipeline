@@ -15,11 +15,10 @@ import sys
 from pathlib import Path
 
 from simprep.audit import ReportContext, build_findings_report, run_audit
-from simprep.cli import input_info
 from simprep.config import default_config
 from simprep.knowledge import load_ruleset
 from simprep.paths import REPO_ROOT
-from simprep.provenance import simprep_provenance, utc_now
+from simprep.provenance import input_info, simprep_provenance, utc_now
 from simprep.schemas import validate
 from simprep.structure.parse import read_structure
 

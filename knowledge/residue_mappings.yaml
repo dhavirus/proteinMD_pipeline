@@ -1,0 +1,7 @@
+# Atom mappings that allow prep to apply revert_to_parent (TASK-004 decision 3).
+# None ship in v0.1: the panel's only non-standard residue is ALS (5FQL), whose file
+# names ALA as parent while the formylglycine rule describes reverting to CYS; that
+# choice stays with a human. Add an entry here (with rationale and references) to
+# enable a revert, then re-run prep.
+schema_version: 0.1.0
+mappings: []

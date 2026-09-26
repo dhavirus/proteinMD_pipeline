@@ -1,0 +1,31 @@
+# Prep fixture (TASK-004): decides every 5FQL finding with a deliberate mix of options.
+# Decisions are test inputs, not scientific recommendations. Expected outputs are written
+# by hand from the file's own records (entity / atom_site / struct_conn), not from prep.
+structure: 5FQL.cif.gz
+reviewed: false
+decisions:
+  metals/A:1551: {option: nonbonded_12_6_4, rationale: "Ca2+ site: parameterization stage"}
+  nonstandard_residues/A:84: {option: model_gem_diol, rationale: "FGly default is gem-diol (TASK-001 review)"}
+  altlocs/A:294: {option: highest_occupancy, rationale: "fixture: keep the major altloc (B, 0.52)"}
+  altlocs/A:421: {option: specific_altloc, parameters: {altloc: B}, rationale: "fixture: keep the minor altloc B on purpose"}
+  missing_residues/A:26-33: {option: cap_termini, rationale: "fixture: N-terminal tail, cap later"}
+  missing_residues/A:444-453: {option: model_loop, rationale: "fixture: internal loop, model later"}
+  unrecognized/group/A:1558: {option: exclude, rationale: "glycan (NAG) excluded for the apo-protein system"}
+  unrecognized/group/A:1559: {option: exclude, rationale: "glycan (NAG) excluded for the apo-protein system"}
+  unrecognized/group/B:1: {option: exclude, rationale: "branched glycan excluded"}
+  unrecognized/group/C:1: {option: exclude, rationale: "branched glycan excluded"}
+  unrecognized/group/D:1: {option: exclude, rationale: "branched glycan excluded"}
+  unrecognized/group/E:1: {option: exclude, rationale: "branched glycan excluded"}
+  unrecognized/group/F:1: {option: exclude, rationale: "branched glycan excluded"}
+  unrecognized/group/A:1567: {option: parameterize_manually, rationale: "fixture: chloride kept"}
+  unrecognized/group/A:1568: {option: parameterize_manually, rationale: "fixture: chloride kept"}
+  unrecognized/group/A:1569: {option: parameterize_manually, rationale: "fixture: chloride kept"}
+expected:
+  # TASK-004 acceptance: the seven glycan groups (branched entities in chains B-F, and
+  # the two NAG non-polymer residues A:1558, A:1559) are excluded; nothing else is.
+  systems: [system]
+  excluded_residues: {chains: [B, C, D, E, F], residues: ["A:1558", "A:1559"]}
+  excluded_by_class: {branched: 13, nonpolymer: 2, polymer: 0, water: 0}
+  collapsed_altloc_residues: {"A:294": B, "A:421": B}
+  added_links: []
+  work_order: {parameterization: 4, chemistry: 1, modelling: 2}
