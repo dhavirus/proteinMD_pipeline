@@ -1,8 +1,8 @@
 // Decisions as recorded in manifest.schema.json (decision), validated before they are saved.
-import { altlocChoices } from "./findings.js";
+import { altlocChoices, rotamerChoices } from "./findings.js";
 
 /** Options that need parameters, and how to read them. */
-export const OPTION_PARAMETERS = { specific_altloc: "altloc" };
+export const OPTION_PARAMETERS = { specific_altloc: "altloc", choose_rotamer: "rotamer" };
 
 /**
  * Validate a draft {option_id, rationale, decided_by, confirmed_explicit, parameters}
@@ -25,6 +25,22 @@ function parameterProblems(finding, draft) {
   const key = OPTION_PARAMETERS[draft.option_id];
   if (!key) return [];
   const value = ((draft.parameters || {})[key] || "").trim();
+  return key === "rotamer" ? rotamerProblems(finding, value) : altlocProblems(finding, value);
+}
+
+/** simprep variants refuses a clashing rotamer (TASK-005 decision 4); say so here. */
+function rotamerProblems(finding, value) {
+  const choice = rotamerChoices(finding).find((c) => c.id === value);
+  if (!value) return ["Choose the rotamer to build."];
+  if (!choice) return [`Rotamer "${value}" is not one of the candidates.`];
+  if (choice.clashCount) {
+    return [`Rotamer ${value} has ${choice.clashCount} clash(es); simprep variants will not build it. `
+      + "Choose a clash-free rotamer, or Expert review."];
+  }
+  return [];
+}
+
+function altlocProblems(finding, value) {
   const choices = altlocChoices(finding);
   if (!value) return ["Choose which altloc to keep."];
   if (choices.length && !choices.includes(value)) return [`Altloc "${value}" is not one of ${choices.join(", ")}.`];

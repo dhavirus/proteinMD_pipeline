@@ -8,9 +8,10 @@ export const FAMILY_LABELS = {
   missing_residues: "Missing residues",
   covalent_contacts: "Unannotated covalent contacts",
   unrecognized: "Unrecognized chemistry",
+  variant_build: "Variant side chains",
 };
 // Evidence items whose atoms are drawn as context around the selected finding.
-const CONTEXT_EVIDENCE = ["ligand_distance", "attachment", "link", "contact_distance"];
+const CONTEXT_EVIDENCE = ["ligand_distance", "attachment", "link", "contact_distance", "candidate"];
 const UNIT_SUFFIX = { angstrom: " Å", angstrom_squared: " Å²", degree: "°", fraction: "" };
 
 export function severityCounts(findings) {
@@ -52,6 +53,11 @@ export function formatEvidenceValue(item) {
       .join(" · ");
   }
   if (item.type === "flag") return item.value ? "yes" : "no";
+  if (item.type === "candidate") {
+    const overlap = item.max_overlap_angstrom === null ? "no contact" : `max overlap ${item.max_overlap_angstrom} Å`;
+    return `${item.value}: chi ${item.chi_degree.join(", ")}° · library ${item.frequency_percent} % · `
+      + `${item.clash_count} clash${item.clash_count === 1 ? "" : "es"} · ${overlap}`;
+  }
   const unit = item.unit in UNIT_SUFFIX ? UNIT_SUFFIX[item.unit] : item.unit ? ` ${item.unit}` : "";
   return `${item.value}${unit}`;
 }
@@ -65,6 +71,13 @@ export function formatAtom(atom) {
 export function altlocChoices(finding) {
   const item = finding.evidence.find((e) => e.key === "altloc_ids");
   return item ? item.value.split(",").filter(Boolean) : [];
+}
+
+/** Rotamer candidates a "choose_rotamer" decision may choose from (from the evidence). */
+export function rotamerChoices(finding) {
+  return finding.evidence
+    .filter((e) => e.type === "candidate")
+    .map((e) => ({ id: e.value, clashCount: e.clash_count, frequency: e.frequency_percent }));
 }
 
 /** Residues to show for a finding: its anchors, plus context atoms named in the evidence. */
