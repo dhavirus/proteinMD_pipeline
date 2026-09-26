@@ -1,0 +1,101 @@
+schema_version: 0.1.0
+family: altlocs
+description: >-
+  Alternative locations (altlocs). A simulation needs one conformer per system; the
+  choice is recorded. Spread = largest displacement of the same atom between altlocs.
+
+x-options: &options
+  - id: highest_occupancy
+    label: Keep the highest-occupancy altloc
+    cost_hint: low
+    trade_offs:
+      - Simple and reproducible; ties are broken by altloc identifier (A before B).
+      - Discards the minor state, which may be the functionally relevant one.
+  - id: specific_altloc
+    label: Keep a specific altloc (named in the decision)
+    cost_hint: low
+    trade_offs:
+      - Lets the human choose the state relevant to the question.
+      - Mixing altloc letters across residues can create clashes when the letters were
+        not refined as a consistent set; check neighbours.
+  - id: keep_ensemble
+    label: Keep each altloc as a separate system (ensemble)
+    cost_hint: high
+    trade_offs:
+      - Samples both deposited states; the difference becomes part of the result.
+      - Multiplies the number of systems to prepare and simulate.
+
+x-recommendation: &recommendation
+  default: highest_occupancy
+  conditions: []
+
+rules:
+  - rule_id: altlocs.minor_spread
+    family: altlocs
+    version: 0.1.0
+    title: Alternative locations with small spread
+    priority: 0
+    matcher:
+      kind: altloc
+      residue_classes: [polymer, nonpolymer, branched]
+      min_spread_angstrom: 0.0
+      max_spread_angstrom: 1.0
+      aggregate: false
+    base_severity: info
+    options: *options
+    recommended_option: *recommendation
+    rationale: >-
+      Altlocs whose atoms move less than 1 A describe nearly the same conformation;
+      the choice rarely matters but must still be recorded. The 1 A split between
+      minor and major spread is a working threshold, not a literature value.
+    references: []
+    verify_flags: []
+
+  - rule_id: altlocs.major_spread
+    family: altlocs
+    version: 0.1.0
+    title: Alternative locations with large spread
+    priority: 0
+    matcher:
+      kind: altloc
+      residue_classes: [polymer, nonpolymer, branched]
+      min_spread_angstrom: 1.0
+      max_spread_angstrom: null
+      aggregate: false
+    base_severity: warn
+    options: *options
+    recommended_option:
+      default: highest_occupancy
+      conditions:
+        - name: in_region
+          when:
+            region_proximity: [inside]
+          option: keep_ensemble
+          reason: >-
+            Distinct conformations inside a region of interest may be the very states
+            the study compares; keep both until judged.
+    rationale: >-
+      Altlocs that move atoms by 1 A or more are distinct conformations; which one is
+      simulated can change the outcome near a region of interest.
+    references: []
+    verify_flags: []
+
+  - rule_id: altlocs.water
+    family: altlocs
+    version: 0.1.0
+    title: Waters with alternative locations
+    priority: 0
+    matcher:
+      kind: altloc
+      residue_classes: [water]
+      min_spread_angstrom: 0.0
+      max_spread_angstrom: null
+      aggregate: true
+    base_severity: info
+    options: *options
+    recommended_option: *recommendation
+    rationale: >-
+      Crystallographic waters with altlocs are reported together; a single decision
+      normally covers all of them.
+    references: []
+    verify_flags: []

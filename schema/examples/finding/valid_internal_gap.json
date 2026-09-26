@@ -1,0 +1,142 @@
+{
+  "anchor_residues": [
+    {
+      "chain": "A",
+      "ins_code": "",
+      "seq_num": 4
+    },
+    {
+      "chain": "A",
+      "ins_code": "",
+      "seq_num": 6
+    }
+  ],
+  "base_severity": "warn",
+  "effective_severity": "warn",
+  "evidence": [
+    {
+      "key": "position",
+      "type": "label",
+      "value": "internal"
+    },
+    {
+      "key": "gap_length",
+      "type": "count",
+      "value": 1
+    },
+    {
+      "key": "missing_sequence",
+      "type": "label",
+      "value": "GLY"
+    },
+    {
+      "category": "pdbx_unobs_or_zero_occ_residues",
+      "fields": {
+        "first": "A:5",
+        "first_label_seq": 5,
+        "last": "A:5",
+        "last_label_seq": 5
+      },
+      "key": "unobserved_record",
+      "type": "source_record"
+    },
+    {
+      "key": "flank_before",
+      "type": "label",
+      "value": "HISA:4"
+    },
+    {
+      "key": "flank_after",
+      "type": "label",
+      "value": "GLYA:6"
+    },
+    {
+      "atoms": [
+        {
+          "altloc": "",
+          "atom_name": "CA",
+          "chain": "A",
+          "ins_code": "",
+          "res_name": "HIS",
+          "seq_num": 4
+        },
+        {
+          "altloc": "",
+          "atom_name": "CA",
+          "chain": "A",
+          "ins_code": "",
+          "res_name": "GLY",
+          "seq_num": 6
+        }
+      ],
+      "key": "flank_ca_distance",
+      "type": "distance",
+      "unit": "angstrom",
+      "value": 5.162
+    },
+    {
+      "key": "max_bridgeable_span",
+      "note": "3.8 A x (gap length + 1)",
+      "type": "number",
+      "unit": "angstrom",
+      "value": 7.6
+    },
+    {
+      "key": "bridgeable",
+      "type": "flag",
+      "value": true
+    }
+  ],
+  "id": "missing_residues/A:5-5",
+  "locus": {
+    "atom_names": [],
+    "chain": "A",
+    "extent": [
+      {
+        "chain": "A",
+        "ins_code": "",
+        "res_name": "GLY",
+        "seq_num": 5
+      }
+    ],
+    "ins_code": "",
+    "res_name": "GLY",
+    "seq_num": 5
+  },
+  "options": [
+    {
+      "cost_hint": "medium",
+      "id": "model_loop",
+      "label": "Model the missing loop",
+      "trade_offs": [
+        "Restores chain connectivity.",
+        "The modelled loop is a hypothesis; its conformation is unconstrained by density and may bias sampling nearby."
+      ]
+    },
+    {
+      "cost_hint": "low",
+      "id": "truncate",
+      "label": "Leave the gap as a chain break, capping both sides",
+      "trade_offs": [
+        "No invented coordinates.",
+        "Two artificial termini; the flanking segments can drift apart."
+      ]
+    }
+  ],
+  "rationale": "An internal gap leaves two artificial chain ends. Evidence gives the gap length and the flanking CA-CA distance, compared with the maximum span of the missing residues (3.8 A per peptide unit, the approximate trans CA-CA distance).",
+  "recommendation_basis": "default",
+  "recommended_option": "model_loop",
+  "references": [],
+  "rule_family": "missing_residues",
+  "rule_id": "missing_residues.internal",
+  "severity_context": {
+    "min_distance_angstrom": null,
+    "nearest_region": null,
+    "proximity": "no_regions",
+    "raise_levels": 0
+  },
+  "title": "Internal gap (unobserved residues between observed ones): A:5-5 (1 residues)",
+  "verify_flags": [
+    "[VERIFY] 3.8 A CA-CA distance per residue is the textbook trans-peptide value; no citation attached in this session."
+  ]
+}

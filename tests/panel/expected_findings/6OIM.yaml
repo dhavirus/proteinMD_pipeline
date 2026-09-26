@@ -1,0 +1,67 @@
+pdb_id: 6OIM
+file: 6OIM.cif.gz
+reviewed: false
+derived_by: 'tests/panel/derive_expected.py: raw mmCIF categories (atom_site, entity, struct_conn, pdbx_struct_mod_residue,
+  pdbx_unobs_or_zero_occ_residues); no simprep code'
+families:
+  metals:
+  - id: metals/A:301
+    rule_id: metals.magnesium
+    annotated_ligands:
+    - residue: A:17
+      atom: OG
+      element: O
+      distance_angstrom: 2.164
+    - residue: A:302
+      atom: O2B
+      element: O
+      distance_angstrom: 2.157
+    - residue: A:405
+      atom: O
+      element: O
+      distance_angstrom: 2.161
+    - residue: A:415
+      atom: O
+      element: O
+      distance_angstrom: 2.166
+    - residue: A:440
+      atom: O
+      element: O
+      distance_angstrom: 2.166
+    - residue: A:447
+      atom: O
+      element: O
+      distance_angstrom: 2.164
+  nonstandard_residues: []
+  altlocs: []
+  missing_residues:
+  - id: missing_residues/A:-13--1
+    rule_id: missing_residues.n_terminal
+    gap_length: 13
+  - id: missing_residues/A:105-107
+    rule_id: missing_residues.internal
+    gap_length: 3
+  unrecognized:
+  - id: unrecognized/group/A:302
+    components: GDP
+  - id: unrecognized/group/A:303
+    components: MOV
+curated_checks:
+- source: 'Maintainer decision (TASK-001 review): Mg 301 is not catalytic just because GDP is in its shell;
+    the file''s crystallization conditions include 1 mM MgCl2.'
+  finding_id: metals/A:301
+  shell_residues:
+  - A:17
+  - A:302
+  - A:405
+  - A:415
+  - A:440
+  - A:447
+  evidence:
+    classification: ambiguous
+    coordination_number: 6
+    nonpolymer_ligand_donors: 1
+- source: 'struct_conn covale1: AMG 510 (MOV) C25 bonded to Cys12 SG'
+  finding_id: unrecognized/group/A:303
+  evidence:
+    components: MOV

@@ -1,0 +1,300 @@
+{
+  "anchor_residues": [
+    {
+      "chain": "A",
+      "ins_code": "",
+      "seq_num": 901
+    }
+  ],
+  "base_severity": "warn",
+  "effective_severity": "warn",
+  "evidence": [
+    {
+      "key": "metal_occupancy",
+      "type": "occupancy",
+      "value": 1.7
+    },
+    {
+      "key": "metal_b_factor",
+      "type": "b_factor",
+      "unit": "angstrom_squared",
+      "value": 20.0
+    },
+    {
+      "key": "coordination_cutoff",
+      "type": "number",
+      "unit": "angstrom",
+      "value": 2.8
+    },
+    {
+      "key": "coordination_number",
+      "type": "count",
+      "value": 4
+    },
+    {
+      "key": "protein_donors",
+      "type": "count",
+      "value": 3
+    },
+    {
+      "key": "water_donors",
+      "type": "count",
+      "value": 1
+    },
+    {
+      "key": "nonstandard_polymer_residue_donors",
+      "type": "count",
+      "value": 0
+    },
+    {
+      "key": "nonpolymer_ligand_donors",
+      "type": "count",
+      "value": 0
+    },
+    {
+      "key": "mean_ligand_distance",
+      "type": "number",
+      "unit": "angstrom",
+      "value": 2.051
+    },
+    {
+      "key": "geometry",
+      "type": "label",
+      "value": "tetrahedral"
+    },
+    {
+      "key": "geometry_rms_angle_deviation",
+      "type": "number",
+      "unit": "degree",
+      "value": 0.0
+    },
+    {
+      "key": "classification",
+      "note": "open site: 3 protein donors, 1 water donors",
+      "type": "label",
+      "value": "likely_catalytic"
+    },
+    {
+      "atoms": [
+        {
+          "altloc": "",
+          "atom_name": "ZN",
+          "chain": "A",
+          "ins_code": "",
+          "res_name": "ZN",
+          "seq_num": 901
+        },
+        {
+          "altloc": "",
+          "atom_name": "NE2",
+          "chain": "A",
+          "ins_code": "",
+          "res_name": "HIS",
+          "seq_num": 2
+        }
+      ],
+      "key": "ligand_distance",
+      "note": "protein",
+      "type": "distance",
+      "unit": "angstrom",
+      "value": 2.051
+    },
+    {
+      "atoms": [
+        {
+          "altloc": "",
+          "atom_name": "ZN",
+          "chain": "A",
+          "ins_code": "",
+          "res_name": "ZN",
+          "seq_num": 901
+        },
+        {
+          "altloc": "",
+          "atom_name": "NE2",
+          "chain": "A",
+          "ins_code": "",
+          "res_name": "HIS",
+          "seq_num": 4
+        }
+      ],
+      "key": "ligand_distance",
+      "note": "protein",
+      "type": "distance",
+      "unit": "angstrom",
+      "value": 2.051
+    },
+    {
+      "atoms": [
+        {
+          "altloc": "",
+          "atom_name": "ZN",
+          "chain": "A",
+          "ins_code": "",
+          "res_name": "ZN",
+          "seq_num": 901
+        },
+        {
+          "altloc": "",
+          "atom_name": "NE2",
+          "chain": "A",
+          "ins_code": "",
+          "res_name": "HIS",
+          "seq_num": 8
+        }
+      ],
+      "key": "ligand_distance",
+      "note": "protein",
+      "type": "distance",
+      "unit": "angstrom",
+      "value": 2.051
+    },
+    {
+      "atoms": [
+        {
+          "altloc": "",
+          "atom_name": "ZN",
+          "chain": "A",
+          "ins_code": "",
+          "res_name": "ZN",
+          "seq_num": 901
+        },
+        {
+          "altloc": "",
+          "atom_name": "O",
+          "chain": "A",
+          "ins_code": "",
+          "res_name": "HOH",
+          "seq_num": 1001
+        }
+      ],
+      "key": "ligand_distance",
+      "note": "water",
+      "type": "distance",
+      "unit": "angstrom",
+      "value": 2.051
+    },
+    {
+      "atoms": [
+        {
+          "altloc": "",
+          "atom_name": "ZN",
+          "chain": "A",
+          "ins_code": "",
+          "res_name": "ZN",
+          "seq_num": 901
+        },
+        {
+          "altloc": "",
+          "atom_name": "NE2",
+          "chain": "A",
+          "ins_code": "",
+          "res_name": "HIS",
+          "seq_num": 2
+        }
+      ],
+      "category": "struct_conn",
+      "fields": {
+        "conn_type": "metalc",
+        "distance_angstrom": 2.05,
+        "id": "metalc1"
+      },
+      "key": "annotated_metal_link",
+      "type": "source_record"
+    }
+  ],
+  "id": "metals/A:901",
+  "locus": {
+    "atom_names": [
+      "ZN"
+    ],
+    "chain": "A",
+    "extent": [
+      {
+        "chain": "A",
+        "ins_code": "",
+        "res_name": "ZN",
+        "seq_num": 901
+      }
+    ],
+    "ins_code": "",
+    "res_name": "ZN",
+    "seq_num": 901
+  },
+  "options": [
+    {
+      "cost_hint": "low",
+      "id": "nonbonded_12_6",
+      "label": "Nonbonded 12-6 LJ ion model",
+      "trade_offs": [
+        "Cheapest and fully transferable; ligands may exchange freely.",
+        "For divalent ions a single 12-6 parameter set cannot reproduce hydration free energy, ion-oxygen distance and coordination number at once (Li & Merz 2014), so the first shell may rearrange or collapse during sampling."
+      ]
+    },
+    {
+      "cost_hint": "low",
+      "id": "nonbonded_12_6_4",
+      "label": "Nonbonded 12-6-4 LJ-type ion model",
+      "trade_offs": [
+        "Adds an ion-induced-dipole (1/r^4) term; reproduces hydration free energy, ion-oxygen distance and coordination number for +2 ions (Li & Merz 2014).",
+        "Modest overhead; needs C4 terms for each ion/atom-type pair; does not treat charge transfer explicitly."
+      ]
+    },
+    {
+      "cost_hint": "high",
+      "id": "bonded_mcpb",
+      "label": "Bonded model (MCPB.py-style)",
+      "trade_offs": [
+        "Keeps the crystallographic coordination geometry by construction.",
+        "Needs QM calculations for force constants and charges (Li & Merz 2016); ligand exchange is impossible, which biases any landscape where site rearrangement matters; must be rebuilt if a variant changes a ligand."
+      ]
+    },
+    {
+      "cost_hint": "low",
+      "id": "restrained",
+      "label": "Nonbonded ion plus distance restraints to crystal ligands",
+      "trade_offs": [
+        "Cheap way to hold the site together without QM parameterization.",
+        "Restraints add a bias to every free energy computed; the restraint set must be recorded and identical across WT and variants to keep comparisons fair."
+      ]
+    }
+  ],
+  "rationale": "A metal site cannot be simulated without choosing an ion model, and the choice changes the site's behaviour. The coordination shell (donor atoms within the cutoff), a geometry descriptor (RMS deviation of L-M-L angles from ideal polyhedra) and the classification are reported as evidence. Classification criteria, in order: the shell contains a non-standard polymer residue or a non-polymer ligand -> likely catalytic; an open site (few protein donors plus water) -> likely catalytic; at least the structural minimum of protein donors -> likely structural; otherwise ambiguous.",
+  "recommendation_basis": "default",
+  "recommended_option": "nonbonded_12_6_4",
+  "references": [
+    {
+      "citation": "Harding MM. Small revisions to predicted distances around metal sites in proteins. Acta Crystallogr D Biol Crystallogr. 2006;62(Pt 6):678-682.",
+      "doi": "10.1107/S0907444906014594",
+      "pmid": "16699196"
+    },
+    {
+      "citation": "Li P, Merz KM Jr. Taking into account the ion-induced dipole interaction in the nonbonded model of ions. J Chem Theory Comput. 2014;10(1):289-297.",
+      "doi": "10.1021/ct400751u",
+      "pmid": "24659926"
+    },
+    {
+      "citation": "Li P, Merz KM Jr. MCPB.py: a Python based metal center parameter builder. J Chem Inf Model. 2016;56(4):599-604.",
+      "doi": "10.1021/acs.jcim.5b00674",
+      "pmid": "26913476"
+    },
+    {
+      "citation": "Vallee BL, Auld DS. Zinc coordination, function, and structure of zinc enzymes and other proteins. Biochemistry. 1990;29(24):5647-5659.",
+      "doi": "10.1021/bi00476a001",
+      "pmid": "2200508"
+    }
+  ],
+  "rule_family": "metals",
+  "rule_id": "metals.zinc",
+  "severity_context": {
+    "min_distance_angstrom": null,
+    "nearest_region": null,
+    "proximity": "no_regions",
+    "raise_levels": 0
+  },
+  "title": "ZN site A:901: likely_catalytic, coordination number 4",
+  "verify_flags": [
+    "[VERIFY] 2.8 A shell cutoff: chosen as a margin above Zn-N/O/S target distances (about 2.0-2.3 A) tabulated by Harding 2006; target values not re-read from the full text in this session.",
+    "[VERIFY] Open-site criterion (3 protein donors + >=1 water = catalytic; 4 protein donors = structural) follows the classification described by Vallee & Auld 1990; full text not re-read in this session."
+  ]
+}

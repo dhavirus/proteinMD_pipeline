@@ -1,0 +1,137 @@
+schema_version: 0.1.0
+family: nonstandard_residues
+description: >-
+  Residues inside polymer chains that are not one of the 20 standard amino acids,
+  found from residue names and from the file's modified-residue annotations.
+  Specific rules (higher priority) claim a residue before the generic rule.
+
+x-generic-options: &generic_options
+  - id: route_to_topology_builder
+    label: Build a topology for the residue as deposited
+    cost_hint: medium
+    trade_offs:
+      - Keeps the deposited chemistry.
+      - Needs parameters (existing library or new derivation) and a check of the
+        protonation / hydration state.
+  - id: revert_to_parent
+    label: Replace with the parent standard residue
+    cost_hint: low
+    requires_explicit_choice: true
+    trade_offs:
+      - Standard parameters, no derivation work.
+      - Changes the chemistry; only defensible when the modification is irrelevant to
+        the question (e.g. a crystallization aid). Never applied by default.
+  - id: exclude_segment
+    label: Exclude the residue (and break the chain there)
+    cost_hint: low
+    trade_offs:
+      - Removes the problem at the cost of a chain break and a missing residue.
+      - Creates new termini that themselves need a capping decision.
+
+rules:
+  - rule_id: nonstandard_residues.formylglycine
+    family: nonstandard_residues
+    version: 0.1.0
+    title: Formylglycine (sulfatase catalytic residue)
+    priority: 10
+    matcher:
+      kind: component_id
+      # ALS: (3S)-3-(sulfooxy)-L-serine, i.e. the FGly sulfate ester; the component used
+      # for residue 84 in 5FQL (checked in the file's chem_comp and
+      # pdbx_struct_mod_residue records). The paper calls this residue "FGS84".
+      # DDZ: 3,3-dihydroxy-alanine, the aldehyde-hydrate (gem-diol) form, named in
+      # Demydchuk et al. 2017. No component ID for the free aldehyde until verified.
+      comp_ids: [ALS, DDZ]
+      residue_classes: [polymer]
+      modeled_forms:
+        - {form: sulfate_ester, comp_ids: [ALS], required_atoms: [S]}
+        - {form: gem_diol, comp_ids: [DDZ], required_atoms: []}
+    base_severity: blocking
+    options:
+      - id: model_gem_diol
+        label: Model FGly as the aldehyde hydrate (gem-diol, FGH)
+        cost_hint: medium
+        trade_offs:
+          - The species proposed to perform the nucleophilic attack in the
+            transesterification-elimination mechanism (Demydchuk et al. 2017).
+          - Needs a parameterized non-standard residue; replaces the deposited sulfate
+            ester, so the covalent sulfate is removed (record that decision too).
+      - id: model_aldehyde
+        label: Model FGly as the free aldehyde
+        cost_hint: medium
+        trade_offs:
+          - The form produced by FGE and regenerated after sulfate elimination.
+          - Not the catalytically active hydrate; needs its own parameters.
+      - id: keep_sulfate_ester
+        label: Keep the deposited FGly sulfate ester (covalent intermediate)
+        cost_hint: medium
+        trade_offs:
+          - Matches the deposited coordinates and the Ca2+ coordination by sulfate
+            oxygens.
+          - Simulates an intermediate, not the resting enzyme; the authors note the
+            density could alternatively be a phosphate ester.
+      - id: revert_to_parent
+        label: Revert to cysteine (the unmodified precursor)
+        cost_hint: low
+        requires_explicit_choice: true
+        trade_offs:
+          - Standard parameters.
+          - Removes the catalytic chemistry; only defensible for questions that do not
+            involve the active site.
+    recommended_option:
+      default: model_gem_diol
+      conditions:
+        - name: deposited_as_gem_diol
+          when:
+            evidence:
+              modeled_form: [gem_diol]
+          option: model_gem_diol
+          reason: Deposited as the hydrate; keep it.
+    rationale: >-
+      Eukaryotic sulfatases carry C-alpha-formylglycine, post-translationally formed from
+      a cysteine, as the catalytic residue. Its hydration / esterification state (free
+      aldehyde, gem-diol hydrate, or sulfate/phosphate ester intermediate) changes the
+      active site's chemistry and the metal coordination, so it is an explicit decision
+      and never a silent default.
+    references:
+      - citation: >-
+          Demydchuk M, Hill CH, Zhou A, et al. Insights into Hunter syndrome from the
+          structure of iduronate-2-sulfatase. Nat Commun. 2017;8:15786.
+        doi: 10.1038/ncomms15786
+        pmid: "28593992"
+      - citation: >-
+          Dierks T, Schmidt B, Borissenko LV, et al. Multiple sulfatase deficiency is
+          caused by mutations in the gene encoding the human C(alpha)-formylglycine
+          generating enzyme. Cell. 2003;113(4):435-444.
+        doi: 10.1016/s0092-8674(03)00347-7
+        pmid: "12757705"
+    verify_flags:
+      - "[VERIFY] DDZ is taken from Demydchuk et al. 2017 ('Protein Data Bank code DDZ: 3,3-dihydroxy-alanine'); not checked against the wwPDB Chemical Component Dictionary in this session. ALS was checked only against the 5FQL file's own chem_comp record."
+      - "[VERIFY] Treating ALS as formylglycine sulfate ester is a chemical identification ((3S)-3-(sulfooxy)-L-serine = C-alpha-formylglycine hydrate monosulfate); ALS in another entry could be a genuine sulfated serine, so check the context when another structure matches."
+      - "[VERIFY] No component ID for free formylglycine aldehyde is included; add one only after checking the CCD."
+      - "[VERIFY] Recommending the gem-diol follows the paper's statement that FGly acts catalytically as the aldehyde hydrate; whether that is the right state for a given free-energy question is a study decision."
+  - rule_id: nonstandard_residues.generic
+    family: nonstandard_residues
+    version: 0.1.0
+    title: Non-standard polymer residue
+    priority: 0
+    matcher:
+      kind: nonstandard_polymer_residue
+      standard_residues: [ALA, ARG, ASN, ASP, CYS, GLN, GLU, GLY, HIS, ILE,
+                          LEU, LYS, MET, PHE, PRO, SER, THR, TRP, TYR, VAL]
+      use_modification_annotations: true
+      # An annotation whose component equals its parent (e.g. ASN, parent ASN,
+      # "GLYCOSYLATION SITE") marks an attachment site, not a non-standard residue; it is
+      # reported as evidence on the attached group instead.
+      skip_annotations_on_parent_residue: true
+    base_severity: warn
+    options: *generic_options
+    recommended_option:
+      default: route_to_topology_builder
+      conditions: []
+    rationale: >-
+      A polymer residue outside the 20 standard amino acids has no parameters in a
+      standard protein force field. The deposited chemistry is kept by default;
+      reverting to the parent residue is offered only as an explicit choice.
+    references: []
+    verify_flags: []

@@ -1,0 +1,567 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:simprep:schema:rule",
+  "x-schema-version": "0.1.0",
+  "title": "simprep knowledge-base rule file",
+  "description": "One YAML file per rule family. Each rule carries a declarative matcher the family's detector evaluates, the options offered to the human, and conditions that select the recommended default.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "family",
+    "rules"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "0.1.0"
+    },
+    "family": {
+      "$ref": "urn:simprep:schema:finding#/$defs/family"
+    },
+    "description": {
+      "type": "string"
+    },
+    "rules": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/rule"
+      }
+    }
+  },
+  "$defs": {
+    "rule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "rule_id",
+        "family",
+        "version",
+        "title",
+        "priority",
+        "matcher",
+        "base_severity",
+        "options",
+        "recommended_option",
+        "rationale",
+        "references",
+        "verify_flags"
+      ],
+      "properties": {
+        "rule_id": {
+          "$ref": "urn:simprep:schema:finding#/$defs/rule_id"
+        },
+        "family": {
+          "$ref": "urn:simprep:schema:finding#/$defs/family"
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "priority": {
+          "description": "Higher priority rules claim a record first (specific rules above generic ones).",
+          "type": "integer"
+        },
+        "matcher": {
+          "$ref": "#/$defs/matcher"
+        },
+        "base_severity": {
+          "$ref": "urn:simprep:schema:finding#/$defs/severity"
+        },
+        "options": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "urn:simprep:schema:finding#/$defs/option"
+          }
+        },
+        "recommended_option": {
+          "$ref": "#/$defs/recommendation"
+        },
+        "rationale": {
+          "type": "string",
+          "minLength": 1
+        },
+        "references": {
+          "type": "array",
+          "items": {
+            "$ref": "urn:simprep:schema:finding#/$defs/reference"
+          }
+        },
+        "verify_flags": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "recommendation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "default",
+        "conditions"
+      ],
+      "properties": {
+        "default": {
+          "type": "string",
+          "minLength": 1
+        },
+        "conditions": {
+          "description": "Evaluated in order; the first whose 'when' matches selects the option.",
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/condition"
+          }
+        }
+      }
+    },
+    "condition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "when",
+        "option",
+        "reason"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]*$"
+        },
+        "when": {
+          "type": "object",
+          "additionalProperties": false,
+          "minProperties": 1,
+          "properties": {
+            "region_proximity": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "$ref": "urn:simprep:schema:finding#/$defs/proximity"
+              }
+            },
+            "evidence": {
+              "description": "Evidence key -> allowed values (all keys must match).",
+              "type": "object",
+              "minProperties": 1,
+              "additionalProperties": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": [
+                    "string",
+                    "number",
+                    "boolean"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "option": {
+          "type": "string",
+          "minLength": 1
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "residue_classes": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "polymer",
+          "nonpolymer",
+          "branched",
+          "water"
+        ]
+      }
+    },
+    "names": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^[A-Z0-9]{1,5}$"
+      }
+    },
+    "matcher": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/matcher_metal_element"
+        },
+        {
+          "$ref": "#/$defs/matcher_component_id"
+        },
+        {
+          "$ref": "#/$defs/matcher_nonstandard_polymer_residue"
+        },
+        {
+          "$ref": "#/$defs/matcher_altloc"
+        },
+        {
+          "$ref": "#/$defs/matcher_unobserved_run"
+        },
+        {
+          "$ref": "#/$defs/matcher_unclaimed_group"
+        },
+        {
+          "$ref": "#/$defs/matcher_unexplained_link"
+        }
+      ]
+    },
+    "matcher_metal_element": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "elements",
+        "donor_elements",
+        "coordination_cutoff_angstrom",
+        "classification",
+        "min_donor_occupancy"
+      ],
+      "properties": {
+        "kind": {
+          "const": "metal_element"
+        },
+        "elements": {
+          "$ref": "#/$defs/names"
+        },
+        "donor_elements": {
+          "$ref": "#/$defs/names"
+        },
+        "coordination_cutoff_angstrom": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "geometry_candidates": {
+          "description": "Ideal polyhedra compared by RMS angle deviation, keyed by coordination number.",
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "enum": [
+                "linear",
+                "trigonal_planar",
+                "tetrahedral",
+                "square_planar",
+                "trigonal_bipyramidal",
+                "square_pyramidal",
+                "octahedral",
+                "pentagonal_bipyramidal"
+              ]
+            }
+          }
+        },
+        "classification": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "catalytic_if_shell_contains",
+            "open_site",
+            "structural_min_protein_donors"
+          ],
+          "properties": {
+            "catalytic_if_shell_contains": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "nonstandard_polymer_residue",
+                  "nonpolymer_ligand"
+                ]
+              }
+            },
+            "open_site": {
+              "oneOf": [
+                {
+                  "type": "null"
+                },
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "max_protein_donors",
+                    "min_water_donors"
+                  ],
+                  "properties": {
+                    "max_protein_donors": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "min_water_donors": {
+                      "type": "integer",
+                      "minimum": 1
+                    }
+                  }
+                }
+              ]
+            },
+            "structural_min_protein_donors": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        },
+        "min_donor_occupancy": {
+          "description": "A donor counts toward the coordination number only if the occupancies of its records inside the cutoff sum to at least this value; others are reported as excluded partial donors.",
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        }
+      }
+    },
+    "matcher_component_id": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "comp_ids",
+        "residue_classes"
+      ],
+      "properties": {
+        "kind": {
+          "const": "component_id"
+        },
+        "comp_ids": {
+          "$ref": "#/$defs/names"
+        },
+        "residue_classes": {
+          "$ref": "#/$defs/residue_classes"
+        },
+        "modeled_forms": {
+          "description": "Classify the deposited form of the residue by which atoms are present.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "form",
+              "comp_ids",
+              "required_atoms"
+            ],
+            "properties": {
+              "form": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9_]*$"
+              },
+              "comp_ids": {
+                "$ref": "#/$defs/names"
+              },
+              "required_atoms": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "absent_atoms": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "matcher_nonstandard_polymer_residue": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "standard_residues",
+        "use_modification_annotations",
+        "skip_annotations_on_parent_residue"
+      ],
+      "properties": {
+        "kind": {
+          "const": "nonstandard_polymer_residue"
+        },
+        "standard_residues": {
+          "$ref": "#/$defs/names"
+        },
+        "use_modification_annotations": {
+          "type": "boolean"
+        },
+        "skip_annotations_on_parent_residue": {
+          "description": "Ignore modification annotations whose component equals the parent component (attachment sites such as glycosylated ASN).",
+          "type": "boolean"
+        }
+      }
+    },
+    "matcher_altloc": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "residue_classes",
+        "min_spread_angstrom",
+        "max_spread_angstrom",
+        "aggregate"
+      ],
+      "properties": {
+        "kind": {
+          "const": "altloc"
+        },
+        "residue_classes": {
+          "$ref": "#/$defs/residue_classes"
+        },
+        "min_spread_angstrom": {
+          "type": "number",
+          "minimum": 0
+        },
+        "max_spread_angstrom": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "exclusiveMinimum": 0
+        },
+        "aggregate": {
+          "description": "Emit one finding for all matching residues instead of one per residue.",
+          "type": "boolean"
+        }
+      }
+    },
+    "matcher_unobserved_run": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "position",
+        "peptide_rise_angstrom"
+      ],
+      "properties": {
+        "kind": {
+          "const": "unobserved_run"
+        },
+        "position": {
+          "enum": [
+            "n_terminal",
+            "c_terminal",
+            "internal",
+            "whole_chain"
+          ]
+        },
+        "peptide_rise_angstrom": {
+          "description": "Maximum CA-CA span per peptide bond, used to test whether flanking residues can be bridged by the missing residues.",
+          "type": "number",
+          "exclusiveMinimum": 0
+        }
+      }
+    },
+    "matcher_unclaimed_group": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "residue_classes",
+        "group_by_conn_types"
+      ],
+      "properties": {
+        "kind": {
+          "const": "unclaimed_group"
+        },
+        "residue_classes": {
+          "$ref": "#/$defs/residue_classes"
+        },
+        "group_by_conn_types": {
+          "description": "Unclaimed residues joined by these annotated connection types form one group.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "matcher_unexplained_link": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "conn_types",
+        "recognized_links"
+      ],
+      "properties": {
+        "kind": {
+          "const": "unexplained_link"
+        },
+        "conn_types": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        },
+        "recognized_links": {
+          "description": "Connections that standard polymer chemistry explains (e.g. disulfides).",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "conn_type",
+              "res_names",
+              "atom_names"
+            ],
+            "properties": {
+              "conn_type": {
+                "type": "string"
+              },
+              "res_names": {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 2,
+                "items": {
+                  "type": "string"
+                },
+                "description": "'*' matches any residue name."
+              },
+              "atom_names": {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 2,
+                "items": {
+                  "type": "string"
+                }
+              },
+              "residue_classes": {
+                "description": "Required entity classes of the two partners, in order.",
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 2,
+                "items": {
+                  "enum": [
+                    "polymer",
+                    "nonpolymer",
+                    "branched",
+                    "water"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "patternProperties": {
+    "^x-": {
+      "description": "YAML anchor blocks shared between rules; ignored by detectors."
+    }
+  }
+}

@@ -1,0 +1,63 @@
+pdb_id: 3KS3
+file: 3KS3.cif.gz
+reviewed: false
+derived_by: 'tests/panel/derive_expected.py: raw mmCIF categories (atom_site, entity, struct_conn, pdbx_struct_mod_residue,
+  pdbx_unobs_or_zero_occ_residues); no simprep code'
+families:
+  metals:
+  - id: metals/A:262
+    rule_id: metals.zinc
+    annotated_ligands:
+    - residue: A:94
+      atom: NE2
+      element: N
+      distance_angstrom: 2.027
+    - residue: A:96
+      atom: NE2
+      element: N
+      distance_angstrom: 2.038
+    - residue: A:119
+      atom: ND1
+      element: N
+      distance_angstrom: 2.023
+    - residue: A:402
+      atom: O
+      element: O
+      distance_angstrom: 1.9
+    - residue: A:707
+      atom: O
+      element: O
+      distance_angstrom: 2.569
+  nonstandard_residues: []
+  altlocs:
+  - id: altlocs/A:4
+  - id: altlocs/A:14
+  - id: altlocs/A:22
+  - id: altlocs/A:34
+  - id: altlocs/A:64
+  - id: altlocs/A:80
+  - id: altlocs/A:130
+  - id: altlocs/A:133
+  - id: altlocs/A:136
+  - id: altlocs/A:152
+  - id: altlocs/A:214
+  - id: altlocs/A:215
+  - id: altlocs/A:217
+  - id: altlocs/water
+    residues_with_altlocs: 3
+  missing_residues:
+  - id: missing_residues/A:1-3
+    rule_id: missing_residues.n_terminal
+    gap_length: 3
+  unrecognized:
+  - id: unrecognized/group/A:304
+    components: GOL
+curated_checks:
+- source: >-
+    Maintainer decision (TASK-001 review): donors with in-shell occupancy below 0.5 are
+    excluded from the coordination number. HOH 707 (occupancy 0.29, 2.57 A) is reported
+    but not counted; the Zn-bound HOH 402 (occupancy 0.87) counts.
+  finding_id: metals/A:262
+  shell_residues: ["A:94", "A:96", "A:119", "A:402"]
+  evidence: {coordination_number: 4, geometry: tetrahedral, classification: likely_catalytic,
+             protein_donors: 3, water_donors: 1}

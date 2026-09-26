@@ -1,0 +1,13 @@
+# Default audit configuration, used when no manifest overrides it. Copied verbatim into
+# every findings.json (audit_config) so the thresholds applied are always on record.
+#
+# Severity escalation by proximity to manifest regions (heavy atom to heavy atom).
+# These distances are a working judgment, not literature values: ~6 A reaches the
+# first/second contact shell of a region, ~12 A the residues packing against it.
+# Revisit per study in the manifest.
+severity_escalation:
+  thresholds:
+    - max_distance_angstrom: 6.0
+      raise_levels: 2
+    - max_distance_angstrom: 12.0
+      raise_levels: 1
