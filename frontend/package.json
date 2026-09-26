@@ -1,0 +1,9 @@
+{
+  "name": "simprep-frontend",
+  "private": true,
+  "description": "Static review page for simprep findings. No dependencies and no build step.",
+  "type": "module",
+  "scripts": {
+    "test": "node --test \"tests/*.test.mjs\""
+  }
+}

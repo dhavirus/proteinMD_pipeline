@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>simprep review</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<!-- Pinned CDN builds with Subresource Integrity (versions and hashes: ADR-0003). -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/molstar@5.11.0/build/viewer/molstar.css"
+      integrity="sha384-RIontCdJN53gEl2fmiHN+4bscIBvaUaOiCeeGktXqmFqdEBF+COnSdt9O4IKFSvq" crossorigin="anonymous">
+<link rel="stylesheet" href="styles.css">
+<script src="https://cdn.jsdelivr.net/npm/ajv-dist@8.17.1/dist/ajv2020.min.js"
+        integrity="sha384-vsMiC2R9fcX/SqeA9xJ+Lpbbe1fRi7RDpgHenZH7A8yXAoX+9T4m8MfuwrafZAAL" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/molstar@5.11.0/build/viewer/molstar.js"
+        integrity="sha384-5Mfx4eL50NkWPky+mcH//qY0sbml4il0CLFFmrMp8uv/saB3Z6uZMHn2dUpAnH92" crossorigin="anonymous"></script>
+<script type="module" src="app.js"></script>
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <div>
+      <h1>simprep review</h1>
+      <p class="sub" id="subtitle">Review the findings of <span class="mono">simprep audit</span>, record a decision for each, and export the manifest. Files stay on this computer.</p>
+    </div>
+    <div class="controls" id="top-actions" hidden>
+      <button class="btn" id="open-other" type="button">Open other files</button>
+    </div>
+  </header>
+
+  <section class="open" id="open-panel" aria-labelledby="open-title">
+    <h2 id="open-title">Open an audit</h2>
+    <p class="msg">Run <span class="mono">simprep audit STRUCTURE --out DIR</span>, then open the structure and <span class="mono">DIR/findings.json</span>. Add a <span class="mono">manifest.json</span> to continue earlier decisions.</p>
+    <form id="open-form" class="open-grid">
+      <label class="file" for="file-structure"><span>Structure <em>(.cif, .cif.gz, .pdb)</em></span>
+        <input id="file-structure" type="file" accept=".cif,.gz,.pdb,.ent,.mmcif" required></label>
+      <label class="file" for="file-findings"><span>findings.json</span>
+        <input id="file-findings" type="file" accept=".json,application/json" required></label>
+      <label class="file" for="file-manifest"><span>manifest.json <em>(optional)</em></span>
+        <input id="file-manifest" type="file" accept=".json,application/json"></label>
+      <div class="form-row">
+        <button class="btn primary" type="submit">Open</button>
+        <button class="btn" id="load-demo" type="button">Load example (5FQL)</button>
+        <span class="msg" id="open-status" role="status"></span>
+      </div>
+    </form>
+    <ul class="errors" id="open-errors" aria-live="polite"></ul>
+  </section>
+
+  <main id="review" hidden>
+    <div class="summary" id="summary"></div>
+    <div class="banner" id="notices" aria-live="polite"></div>
+    <div class="layout">
+      <div class="viewer-card">
+        <div id="structure-view" aria-label="3D structure view"></div>
+        <div class="viewer-note">
+          <span><span class="dot" style="--c:#9aa7a3"></span>protein</span>
+          <span><span class="dot" style="--c:#e0a33a"></span>selected finding</span>
+          <span><span class="dot" style="--c:#d4dad8"></span>context</span>
+          <span><span class="dot" style="--c:#4fb3bb"></span>regions of interest</span>
+          <span id="viewer-status" role="status"></span>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="filters" id="filters"></div>
+        <nav class="list" id="list" aria-label="Findings"></nav>
+        <section class="detail" id="detail" aria-live="polite"></section>
+        <section class="card" id="regions" aria-labelledby="regions-title"></section>
+        <section class="card" id="export" aria-labelledby="export-title"></section>
+      </div>
+    </div>
+  </main>
+</div>
+</body>
+</html>
