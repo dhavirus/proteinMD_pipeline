@@ -9,6 +9,7 @@ export const FAMILY_LABELS = {
   covalent_contacts: "Unannotated covalent contacts",
   unrecognized: "Unrecognized chemistry",
   variant_build: "Variant side chains",
+  relaxation: "Relaxation",
 };
 // Evidence items whose atoms are drawn as context around the selected finding.
 const CONTEXT_EVIDENCE = ["ligand_distance", "attachment", "link", "contact_distance", "candidate"];

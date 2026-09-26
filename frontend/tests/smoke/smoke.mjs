@@ -204,7 +204,8 @@ async function decideRotamer(page, base, manifestPath) {
   await page.fill("#decision-rationale", "smoke test");
   await page.fill("#decision-by", "smoke-test");
   await page.click('#decision-form button[type="submit"]');
-  check("a clashing rotamer is refused in the form", /will not build it/.test(await page.textContent("#decision-status")));
+  check("a clashing rotamer is accepted (clashes only flag)", /recorded/.test(await page.textContent("#decision-status")));
+  check("the relaxation protocol is shown read-only", /Relaxation: openmm/.test(await page.textContent("#relaxation-protocol")));
   await page.selectOption("#decision-rotamer", "mm-40");
   await page.click('#decision-form button[type="submit"]');
   await page.waitForSelector("#decision-status.ok");

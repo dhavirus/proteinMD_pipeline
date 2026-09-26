@@ -1,7 +1,7 @@
 // Schema validation in the browser with ajv (pinned CDN build), against the repository's
 // own schema/*.schema.json files, the same files simprep validates with in Python.
 
-const SCHEMA_NAMES = ["finding", "rule", "manifest", "findings_report"];
+const SCHEMA_NAMES = ["finding", "rule", "relaxation", "manifest", "findings_report"];
 
 export async function createValidator(schemaBaseUrl) {
   const library = globalThis.ajv2020;

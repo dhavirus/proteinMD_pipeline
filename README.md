@@ -9,7 +9,7 @@ decides; the manifest records the decision. See `CLAUDE.md` and `docs/decisions/
 ## Quickstart
 
 ```bash
-python -m pip install -e '.[dev]'                        # Python >= 3.11, from a checkout
+python -m pip install -e '.[dev,relax]'                  # Python >= 3.11, from a checkout
 simprep audit tests/panel/5FQL.cif.gz --out out/5fql     # -> findings.json + report.md
 simprep manifest init tests/panel/5FQL.cif.gz --out m.json
 # edit m.json: add regions of interest (named residue sets)
@@ -55,9 +55,12 @@ List variants in the manifest (`"variants"`, or the review page's variant editor
 writes `DIR/manifest.json` with every side-chain rotamer candidate as a `variant_build`
 finding (exit 3); decide them on the review page, then run again with that manifest to
 get `wt/`, one directory per variant, `variant_record.json` and `variant_report.md`.
-Side chains are built from cited rotamer data in `knowledge/side_chains.yaml`; a rotamer
-that clashes with the kept atoms is never built. See ADR-0005 and
-`notebooks/02_variants.ipynb`.
+Side chains are built from cited rotamer data in `knowledge/side_chains.yaml`; clashes
+flag and do not stop a build. Each variant and a matched wild type are then relaxed around
+the site with OpenMM (`pip install -e '.[relax]'`; protocol in the manifest's `relaxation`,
+defaults in `knowledge/relaxation.yaml`), giving `wt_relaxed_<site>/` and relaxed variant
+directories (rigid builds kept under `unrelaxed/`); clashes that remain are reported as
+warnings. See ADR-0005, ADR-0006 and `notebooks/02_variants.ipynb`.
 
 Layout: `schema/` (JSON Schemas, the source of truth), `knowledge/` (versioned YAML
 rules and residue mappings), `src/simprep/` (parser, detectors, severity, manifest, prep,
