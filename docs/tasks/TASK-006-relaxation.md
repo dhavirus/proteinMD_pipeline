@@ -6,8 +6,8 @@ system exists yet. This task adds a local, restrained energy minimization around
 mutation site, applied identically to the wild type, so that matched WT and variant
 systems can be built even where a side chain does not fit as placed.
 
-Status: **draft** for maintainer review. Items marked (Q) are open questions (end of
-file). Do not start implementation until they are answered or accepted as defaults.
+Status: **accepted** (maintainer, 2026-09-26: defaults accepted for every open
+question; the resolved decisions are listed at the end of this file).
 
 ## Maintainer decisions carried in from the TASK-005 review (2026-09-26)
 
@@ -50,7 +50,7 @@ What the spike taught:
   clashes to 2-4 marginal ones.
 - **Without restraints the protocol itself distorts the structure.** In vacuum, Lys479
   and Lys486 swing up to 4 A toward Asp484 in the WT as much as in the variant (charged
-  side chains without solvent). Restraints, or a solvent model (Q2), are needed, and
+  side chains without solvent). Restraints, or a solvent model (decision 2), are needed, and
   the WT must go through the same protocol, or protocol artefacts become "variant
   effects".
 - **Traps found and fixed:**
@@ -110,7 +110,7 @@ clashes remain.
   - The hydrogens OpenMM added are discarded.
 - Refusal rule (unknown chemistry is a hard stop, CLAUDE.md): a residue without a
   template inside the non-bonded cutoff of any mobile atom stops relaxation, naming the
-  residue (Q4). Beyond it, it is excluded and recorded.
+  residue (decision 4). Beyond it, it is excluded and recorded.
 - Output of a relaxed system:
   - moved heavy atoms take their relaxed coordinates;
   - every residue with a moved atom loses its deposited hydrogens (they no longer match
@@ -120,13 +120,13 @@ clashes remain.
 ### 3. Matched wild type
 - For each variant site, `wt_relaxed_<site>/` is the prepared wild type relaxed with
   the identical protocol and shell. The shell is the union of the WT and variant
-  shells, so both move the same residues (Q3).
+  shells, so both move the same residues (decision 3).
 - A test asserts that the relaxed WT and the relaxed variant differ only inside that
   shell.
 
 ### 4. CLI, record, report
 - `simprep variants` relaxes when the manifest's `relaxation` says so (default: on,
-  Q5). Outputs:
+  decision 5). Outputs:
   - `wt/` (unrelaxed, as today);
   - `wt_relaxed_<site>/`;
   - `<variant>/` (relaxed; the rigid build is kept as `<variant>/unrelaxed/`).
@@ -147,7 +147,7 @@ clashes remain.
 
 ### 6. Front end
 - The `relaxation` family is shown like the others. The review page shows the
-  manifest's `relaxation` settings read-only; they are edited in JSON in v0.1 (Q6).
+  manifest's `relaxation` settings read-only; they are edited in JSON in v0.1 (decision 6).
 
 ### 7. Tests (offline, CI with the extra installed)
 - Unit tests:
@@ -181,38 +181,26 @@ minimization are discarded), parameters for non-standard residues (ALS stays a
 chemistry/parameterization work item), backbone relaxation beyond the restraints above,
 alchemical/FEP setup, GPU.
 
-## Open questions for the maintainer
-1. **Engine and force field (default: OpenMM 8.6.1, Amber ff14SB via `amber14-all.xml`
-   + TIP3P, in vacuum with restraints).** ff14SB: Maier et al. 2015,
-   doi:10.1021/acs.jctc.5b00255 (PubMed 26574453, read in this session); OpenMM 8:
-   Eastman et al. 2024, doi:10.1021/acs.jpcb.3c06662 (PubMed 38154096). The TIP3P
-   reference and the file contents of the OpenMM force-field XMLs are `[VERIFY]`.
-2. **Electrostatics (default: vacuum + strong restraints, as in the spike).** The
-   alternative is an implicit solvent (OpenMM's GBn2 file with amber14), which should
-   remove the Lys-Asp collapse and allow weaker restraints. It was not tested in this
-   session, so it would need another spike.
-3. **Shell and restraints (default):**
+## Resolved decisions (maintainer, 2026-09-26)
+1. **Engine and force field**: OpenMM 8.6.1 with Amber ff14SB (`amber14-all.xml`) and
+   TIP3P waters. ff14SB: Maier et al. 2015, doi:10.1021/acs.jctc.5b00255 (PubMed
+   26574453); OpenMM 8: Eastman et al. 2024, doi:10.1021/acs.jpcb.3c06662 (PubMed
+   38154096), both read in PubMed in this session. The TIP3P reference and the contents
+   of OpenMM's force-field XML files stay `[VERIFY]`. Recorded in ADR-0006.
+2. **Electrostatics**: vacuum with strong restraints, as in the spike. Implicit solvent
+   (GBn2) is not used in v0.1; adopting it needs its own spike.
+3. **Shell and restraints**:
    - mobile: side chains (not N, CA, C, O) and waters with a heavy atom within 6 A of
      the mutated residue;
    - restraint: 10,000 kJ/mol/nm^2 on every mobile heavy atom except the mutated side
      chain;
    - minimizer: tolerance 1 kJ/mol/nm, at most 5,000 iterations;
-   - the WT uses the union shell.
-
-   The alternatives are a larger shell, a mobile backbone, or weaker restraints; the
-   spike shows WT drift grows as restraints weaken.
-4. **Template-less chemistry near a site (default):**
-   - stop if such a residue is within 1.0 nm (the non-bonded cutoff) of any mobile atom;
-   - otherwise exclude it and record it.
-
-   For 5FQL A:468 the nearest (ALS A:84) is 12-14 A from the site. Alternative:
-   generic Lennard-Jones-only parameters for such residues, which is more permissive
-   and needs sources.
-5. **When to relax (default: always, for every variant and its matched WT).** The
-   alternatives are only when a clash remains, or a per-variant choice in the manifest.
-   "Always" keeps WT/variant comparisons uniform.
-6. **Front-end editing of the protocol (default: read-only display in v0.1; edit the
-   manifest JSON).**
-7. **Platform (default: Reference, for byte-identical output).** It costs about 3x CPU
-   time (18 s vs 6.5 s per system here). The alternative is the CPU platform, with
-   reproducibility tested to a tolerance (for example 0.05 A) instead of bytes.
+   - the WT is relaxed with the union of the WT and variant shells.
+4. **Template-less chemistry**: a residue without a force-field template within 1.0 nm
+   (the non-bonded cutoff) of any mobile atom stops relaxation, naming it; farther ones
+   are excluded from the calculation and recorded. No generic parameters.
+5. **When to relax**: always, for every variant and its matched WT.
+6. **Front end**: the relaxation protocol is displayed read-only in v0.1; it is edited
+   in the manifest JSON.
+7. **Platform**: Reference, for byte-identical output (hydrogen placement seeded and
+   also run on Reference); about 3x the CPU platform's time.
