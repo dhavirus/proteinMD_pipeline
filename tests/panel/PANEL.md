@@ -42,6 +42,15 @@ derived from the raw `atom_site` table (gemmi.cif, no simprep code). Also
 | 6OIM | everything deferred or recorded; output equals input apart from format |
 | 1FO8 | `keep_ensemble` on Phe316 gives two systems that differ only there; methylmercury excluded with its metalc links |
 
+## Variant fixture (TASK-005)
+
+`variant_fixtures/5FQL.yaml` lists the study variants R468Q and R468W on top of the 5FQL
+prep fixture and states the expected outcomes by hand: the UniProt position (from
+`_struct_ref_seq`), whether every rotamer candidate clashes, and the recommended option.
+It also holds side-chain placements made independently of simprep (PDBFixer 1.12.0,
+TASK-005 spike): the Trp placement must be flagged as a clash with Ser470, the Gln one
+must not. `reviewed: false` until the maintainer reviews it.
+
 ## Candidates considered
 
 | slot | candidates proposed | outcome |

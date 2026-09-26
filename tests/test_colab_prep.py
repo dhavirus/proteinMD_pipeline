@@ -13,7 +13,7 @@ from tests.prep_helpers import decided_manifest
 
 REPO_ROOT = Path(__file__).parent.parent
 PANEL_DIR = REPO_ROOT / "tests" / "panel"
-NOTEBOOK = REPO_ROOT / "notebooks" / "01_prep.ipynb"
+NOTEBOOKS = {"01_prep.ipynb": "prep_module", "02_variants.ipynb": "variants_module"}
 NOW = datetime(2026, 9, 26, 14, 5, 9, tzinfo=UTC)
 
 
@@ -63,12 +63,13 @@ def test_resume_refuses_a_changed_config(config):
         run_prep_job(config | {"run_dir": str(first.run_dir), "seed": 8})
 
 
-def test_notebook_is_valid_with_one_config_cell_and_no_autoreload():
-    notebook = nbformat.read(NOTEBOOK, as_version=4)
+@pytest.mark.parametrize(("name", "module"), NOTEBOOKS.items())
+def test_notebook_is_valid_with_one_config_cell_and_no_autoreload(name, module):
+    notebook = nbformat.read(REPO_ROOT / "notebooks" / name, as_version=4)
     nbformat.validate(notebook)
     code = [cell.source for cell in notebook.cells if cell.cell_type == "code"]
     assert code[0].count("CONFIG = {") == 1
     assert all("CONFIG = {" not in source for source in code[1:])
-    assert "importlib.reload(prep_module)" in "\n".join(code)
+    assert f"importlib.reload({module})" in "\n".join(code)
     assert "autoreload" not in "\n".join(code)
     assert all("\n" in source for source in code), "cells must keep their newlines"
