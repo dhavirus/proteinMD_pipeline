@@ -7,14 +7,14 @@ TASK-001 to 003 produce a manifest in which every finding has a recorded decisio
 deposited structure plus a complete manifest into prepared system file(s) and a work
 order for the later stages, with every input record accounted for.
 
-Status: **draft** for maintainer review. Items marked (Q) are open questions (end of
-file). Do not start implementation until they are answered or accepted as defaults.
+Status: **accepted** (maintainer, 2026-09-26: defaults accepted for every open
+question; the resolved decisions are listed at the end of this file).
 
 ## Scope in one sentence
 
 Prep v0.1 **selects, removes and records**. It never invents coordinates: loop
 modelling, capping, protonation, chemistry edits and parameterization are later stages
-(Q2). It hands them a machine-readable work order, so no decision is dropped on the way.
+(decision 2). It hands them a machine-readable work order, so no decision is dropped on the way.
 
 ## Constraints carried over
 
@@ -37,7 +37,7 @@ option field `prep_action` so the table is data, not code (schema change, exampl
 |---|---|---|
 | altlocs `highest_occupancy` | `apply` | keep that altloc (ties by altloc id), drop the others, clear altloc ids |
 | altlocs `specific_altloc` | `apply` | keep `parameters.altloc` |
-| altlocs `keep_ensemble` | `apply` | one output system per altloc id (Q4) |
+| altlocs `keep_ensemble` | `apply` | one output system per altloc id (decision 4) |
 | covalent_contacts `add_link` | `apply` | write the bond into the output's `struct_conn`; geometry unchanged |
 | covalent_contacts `treat_noncovalent` | `record` | no change; noted in the work order |
 | covalent_contacts `exclude_group`, unrecognized `exclude`, nonstandard `exclude_segment` | `apply` | delete the residues (the whole group for glycans) |
@@ -46,7 +46,7 @@ option field `prep_action` so the table is data, not code (schema change, exampl
 | missing `truncate`, `exclude_chain` | `record` | nothing to delete; the chain break or terminus is noted for topology |
 | nonstandard `route_to_topology_builder`, `keep_sulfate_ester`, unrecognized `parameterize_manually` | `defer` | kept as deposited; parameterization item |
 | formylglycine `model_gem_diol`, `model_aldehyde` | `defer` | chemistry edit + parameters item (FGly default is gem-diol) |
-| `revert_to_parent` | `apply` only with a mapping (Q3) | rename and delete atoms per `knowledge/residue_mappings.yaml`; refuse without one |
+| `revert_to_parent` | `apply` only with a mapping (decision 3) | rename and delete atoms per `knowledge/residue_mappings.yaml`; refuse without one |
 | `expert_review`, `add_rule` | `unresolved` | prep refuses to run (see §2) |
 
 ## Deliverables
@@ -57,7 +57,7 @@ option field `prep_action` so the table is data, not code (schema change, exampl
   order. Raises a specific error listing every unresolved decision.
 - `apply.py`: pure: `(Structure, PrepPlan) -> list[Structure]` (selection, deletion,
   link records, mapped renames). Operates on the immutable model; no gemmi.
-- `write.py` (I/O edge): prepared structure as mmCIF (primary) and PDB (Q5), with the
+- `write.py` (I/O edge): prepared structure as mmCIF (primary) and PDB (decision 5), with the
   `add_link` bonds in `struct_conn` / `LINK`.
 - `record.py`: the prep record (below).
 
@@ -80,7 +80,7 @@ Writes `system_<n>.cif` (+ `.pdb`), `prep_record.json` and a short `prep_report.
 Deterministic: same inputs give byte-identical coordinate files (no timestamps inside
 them).
 
-### 5. Colab: `modules/prep_module.py` + `notebooks/01_prep.ipynb` (Q1, Q6)
+### 5. Colab: `modules/prep_module.py` + `notebooks/01_prep.ipynb` (decisions 1, 6)
 - The module wraps the CLI function with the run bookkeeping: `PROJECT` root
   `/content/drive/MyDrive/googleColab_run/simprep/` (demo under `googleColab_test/`),
   `./<yymm>/run_<yymmdd_hhmmss>/`, `config.json` with the manifest and the simprep commit,
@@ -113,7 +113,7 @@ them).
 - 1HZH with `add_link` for both candidates: both ASN–NAG bonds appear in the output
   `struct_conn`.
 - 1FO8 with `keep_ensemble` on one residue produces two systems differing only there
-  (Q4).
+  (decision 4).
 - An `expert_review` decision blocks prep with a message naming the finding.
 - CI green without network; notebook passes `nbformat.validate`.
 
@@ -122,21 +122,18 @@ Loop modelling, capping, protonation / pKa, the FGly chemistry edit, parameteriz
 solvation, mutation building (WT vs R468Q/R468W is the next task), MD, and any GPU
 work.
 
-## Open questions for the maintainer
-1. **Where the code lives**: library in `src/simprep/prep/` with a thin Colab wrapper in
-   `modules/` (default), or everything in `modules/`?
-2. **Scope**: prep v0.1 only selects, removes and records, deferring every modelling step
-   (default); or should it already run one modelling tool (e.g. loop building)? That
-   would need an ADR choosing the tool.
-3. **`revert_to_parent`**: allow it only for components with an explicit atom mapping in
-   `knowledge/residue_mappings.yaml` and refuse otherwise (default). The panel's only
-   non-standard residue is ALS (5FQL), whose file annotation names ALA as parent while
-   the formylglycine rule describes reverting to CYS; that mismatch is a reason not to
-   guess.
-4. **`keep_ensemble`**: one system per altloc id applied to every ensemble residue
-   together (default), or all combinations (refused above a limit)?
-5. **Output formats**: mmCIF plus PDB (default), or mmCIF only? PDB is what many MD tools
-   read, but it cannot hold every chain or residue name.
-6. **Notebook now or later**: ship `notebooks/01_prep.ipynb` in this task (default), or
-   only the module and CLI until a later stage needs Colab (prep itself does not need a
-   GPU)?
+## Resolved decisions (maintainer, 2026-09-26)
+1. **Code location**: the library lives in `src/simprep/prep/`; `modules/prep_module.py`
+   is a thin Colab wrapper around it.
+2. **Scope**: prep v0.1 only selects, removes and records. Every modelling step (loops,
+   caps, protonation, chemistry edits) and parameterization is deferred through the work
+   order; adding a modelling tool later needs an ADR choosing it.
+3. **`revert_to_parent`**: applied only for components with an explicit atom mapping in
+   `knowledge/residue_mappings.yaml`; without one, prep refuses and names the component.
+   No mapping ships in v0.1 (the ALS parent mismatch, ALA in the file vs CYS in the rule,
+   stays a human decision).
+4. **`keep_ensemble`**: one system per altloc id, applied to every ensemble residue
+   together; no combinatorial expansion.
+5. **Output formats**: mmCIF (primary) plus PDB.
+6. **Notebook**: `notebooks/01_prep.ipynb` ships in this task, validated with
+   `nbformat.validate`.
