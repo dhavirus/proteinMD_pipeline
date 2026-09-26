@@ -10,7 +10,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 
-from simprep.manifest.status import decision_status
+from simprep.decisions import decision_status
 from simprep.rules import RuleSet
 from simprep.structure.model import Link, LinkPartner, Residue, ResidueId, Structure
 

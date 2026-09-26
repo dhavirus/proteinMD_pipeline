@@ -8,12 +8,9 @@ from pathlib import Path
 
 from simprep.canonical import sha256_canonical
 from simprep.config import AuditConfig, region_from_dict, thresholds_from_dict
+from simprep.errors import ManifestError
 from simprep.rules import RuleSet
 from simprep.schemas import SCHEMA_VERSION, validate
-
-
-class ManifestError(ValueError):
-    """The manifest is inconsistent with its input file or its own findings."""
 
 
 def pretty_json(document: object) -> str:

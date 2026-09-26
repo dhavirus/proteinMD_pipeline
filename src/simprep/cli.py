@@ -10,6 +10,7 @@ from pathlib import Path
 
 from simprep.audit import ReportContext, build_findings_report, run_audit
 from simprep.config import default_config
+from simprep.decisions import decision_status, render_status
 from simprep.knowledge import load_ruleset
 from simprep.manifest import (
     attach_snapshot,
@@ -20,7 +21,6 @@ from simprep.manifest import (
     write_json,
 )
 from simprep.manifest.manifest import sha256_text
-from simprep.manifest.status import decision_status, render_status
 from simprep.paths import KNOWLEDGE_DIR
 from simprep.prep.run import RECORD_FILE, PrepRequest, run_prep
 from simprep.prep.run import REPORT_FILE as PREP_REPORT_FILE

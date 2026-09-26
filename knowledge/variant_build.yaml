@@ -58,7 +58,10 @@ rules:
       0.4 A in heavy-atom radii; it clashes only below 2.3 A. That limit is empirical:
       of 1592 polar side-chain contacts with positive overlap in the committed panel,
       0.1 % are shorter than 2.27 A and 1 % shorter than 2.36 A (measured in this
-      session; test_variant_check.py recomputes it). Hydrogens are ignored.
+      session; test_variant_check.py recomputes it). Hydrogens are ignored. Applied to
+      the deposited GLN, TRP and ARG side chains of the panel, the criterion flags 11 of
+      286 (3.8 %), mostly C-O contacts of 2.7-2.8 A: heavy-atom radii without hydrogens
+      make 0.4 A slightly strict.
     references:
       - citation: "Lovell SC, Word JM, Richardson JS, Richardson DC. The penultimate rotamer library. Proteins 2000;40:389-408."
         doi: "10.1002/1097-0134(20000815)40:3<389::AID-PROT50>3.0.CO;2-2"

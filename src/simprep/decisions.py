@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from simprep.manifest.manifest import ManifestError
+from simprep.errors import ManifestError
 
 SEVERITIES = ("blocking", "warn", "info")
 

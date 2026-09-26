@@ -4,7 +4,22 @@ import subprocess
 import sys
 
 BLOCKED = ("gemmi", "yaml", "jsonschema", "referencing")
-PURE_MODULES = ("simprep.audit", "simprep.report", "simprep.severity", "simprep.rules")
+PURE_MODULES = (
+    "simprep.audit",
+    "simprep.report",
+    "simprep.severity",
+    "simprep.rules",
+    "simprep.decisions",
+    "simprep.prep.plan",
+    "simprep.prep.apply",
+    "simprep.prep.record",
+    "simprep.variants.build",
+    "simprep.variants.check",
+    "simprep.variants.findings",
+    "simprep.variants.validate",
+    "simprep.variants.apply",
+    "simprep.variants.report",
+)
 
 PROBE = f"""
 import builtins
