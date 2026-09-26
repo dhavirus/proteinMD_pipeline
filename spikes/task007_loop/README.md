@@ -17,3 +17,11 @@ Findings (TASK-006/007 session, 5FQL prep fixture, gap A:444-453):
   implementation step of TASK-007 is to find and seed the remaining randomness
   (numpy? the OpenMM platform used by `addMissingAtoms`?). If byte-identical output
   cannot be reached, TASK-007 stops and reports (decision 2).
+
+Resolved in the TASK-007 implementation session (ADR-0007):
+- The remaining randomness was PDBFixer's own Langevin integrator (unseeded unless
+  `addMissingAtoms(seed=...)`) on the default multithreaded platform. With the seed and
+  `PDBFixer(..., platform=Reference)` two runs are byte-identical.
+- The placement also contains D residues (Phe444, Leu447, Tyr452, Leu453), so simprep
+  follows it with a restrained, sterics-only minimization (trans omega and L chirality
+  restraints); see `src/simprep/model/` and ADR-0007.

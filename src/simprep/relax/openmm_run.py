@@ -4,6 +4,14 @@ OpenMM is imported here only, lazily, so simprep runs without it until relaxatio
 used (``pip install simprep[relax]``). Hydrogens are added for the calculation only
 (seeded, on the Reference platform, so runs are byte-identical) and discarded: residues
 whose heavy atoms moved come back without hydrogens.
+
+With torsion restraints (loop modelling, TASK-007), a bonded-only pre-stage runs first:
+the same system without non-bonded terms, so a placement with inverted chirality or cis
+peptides can reach the intended basin without clashes in the way. The torsion restraints
+stay on in the final minimization, or clash forces flip the centres back. With
+``nonbonded: sterics_only`` the final minimization has Lennard-Jones between mobile atoms
+and everything else instead of the full non-bonded terms (vacuum electrostatics stretch
+a charged loop; ADR-0007).
 """
 
 from __future__ import annotations
@@ -14,6 +22,7 @@ from dataclasses import dataclass, replace
 
 from simprep.relax.shell import (
     ANGSTROM_PER_NM,
+    AtomKey,
     RelaxError,
     Shell,
     heavy,
@@ -26,6 +35,21 @@ from simprep.structure.model import Residue, ResidueId, Structure
 COORDINATE_DECIMALS = 3  # the precision of the written files
 MOVED_ANGSTROM = 0.001
 RESTRAINT = "0.5*k*((x-x0)^2+(y-y0)^2+(z-z0)^2)"
+STERICS_ONLY = "sterics_only"
+STERICS = (
+    "4*epsilon*((sigma/r)^12-(sigma/r)^6); sigma=0.5*(sigma1+sigma2); "
+    "epsilon=sqrt(epsilon1*epsilon2)"
+)
+TORSION_RESTRAINT = "0.5*k_torsion*min(dt, 2*pi-dt)^2; dt=abs(theta-theta0); pi=3.141592653589793"
+
+
+@dataclass(frozen=True)
+class TorsionRestraint:
+    """Harmonic restraint of the dihedral over four heavy atoms to ``target_degree``
+    (pre-stage only)."""
+
+    atoms: tuple[AtomKey, AtomKey, AtomKey, AtomKey]
+    target_degree: float
 
 
 @dataclass(frozen=True)
@@ -53,8 +77,12 @@ def _openmm():
     return openmm, app, unit
 
 
-def relax(structure: Structure, shell: Shell, protocol: dict) -> RelaxOutcome:
-    """Minimize ``shell`` in ``structure`` under ``protocol`` (manifest ``relaxation``)."""
+def relax(
+    structure: Structure, shell: Shell, protocol: dict, torsions: tuple[TorsionRestraint, ...] = ()
+) -> RelaxOutcome:
+    """Minimize ``shell`` in ``structure`` under ``protocol`` (manifest ``relaxation``, or
+    the modelling protocol's ``minimization``, which adds
+    ``torsion_restraint_kj_per_mol_rad2`` for ``torsions``)."""
     with_altlocs = [r.id.label() for r in structure.residues if r.altlocs]
     if with_altlocs:
         raise RelaxError(
@@ -71,7 +99,7 @@ def relax(structure: Structure, shell: Shell, protocol: dict) -> RelaxOutcome:
         )
     openmm, app, unit = _openmm()
     model = _model(structure, (openmm, app, unit), protocol)
-    minimized = _minimize(model, shell, protocol)
+    minimized = _minimize(model, shell, (protocol, torsions))
     return _outcome(structure, model, minimized, (left_out, openmm.__version__))
 
 
@@ -120,7 +148,8 @@ def _add_residue(topology, chain, residue: Residue, sink: tuple) -> None:
         positions.append(atom.position)
 
 
-def _minimize(model: Model, shell: Shell, protocol: dict):
+def _minimize(model: Model, shell: Shell, settings: tuple):
+    protocol, torsions = settings
     openmm, app, unit = model.openmm
     forcefield = app.ForceField(*protocol["force_field_files"])
     system = forcefield.createSystem(
@@ -133,22 +162,115 @@ def _minimize(model: Model, shell: Shell, protocol: dict):
         residueTemplates=_disulfide_templates(model.topology),
     )
     keys = _atom_keys(model)
+    mobile = [a.index for a in model.topology.atoms() if _is_mobile(a, keys, shell)]
+    if protocol.get("nonbonded") == STERICS_ONLY:
+        _sterics_only(system, mobile, (openmm, unit, model.positions, protocol))
     _restrain(system, keys, shell, (openmm, model, protocol))
+    if torsions:
+        system.addForce(_torsion_force(openmm, keys, torsions, protocol))
     for atom in model.topology.atoms():
-        if not _is_mobile(atom, keys, shell):
+        if atom.index not in mobile:
             system.setParticleMass(atom.index, 0.0)
     platform = openmm.Platform.getPlatformByName(protocol["platform"])
     context = openmm.Context(system, openmm.VerletIntegrator(0.001), platform)
     context.setPositions(model.positions)
     initial = context.getState(getEnergy=True).getPotentialEnergy()
+    if torsions:
+        context.setPositions(_bonded_prestage(system, model, protocol))
     openmm.LocalEnergyMinimizer.minimize(
         context, protocol["tolerance_kj_per_mol_nm"], protocol["max_iterations"]
     )
     state = context.getState(getEnergy=True, getPositions=True, getForces=True)
-    mobile = [a.index for a in model.topology.atoms() if _is_mobile(a, keys, shell)]
+    _check_margin(model.positions, state.getPositions(), (mobile, protocol, unit))
     return Minimized(
         state.getPositions(), (initial, state.getPotentialEnergy()), state.getForces(), mobile
     )
+
+
+def _sterics_only(system, mobile: list[int], context: tuple) -> None:
+    """Replace the NonbondedForce by Lennard-Jones between mobile atoms and every atom
+    within the cutoff plus ``sterics_margin_nm`` of their start: no charges, no 1-2/1-3/1-4
+    pairs, no fixed-fixed pairs (loop modelling; exact while no atom moves farther than
+    the margin, which _check_margin enforces)."""
+    openmm, unit, positions, protocol = context
+    index = next(
+        i for i, f in enumerate(system.getForces()) if isinstance(f, openmm.NonbondedForce)
+    )
+    nonbonded = system.getForce(index)
+    sterics = openmm.CustomNonbondedForce(STERICS)
+    for parameter in ("sigma", "epsilon"):
+        sterics.addPerParticleParameter(parameter)
+    for particle in range(nonbonded.getNumParticles()):
+        _, sigma, epsilon = nonbonded.getParticleParameters(particle)
+        sterics.addParticle(
+            [sigma.value_in_unit(unit.nanometer), epsilon.value_in_unit(unit.kilojoule_per_mole)]
+        )
+    for exception in range(nonbonded.getNumExceptions()):
+        first, second, *_ = nonbonded.getExceptionParameters(exception)
+        sterics.addExclusion(first, second)
+    sterics.setNonbondedMethod(openmm.CustomNonbondedForce.CutoffNonPeriodic)
+    sterics.setCutoffDistance(protocol["sterics_cutoff_nm"])
+    sterics.setUseSwitchingFunction(True)
+    sterics.setSwitchingDistance(protocol["sterics_switch_nm"])
+    reach_nm = protocol["sterics_cutoff_nm"] + protocol["sterics_margin_nm"]
+    sterics.addInteractionGroup(mobile, _within(positions, mobile, (reach_nm, unit)))
+    system.removeForce(index)
+    system.addForce(sterics)
+
+
+def _within(positions, mobile: list[int], reach: tuple) -> list[int]:
+    """Indices of atoms within ``reach`` (nm, unit module) of any mobile atom."""
+    import numpy
+
+    reach_nm, unit = reach
+    xyz = numpy.array(positions.value_in_unit(unit.nanometer))
+    nearest = numpy.full(len(xyz), numpy.inf)
+    for index in mobile:
+        nearest = numpy.minimum(nearest, numpy.linalg.norm(xyz - xyz[index], axis=1))
+    return [int(i) for i in numpy.flatnonzero(nearest <= reach_nm)]
+
+
+def _check_margin(start, final, context: tuple) -> None:
+    """Raise if a mobile atom moved farther than the sterics margin (the partner list
+    would then miss pairs within the cutoff)."""
+    mobile, protocol, unit = context
+    if protocol.get("nonbonded") != STERICS_ONLY:
+        return
+    before, after = (p.value_in_unit(unit.nanometer) for p in (start, final))
+    moved_nm = max(math.dist(before[i], after[i]) for i in mobile)
+    if moved_nm > protocol["sterics_margin_nm"]:
+        raise RelaxError(
+            f"a mobile atom moved {moved_nm:.2f} nm, more than sterics_margin_nm "
+            f"({protocol['sterics_margin_nm']}); raise it in the protocol and run again"
+        )
+
+
+def _bonded_prestage(system, model: Model, protocol: dict):
+    """Minimize a copy of ``system`` without its non-bonded terms; return the positions."""
+    openmm = model.openmm[0]
+    staged = openmm.XmlSerializer.clone(system)
+    for index in reversed(range(staged.getNumForces())):
+        if isinstance(staged.getForce(index), openmm.NonbondedForce | openmm.CustomNonbondedForce):
+            staged.removeForce(index)
+    platform = openmm.Platform.getPlatformByName(protocol["platform"])
+    context = openmm.Context(staged, openmm.VerletIntegrator(0.001), platform)
+    context.setPositions(model.positions)
+    openmm.LocalEnergyMinimizer.minimize(
+        context, protocol["tolerance_kj_per_mol_nm"], protocol["max_iterations"]
+    )
+    return context.getState(getPositions=True).getPositions()
+
+
+def _torsion_force(openmm, keys: dict, torsions: tuple, protocol: dict):
+    index = {(rid, name): i for i, (rid, name, is_heavy) in keys.items() if is_heavy}
+    force = openmm.CustomTorsionForce(TORSION_RESTRAINT)
+    force.addGlobalParameter("k_torsion", protocol["torsion_restraint_kj_per_mol_rad2"])
+    force.addPerTorsionParameter("theta0")
+    for torsion in torsions:
+        force.addTorsion(
+            *(index[key] for key in torsion.atoms), [math.radians(torsion.target_degree)]
+        )
+    return force
 
 
 def _disulfide_templates(topology) -> dict:
@@ -202,6 +324,8 @@ def _outcome(
     left_out, version = extra
     _, _, unit = model.openmm
     new = _heavy_positions(model, minimized.positions, unit)
+    if not all(math.isfinite(c) for position in new.values() for c in position):
+        raise RelaxError("minimization produced non-finite coordinates; nothing was changed")
     residues, moved, displacements = [], [], []
     for residue in structure.residues:
         updated, shifts = _updated(residue, new)

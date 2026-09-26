@@ -114,7 +114,8 @@
         "covalent_contacts",
         "unrecognized",
         "variant_build",
-        "relaxation"
+        "relaxation",
+        "modelling"
       ]
     },
     "severity": {
@@ -349,7 +350,7 @@
           ]
         },
         "prep_stage": {
-          "description": "Later stage that receives the work-order item (record / defer).",
+          "description": "Later stage that receives the work-order item (record / defer), or that carries out an apply option instead of prep (ADR-0007).",
           "enum": [
             "modelling",
             "chemistry",

@@ -23,9 +23,10 @@ from tests.prep_helpers import decided_manifest
 PANEL_DIR = Path(__file__).parent / "panel"
 FIXTURE = yaml.safe_load((PANEL_DIR / "variant_fixtures" / "5FQL.yaml").read_text())
 STRUCTURE = PANEL_DIR / FIXTURE["structure"]
-PREP_DECISIONS = yaml.safe_load(
-    (PANEL_DIR / "prep_fixtures" / FIXTURE["prep_fixture"]).read_text()
-)["decisions"]
+PREP_DECISIONS = (
+    yaml.safe_load((PANEL_DIR / "prep_fixtures" / FIXTURE["prep_fixture"]).read_text())["decisions"]
+    | FIXTURE["prep_overrides"]
+)
 SITE = ResidueId("A", 468)
 
 

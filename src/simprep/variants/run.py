@@ -4,6 +4,10 @@ Pass 1 (variant snapshot missing or stale): evaluate every rotamer candidate, wr
 ``manifest.json`` with the variant_build findings and stop for decisions. Pass 2 (snapshot
 current): check the rotamer decisions and write ``wt/`` (the prepared wild type, with its
 prep record), one directory per variant, ``variant_record.json`` and ``variant_report.md``.
+
+Gaps decided ``model_loop`` are built first (TASK-007), once, on the prepared wild type:
+candidates are evaluated and variants built on the modelled wild type, which is written
+to ``wt_modelled/`` with ``model_record.json``, so every system shares the same loop.
 """
 
 from __future__ import annotations
@@ -13,6 +17,8 @@ from pathlib import Path
 
 from simprep.canonical import sha256_canonical
 from simprep.manifest import attach_variant_snapshot, config_from_manifest, write_json
+from simprep.model.run import MODELLED_DIR, model_wild_type, write_model
+from simprep.model.run import RECORD_FILE as MODEL_RECORD_FILE
 from simprep.prep.apply import apply_plan
 from simprep.prep.plan import build_plan
 from simprep.prep.record import system_counts
@@ -73,7 +79,11 @@ def run_variants(request: PrepRequest) -> VariantOutcome:
     if not variants:
         raise VariantError("the manifest lists no variants; add them under `variants` first")
     plan = build_plan(inputs.structure, inputs.manifest, inputs.ruleset)
-    wild_type = _wild_type(inputs, plan)
+    prepared = _wild_type(inputs, plan)
+    modelled = model_wild_type(inputs, plan, prepared)
+    if modelled is not None and modelled.rejected:  # writes the records, raises LoopRejected
+        _write_wild_type(inputs, plan, (modelled, request.out_dir))
+    wild_type = prepared if modelled is None else modelled.structure
     context = (inputs.structure, wild_type, plan)
     sites = resolve_sites(variants, context, inputs.ruleset.side_chains)
     results = {
@@ -83,10 +93,10 @@ def run_variants(request: PrepRequest) -> VariantOutcome:
     if not _snapshot_current(inputs.manifest, findings):
         return _needs_decisions(inputs, findings, request.out_dir)
     choices = chosen_candidates(inputs.manifest, results)
-    wt_record = write_prep(inputs, plan, request.out_dir / WILD_TYPE_DIR)
+    wt_record, modelled_entry = _write_wild_type(inputs, plan, (modelled, request.out_dir))
     built = [_build(variant, (wild_type, results, choices)) for variant in variants]
     protocol = inputs.manifest.get("relaxation") or inputs.ruleset.relaxation
-    context = Context(inputs, wild_type, wt_record, protocol, request.out_dir)
+    context = Context(inputs, wild_type, wt_record, protocol, request.out_dir, modelled_entry)
     relaxed_wts, relaxed = _relax_all(built, context) if protocol["enabled"] else ([], {})
     entries = [_variant_entry(b, relaxed.get(b.name), context) for b in built]
     record = _record(context, entries, relaxed_wts)
@@ -101,6 +111,21 @@ def _wild_type(inputs: PrepInputs, plan) -> Structure:
             f"ensemble ({', '.join(s.name for s in systems)}). Choose one altloc first."
         )
     return systems[0].structure
+
+
+def _write_wild_type(inputs: PrepInputs, plan, where: tuple) -> tuple[dict, dict]:
+    """Write wt/ (and wt_modelled/ with its record). Return the prep record, with the
+    model record's work order when loops were built, and the record's wild_type extra."""
+    modelled, out_dir = where
+    wt_record = write_prep(inputs, plan, out_dir / WILD_TYPE_DIR)
+    if modelled is None:
+        return wt_record, {}
+    model_record = write_model(modelled, (inputs, wt_record), out_dir)
+    entry = {
+        "directory": MODELLED_DIR,
+        "model_record_sha256": sha256_file(out_dir / MODEL_RECORD_FILE),
+    }
+    return {**wt_record, "work_order": model_record["work_order"]}, {"modelled": entry}
 
 
 def _finding_dicts(inputs: PrepInputs, wild_type: Structure, results: dict) -> list[dict]:
@@ -177,6 +202,7 @@ class Context:
     wt_record: dict
     protocol: dict
     out_dir: Path
+    modelled: dict  # the record's wild_type.modelled entry, or {} without modelling
 
 
 def _build(variant: dict, built: tuple) -> Built:
@@ -316,6 +342,7 @@ def _record(context: Context, entries: list[dict], relaxed_wild_types: list[dict
         "wild_type": {
             "directory": WILD_TYPE_DIR,
             "prep_record_sha256": sha256_file(out_dir / WILD_TYPE_DIR / PREP_RECORD_FILE),
+            **context.modelled,
         },
         "relaxed_wild_types": relaxed_wild_types,
         "variants": entries,

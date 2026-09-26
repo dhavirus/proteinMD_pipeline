@@ -1,5 +1,5 @@
 # Knowledge-base manifest. Bump kb_version whenever any rule file changes.
-kb_version: 0.5.0
+kb_version: 0.6.0
 rule_files:
   - metals.yaml
   - nonstandard_residues.yaml
@@ -9,3 +9,4 @@ rule_files:
   - unrecognized.yaml
   - variant_build.yaml
   - relaxation_checks.yaml
+  - modelling_checks.yaml

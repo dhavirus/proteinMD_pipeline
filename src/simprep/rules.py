@@ -49,6 +49,7 @@ class RuleSet:
     residue_mappings: tuple[dict, ...] = ()
     side_chains: dict = field(default_factory=dict)
     relaxation: dict = field(default_factory=dict)
+    modelling: dict = field(default_factory=dict)
 
     def family(self, family: str) -> tuple[Rule, ...]:
         """Rules of ``family``, highest priority first, then by rule id (deterministic)."""

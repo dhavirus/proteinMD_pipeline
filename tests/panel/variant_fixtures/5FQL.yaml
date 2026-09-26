@@ -5,6 +5,11 @@
 structure: 5FQL.cif.gz
 prep_fixture: 5FQL.yaml
 reviewed: false
+# Loop modelling (TASK-007) is tested in test_model_panel.py. The rigid-build and
+# relaxation tests leave the 444-453 gap as a chain break, so they do not rebuild the loop
+# (about two minutes per run) in every pass.
+prep_overrides:
+  missing_residues/A:444-453: {option: truncate, rationale: "variant tests: loop modelling is covered by test_model_panel.py"}
 variants:
   - name: R468Q
     mutations: [{chain: A, seq_num: 468, ins_code: "", from: ARG, to: GLN}]

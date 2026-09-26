@@ -41,6 +41,10 @@
       "description": "Relaxation protocol for variants and their matched wild type (TASK-006); simprep variants fills it from knowledge/relaxation.yaml when absent.",
       "$ref": "urn:simprep:schema:relaxation#/$defs/protocol"
     },
+    "modelling": {
+      "description": "Loop-modelling protocol for gaps decided `model_loop` (TASK-007); when absent, the defaults in knowledge/modelling.yaml are used and recorded in model_record.json.",
+      "$ref": "urn:simprep:schema:modelling#/$defs/protocol"
+    },
     "variants": {
       "description": "Variants to build from the prepared wild-type system (TASK-005). Optional.",
       "type": "array",

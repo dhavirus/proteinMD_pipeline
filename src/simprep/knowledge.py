@@ -16,7 +16,8 @@ AUDIT_DEFAULTS = "audit_defaults.yaml"
 RESIDUE_MAPPINGS = "residue_mappings.yaml"
 SIDE_CHAINS = "side_chains.yaml"
 RELAXATION = "relaxation.yaml"
-DATA_FILES = (RESIDUE_MAPPINGS, SIDE_CHAINS, RELAXATION)
+MODELLING = "modelling.yaml"
+DATA_FILES = (RESIDUE_MAPPINGS, SIDE_CHAINS, RELAXATION, MODELLING)
 
 
 def load_rule_file(path: Path) -> tuple[Rule, ...]:
@@ -46,6 +47,7 @@ def load_ruleset(knowledge_dir: Path = KNOWLEDGE_DIR) -> RuleSet:
         residue_mappings=load_residue_mappings(knowledge_dir / RESIDUE_MAPPINGS),
         side_chains=load_side_chains(knowledge_dir / SIDE_CHAINS),
         relaxation=load_relaxation(knowledge_dir / RELAXATION),
+        modelling=load_modelling(knowledge_dir / MODELLING),
     )
 
 
@@ -71,6 +73,13 @@ def load_relaxation(path: Path) -> dict:
     """Schema-validated default relaxation protocol (variants, TASK-006)."""
     data = yaml.safe_load(path.read_text())
     validate(data, "relaxation")
+    return data["protocol"]
+
+
+def load_modelling(path: Path) -> dict:
+    """Schema-validated default loop-modelling protocol (TASK-007)."""
+    data = yaml.safe_load(path.read_text())
+    validate(data, "modelling")
     return data["protocol"]
 
 

@@ -1,0 +1,36 @@
+# Invalid: modelled atoms must be written with occupancy 0.00 (TASK-007 decision 3).
+schema_version: 0.1.0
+protocol:
+  method: pdbfixer_then_minimization
+  placement:
+    tool: pdbfixer
+    tool_version: 1.12.0
+    seed: 20260926
+    platform: Reference
+  minimization:
+    force_field_files: [amber14-all.xml, amber14/tip3p.xml]
+    mobile_atoms: loop_and_flanks
+    restraint_kj_per_mol_nm2: 10000.0
+    torsion_restraint_kj_per_mol_rad2: 1000.0
+    l_chirality_improper_degree: 34.0
+    nonbonded: sterics_only
+    sterics_cutoff_nm: 0.6
+    sterics_switch_nm: 0.5
+    sterics_margin_nm: 1.5
+    tolerance_kj_per_mol_nm: 1.0
+    max_iterations: 5000
+    nonbonded_cutoff_nm: 1.0
+    platform: Reference
+    hydrogen_ph: 7.0
+    seed: 20260926
+  checks:
+    peptide_bond_angstrom: 1.33
+    peptide_bond_tolerance_angstrom: 0.05
+    ca_ca_trans_angstrom: 3.8
+    ca_ca_trans_tolerance_angstrom: 0.1
+  marking:
+    occupancy: 1.0
+    b_iso_angstrom2: 0.0
+references: []
+verify_flags:
+  - "[VERIFY] 1.33 A (C-N) and 3.8 A (trans CA-CA) are textbook peptide values used as the TASK-007 acceptance numbers; no citation attached in this session."

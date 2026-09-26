@@ -34,7 +34,8 @@ def config(tmp_path, manifest):
 
 @pytest.fixture
 def undecided(tmp_path):
-    path = decided_manifest(STRUCTURE, PREP["decisions"], tmp_path / "m.json")
+    decisions = PREP["decisions"] | FIXTURE["prep_overrides"]
+    path = decided_manifest(STRUCTURE, decisions, tmp_path / "m.json")
     document = json.loads(path.read_text())
     document["variants"] = [v for v in FIXTURE["variants"] if v["name"] == "R468Q"]
     document["relaxation"] = {**load_ruleset().relaxation, "enabled": False}  # speed

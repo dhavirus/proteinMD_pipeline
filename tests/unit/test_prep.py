@@ -7,6 +7,7 @@ from pathlib import Path
 import pytest
 import yaml
 
+from simprep.model.loops import APPLIED_OPTIONS as MODEL_OPTIONS
 from simprep.paths import KNOWLEDGE_DIR, SCHEMA_DIR
 from simprep.prep.apply import apply_plan
 from simprep.prep.plan import OPERATIONS, PrepError, build_plan
@@ -281,17 +282,20 @@ def test_snapshot_without_prep_action_is_refused(ruleset):
         plan_for([old], [("lig", "exclude", None)], ruleset)
 
 
-def apply_options(prep_families: bool) -> set[str]:
+def apply_options(prep_families: bool, stage: str | None = None) -> set[str]:
+    """Apply options of prep's rule families (or the variant family) carried out by
+    ``stage`` (None: by prep itself)."""
     return {
         option["id"]
         for path in KNOWLEDGE_DIR.glob("*.yaml")
         for rule in (yaml.safe_load(Path(path).read_text()) or {}).get("rules", [])
         if (rule["family"] != VARIANT_FAMILY) == prep_families
         for option in rule["options"]
-        if option.get("prep_action") == "apply"
+        if option.get("prep_action") == "apply" and option.get("prep_stage") == stage
     }
 
 
 def test_every_apply_option_in_the_knowledge_base_has_an_operation():
     assert apply_options(prep_families=True) and apply_options(True) <= set(OPERATIONS)
+    assert apply_options(prep_families=True, stage="modelling") == set(MODEL_OPTIONS)
     assert apply_options(prep_families=False) == set(APPLIED_OPTIONS)
