@@ -28,15 +28,11 @@ function parameterProblems(finding, draft) {
   return key === "rotamer" ? rotamerProblems(finding, value) : altlocProblems(finding, value);
 }
 
-/** simprep variants refuses a clashing rotamer (TASK-005 decision 4); say so here. */
+/** The rotamer must be one of the candidates; clashes only flag (TASK-005 review):
+ * relaxation follows in simprep variants (TASK-006). */
 function rotamerProblems(finding, value) {
-  const choice = rotamerChoices(finding).find((c) => c.id === value);
   if (!value) return ["Choose the rotamer to build."];
-  if (!choice) return [`Rotamer "${value}" is not one of the candidates.`];
-  if (choice.clashCount) {
-    return [`Rotamer ${value} has ${choice.clashCount} clash(es); simprep variants will not build it. `
-      + "Choose a clash-free rotamer, or Expert review."];
-  }
+  if (!rotamerChoices(finding).some((c) => c.id === value)) return [`Rotamer "${value}" is not one of the candidates.`];
   return [];
 }
 

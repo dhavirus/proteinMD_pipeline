@@ -15,7 +15,8 @@ KB_MANIFEST = "kb.yaml"
 AUDIT_DEFAULTS = "audit_defaults.yaml"
 RESIDUE_MAPPINGS = "residue_mappings.yaml"
 SIDE_CHAINS = "side_chains.yaml"
-DATA_FILES = (RESIDUE_MAPPINGS, SIDE_CHAINS)
+RELAXATION = "relaxation.yaml"
+DATA_FILES = (RESIDUE_MAPPINGS, SIDE_CHAINS, RELAXATION)
 
 
 def load_rule_file(path: Path) -> tuple[Rule, ...]:
@@ -44,6 +45,7 @@ def load_ruleset(knowledge_dir: Path = KNOWLEDGE_DIR) -> RuleSet:
         audit_defaults=yaml.safe_load((knowledge_dir / AUDIT_DEFAULTS).read_text()),
         residue_mappings=load_residue_mappings(knowledge_dir / RESIDUE_MAPPINGS),
         side_chains=load_side_chains(knowledge_dir / SIDE_CHAINS),
+        relaxation=load_relaxation(knowledge_dir / RELAXATION),
     )
 
 
@@ -63,6 +65,13 @@ def load_side_chains(path: Path) -> dict:
     data = yaml.safe_load(path.read_text())
     validate(data, "side_chains")
     return data["residues"]
+
+
+def load_relaxation(path: Path) -> dict:
+    """Schema-validated default relaxation protocol (variants, TASK-006)."""
+    data = yaml.safe_load(path.read_text())
+    validate(data, "relaxation")
+    return data["protocol"]
 
 
 def _hash_files(paths: list[Path]) -> str:

@@ -1,0 +1,2932 @@
+{
+  "generated_at": "2026-09-26T00:00:00Z",
+  "input": {
+    "format": "mmcif",
+    "path": "tests/panel/5FQL.cif.gz",
+    "sha256": "ac5ffc6fed697e7b2659f6747ad4d0638eb949220cd7ca7c8c3b372ce183f8d5"
+  },
+  "knowledge_base": {
+    "sha256": "881d25a420103b8b7c775bea95a644cda98e3ca89439fadf129c556e6017ef78",
+    "version": "0.5.0"
+  },
+  "manifest_sha256": "4b92e3abae03715a64ae49eeea0be68f6e5dc737dcb895b19a064bbeb5a2391a",
+  "relaxation_protocol": {
+    "enabled": true,
+    "engine": "openmm",
+    "force_field_files": [
+      "amber14-all.xml",
+      "amber14/tip3p.xml"
+    ],
+    "hydrogen_ph": 7.0,
+    "max_iterations": 5000,
+    "mobile_atoms": "side_chains_and_waters",
+    "mobile_shell_angstrom": 6.0,
+    "nonbonded_cutoff_nm": 1.0,
+    "platform": "Reference",
+    "restraint_kj_per_mol_nm2": 10000.0,
+    "seed": 20260926,
+    "tolerance_kj_per_mol_nm": 1.0
+  },
+  "relaxed_wild_types": [
+    {
+      "counts": [
+        {
+          "added": 0,
+          "excluded": 0,
+          "in": 507,
+          "modified": 24,
+          "out": 507,
+          "passed_through": 483,
+          "record_type": "polymer residues"
+        },
+        {
+          "added": 0,
+          "excluded": 0,
+          "in": 4,
+          "modified": 0,
+          "out": 4,
+          "passed_through": 4,
+          "record_type": "nonpolymer residues"
+        },
+        {
+          "added": 0,
+          "excluded": 0,
+          "in": 0,
+          "modified": 0,
+          "out": 0,
+          "passed_through": 0,
+          "record_type": "branched residues"
+        },
+        {
+          "added": 0,
+          "excluded": 0,
+          "in": 213,
+          "modified": 5,
+          "out": 213,
+          "passed_through": 208,
+          "record_type": "water residues"
+        },
+        {
+          "added": 0,
+          "excluded": 179,
+          "in": 8158,
+          "modified": 196,
+          "out": 7979,
+          "passed_through": 7783,
+          "record_type": "atom records"
+        },
+        {
+          "added": 0,
+          "excluded": 0,
+          "in": 11,
+          "modified": 0,
+          "out": 11,
+          "passed_through": 11,
+          "record_type": "struct_conn records"
+        },
+        {
+          "added": 0,
+          "excluded": 0,
+          "in": 8,
+          "modified": 0,
+          "out": 8,
+          "passed_through": 8,
+          "record_type": "pdbx_struct_mod_residue records"
+        },
+        {
+          "added": 0,
+          "excluded": 0,
+          "in": 18,
+          "modified": 0,
+          "out": 18,
+          "passed_through": 18,
+          "record_type": "unobserved polymer residues (annotation)"
+        }
+      ],
+      "directory": "wt_relaxed_A468",
+      "files": [
+        {
+          "format": "mmcif",
+          "path": "system.cif",
+          "sha256": "75ce97caf1763e5fb3d43667499870b343472fd7b21f59857692b307a749f023"
+        },
+        {
+          "format": "pdb",
+          "path": "system.pdb",
+          "sha256": "d39dd7269e34da3e78b1e218952f557357d0d249f9bdaf6c6166b05df7cced06"
+        }
+      ],
+      "findings": [],
+      "name": "wt_relaxed_A468",
+      "relaxation": {
+        "clashes_after": 0,
+        "clashes_before": 0,
+        "energy_kj_per_mol": {
+          "final": 243603.7,
+          "initial": 250667.8,
+          "note": "Total potential energy of the calculation, dominated by fixed-fixed terms; not comparable between systems. Only the change and the final force on mobile atoms are meaningful."
+        },
+        "frozen": [
+          {
+            "chain": "A",
+            "distance_angstrom": 5.07,
+            "ins_code": "",
+            "near": "ALS A:84",
+            "seq_num": 348
+          },
+          {
+            "chain": "A",
+            "distance_angstrom": 6.76,
+            "ins_code": "",
+            "near": "ALS A:84",
+            "seq_num": 466
+          },
+          {
+            "chain": "A",
+            "distance_angstrom": 9.29,
+            "ins_code": "",
+            "near": "ALS A:84",
+            "seq_num": 478
+          },
+          {
+            "chain": "A",
+            "distance_angstrom": 3.85,
+            "ins_code": "",
+            "near": "ALS A:84",
+            "seq_num": 479
+          }
+        ],
+        "left_out": [
+          {
+            "chain": "A",
+            "distance_angstrom": 10.18,
+            "ins_code": "",
+            "res_name": "ALS",
+            "seq_num": 84
+          },
+          {
+            "chain": "A",
+            "distance_angstrom": 12.51,
+            "ins_code": "",
+            "res_name": "CA",
+            "seq_num": 1551
+          },
+          {
+            "chain": "A",
+            "distance_angstrom": 23.07,
+            "ins_code": "",
+            "res_name": "CL",
+            "seq_num": 1567
+          },
+          {
+            "chain": "A",
+            "distance_angstrom": 28.59,
+            "ins_code": "",
+            "res_name": "CL",
+            "seq_num": 1568
+          },
+          {
+            "chain": "A",
+            "distance_angstrom": 15.91,
+            "ins_code": "",
+            "res_name": "CL",
+            "seq_num": 1569
+          }
+        ],
+        "max_displacement_angstrom": 0.438,
+        "max_mobile_force_kj_per_mol_nm": 20.76,
+        "mobile_atoms": 100,
+        "moved_atoms": 100,
+        "moved_residues": [
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 261
+          },
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 262
+          },
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 263
+          },
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 264
+          },
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 265
+          },
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 266
+          },
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 344
+          },
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 349
+          },
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 350
+          },
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 467
+          },
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 468
+          },
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 469
+          },
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 470
+          },
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 471
+          },
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 473
+          },
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 476
+          },
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 477
+          },
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 480
+          },
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 484
+          },
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 485
+          },
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 486
+          },
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 487
+          },
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 488
+          },
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 502
+          },
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 2125
+          },
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 2126
+          },
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 2127
+          },
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 2183
+          },
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 2184
+          }
+        ],
+        "openmm_version": "8.6.1",
+        "rms_displacement_angstrom": 0.13,
+        "shell_residues": 34,
+        "sites": [
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 468
+          }
+        ]
+      },
+      "sites": [
+        {
+          "chain": "A",
+          "ins_code": "",
+          "seq_num": 468
+        }
+      ],
+      "work_order": [
+        {
+          "description": "Nonbonded 12-6-4 LJ-type ion model: CA site A:1551: likely_catalytic, coordination number 6",
+          "finding_id": "metals/A:1551",
+          "option_id": "nonbonded_12_6_4",
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 1551
+            }
+          ],
+          "stage": "parameterization"
+        },
+        {
+          "description": "Model FGly as the aldehyde hydrate (gem-diol, FGH): Formylglycine (sulfatase catalytic residue): ALS A:84",
+          "finding_id": "nonstandard_residues/A:84",
+          "option_id": "model_gem_diol",
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 84
+            }
+          ],
+          "stage": "chemistry"
+        },
+        {
+          "description": "Cap the first/last observed residue (neutral ACE/NME-style caps): Unobserved N-terminal residues: A:26-33 (8 residues)",
+          "finding_id": "missing_residues/A:26-33",
+          "option_id": "cap_termini",
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 26
+            },
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 27
+            },
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 28
+            },
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 29
+            },
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 30
+            },
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 31
+            },
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 32
+            },
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 33
+            }
+          ],
+          "stage": "modelling"
+        },
+        {
+          "description": "Model the missing loop: Internal gap (unobserved residues between observed ones): A:444-453 (10 residues)",
+          "finding_id": "missing_residues/A:444-453",
+          "option_id": "model_loop",
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 444
+            },
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 445
+            },
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 446
+            },
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 447
+            },
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 448
+            },
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 449
+            },
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 450
+            },
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 451
+            },
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 452
+            },
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 453
+            }
+          ],
+          "stage": "modelling"
+        },
+        {
+          "description": "Keep and parameterize outside the rule system: Unrecognized chemistry: CL at A:1567",
+          "finding_id": "unrecognized/group/A:1567",
+          "option_id": "parameterize_manually",
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 1567
+            }
+          ],
+          "stage": "parameterization"
+        },
+        {
+          "description": "Keep and parameterize outside the rule system: Unrecognized chemistry: CL at A:1568",
+          "finding_id": "unrecognized/group/A:1568",
+          "option_id": "parameterize_manually",
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 1568
+            }
+          ],
+          "stage": "parameterization"
+        },
+        {
+          "description": "Keep and parameterize outside the rule system: Unrecognized chemistry: CL at A:1569",
+          "finding_id": "unrecognized/group/A:1569",
+          "option_id": "parameterize_manually",
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 1569
+            }
+          ],
+          "stage": "parameterization"
+        },
+        {
+          "description": "A:261: moved in relaxation, hydrogens removed",
+          "finding_id": "relaxation/wt_relaxed_A468",
+          "option_id": null,
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 261
+            }
+          ],
+          "stage": "protonation"
+        },
+        {
+          "description": "A:262: moved in relaxation, hydrogens removed",
+          "finding_id": "relaxation/wt_relaxed_A468",
+          "option_id": null,
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 262
+            }
+          ],
+          "stage": "protonation"
+        },
+        {
+          "description": "A:263: moved in relaxation, hydrogens removed",
+          "finding_id": "relaxation/wt_relaxed_A468",
+          "option_id": null,
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 263
+            }
+          ],
+          "stage": "protonation"
+        },
+        {
+          "description": "A:264: moved in relaxation, hydrogens removed",
+          "finding_id": "relaxation/wt_relaxed_A468",
+          "option_id": null,
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 264
+            }
+          ],
+          "stage": "protonation"
+        },
+        {
+          "description": "A:265: moved in relaxation, hydrogens removed",
+          "finding_id": "relaxation/wt_relaxed_A468",
+          "option_id": null,
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 265
+            }
+          ],
+          "stage": "protonation"
+        },
+        {
+          "description": "A:266: moved in relaxation, hydrogens removed",
+          "finding_id": "relaxation/wt_relaxed_A468",
+          "option_id": null,
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 266
+            }
+          ],
+          "stage": "protonation"
+        },
+        {
+          "description": "A:344: moved in relaxation, hydrogens removed",
+          "finding_id": "relaxation/wt_relaxed_A468",
+          "option_id": null,
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 344
+            }
+          ],
+          "stage": "protonation"
+        },
+        {
+          "description": "A:349: moved in relaxation, hydrogens removed",
+          "finding_id": "relaxation/wt_relaxed_A468",
+          "option_id": null,
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 349
+            }
+          ],
+          "stage": "protonation"
+        },
+        {
+          "description": "A:350: moved in relaxation, hydrogens removed",
+          "finding_id": "relaxation/wt_relaxed_A468",
+          "option_id": null,
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 350
+            }
+          ],
+          "stage": "protonation"
+        },
+        {
+          "description": "A:467: moved in relaxation, hydrogens removed",
+          "finding_id": "relaxation/wt_relaxed_A468",
+          "option_id": null,
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 467
+            }
+          ],
+          "stage": "protonation"
+        },
+        {
+          "description": "A:468: moved in relaxation, hydrogens removed",
+          "finding_id": "relaxation/wt_relaxed_A468",
+          "option_id": null,
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 468
+            }
+          ],
+          "stage": "protonation"
+        },
+        {
+          "description": "A:469: moved in relaxation, hydrogens removed",
+          "finding_id": "relaxation/wt_relaxed_A468",
+          "option_id": null,
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 469
+            }
+          ],
+          "stage": "protonation"
+        },
+        {
+          "description": "A:470: moved in relaxation, hydrogens removed",
+          "finding_id": "relaxation/wt_relaxed_A468",
+          "option_id": null,
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 470
+            }
+          ],
+          "stage": "protonation"
+        },
+        {
+          "description": "A:471: moved in relaxation, hydrogens removed",
+          "finding_id": "relaxation/wt_relaxed_A468",
+          "option_id": null,
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 471
+            }
+          ],
+          "stage": "protonation"
+        },
+        {
+          "description": "A:473: moved in relaxation, hydrogens removed",
+          "finding_id": "relaxation/wt_relaxed_A468",
+          "option_id": null,
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 473
+            }
+          ],
+          "stage": "protonation"
+        },
+        {
+          "description": "A:476: moved in relaxation, hydrogens removed",
+          "finding_id": "relaxation/wt_relaxed_A468",
+          "option_id": null,
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 476
+            }
+          ],
+          "stage": "protonation"
+        },
+        {
+          "description": "A:477: moved in relaxation, hydrogens removed",
+          "finding_id": "relaxation/wt_relaxed_A468",
+          "option_id": null,
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 477
+            }
+          ],
+          "stage": "protonation"
+        },
+        {
+          "description": "A:480: moved in relaxation, hydrogens removed",
+          "finding_id": "relaxation/wt_relaxed_A468",
+          "option_id": null,
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 480
+            }
+          ],
+          "stage": "protonation"
+        },
+        {
+          "description": "A:484: moved in relaxation, hydrogens removed",
+          "finding_id": "relaxation/wt_relaxed_A468",
+          "option_id": null,
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 484
+            }
+          ],
+          "stage": "protonation"
+        },
+        {
+          "description": "A:485: moved in relaxation, hydrogens removed",
+          "finding_id": "relaxation/wt_relaxed_A468",
+          "option_id": null,
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 485
+            }
+          ],
+          "stage": "protonation"
+        },
+        {
+          "description": "A:486: moved in relaxation, hydrogens removed",
+          "finding_id": "relaxation/wt_relaxed_A468",
+          "option_id": null,
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 486
+            }
+          ],
+          "stage": "protonation"
+        },
+        {
+          "description": "A:487: moved in relaxation, hydrogens removed",
+          "finding_id": "relaxation/wt_relaxed_A468",
+          "option_id": null,
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 487
+            }
+          ],
+          "stage": "protonation"
+        },
+        {
+          "description": "A:488: moved in relaxation, hydrogens removed",
+          "finding_id": "relaxation/wt_relaxed_A468",
+          "option_id": null,
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 488
+            }
+          ],
+          "stage": "protonation"
+        },
+        {
+          "description": "A:502: moved in relaxation, hydrogens removed",
+          "finding_id": "relaxation/wt_relaxed_A468",
+          "option_id": null,
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 502
+            }
+          ],
+          "stage": "protonation"
+        },
+        {
+          "description": "A:2125: moved in relaxation, hydrogens removed",
+          "finding_id": "relaxation/wt_relaxed_A468",
+          "option_id": null,
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 2125
+            }
+          ],
+          "stage": "protonation"
+        },
+        {
+          "description": "A:2126: moved in relaxation, hydrogens removed",
+          "finding_id": "relaxation/wt_relaxed_A468",
+          "option_id": null,
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 2126
+            }
+          ],
+          "stage": "protonation"
+        },
+        {
+          "description": "A:2127: moved in relaxation, hydrogens removed",
+          "finding_id": "relaxation/wt_relaxed_A468",
+          "option_id": null,
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 2127
+            }
+          ],
+          "stage": "protonation"
+        },
+        {
+          "description": "A:2183: moved in relaxation, hydrogens removed",
+          "finding_id": "relaxation/wt_relaxed_A468",
+          "option_id": null,
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 2183
+            }
+          ],
+          "stage": "protonation"
+        },
+        {
+          "description": "A:2184: moved in relaxation, hydrogens removed",
+          "finding_id": "relaxation/wt_relaxed_A468",
+          "option_id": null,
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 2184
+            }
+          ],
+          "stage": "protonation"
+        }
+      ]
+    }
+  ],
+  "schema_version": "0.1.0",
+  "simprep": {
+    "git_commit": null,
+    "version": "0.1.0"
+  },
+  "variants": [
+    {
+      "counts": [
+        {
+          "added": 0,
+          "excluded": 0,
+          "in": 507,
+          "modified": 24,
+          "out": 507,
+          "passed_through": 483,
+          "record_type": "polymer residues"
+        },
+        {
+          "added": 0,
+          "excluded": 0,
+          "in": 4,
+          "modified": 0,
+          "out": 4,
+          "passed_through": 4,
+          "record_type": "nonpolymer residues"
+        },
+        {
+          "added": 0,
+          "excluded": 0,
+          "in": 0,
+          "modified": 0,
+          "out": 0,
+          "passed_through": 0,
+          "record_type": "branched residues"
+        },
+        {
+          "added": 0,
+          "excluded": 0,
+          "in": 213,
+          "modified": 5,
+          "out": 213,
+          "passed_through": 208,
+          "record_type": "water residues"
+        },
+        {
+          "added": 2,
+          "excluded": 183,
+          "in": 8158,
+          "modified": 192,
+          "out": 7977,
+          "passed_through": 7783,
+          "record_type": "atom records"
+        },
+        {
+          "added": 0,
+          "excluded": 0,
+          "in": 11,
+          "modified": 0,
+          "out": 11,
+          "passed_through": 11,
+          "record_type": "struct_conn records"
+        },
+        {
+          "added": 0,
+          "excluded": 0,
+          "in": 8,
+          "modified": 0,
+          "out": 8,
+          "passed_through": 8,
+          "record_type": "pdbx_struct_mod_residue records"
+        },
+        {
+          "added": 0,
+          "excluded": 0,
+          "in": 18,
+          "modified": 0,
+          "out": 18,
+          "passed_through": 18,
+          "record_type": "unobserved polymer residues (annotation)"
+        }
+      ],
+      "directory": "R468Q",
+      "files": [
+        {
+          "format": "mmcif",
+          "path": "system.cif",
+          "sha256": "0b19a72dc02e243077262e4c4c625314cbe8559516e8c37484c3f5ef8a449f63"
+        },
+        {
+          "format": "pdb",
+          "path": "system.pdb",
+          "sha256": "8eb5a16e6f6bc3a3c8b9f15254946f3c4967c75ba5a72201373c3885a050bfde"
+        }
+      ],
+      "findings": [],
+      "mutations": [
+        {
+          "chain": "A",
+          "chi_degree": [
+            -65,
+            -65,
+            -40
+          ],
+          "closest_contacts": [
+            {
+              "atom_name": "OE1",
+              "distance_angstrom": 2.522,
+              "overlap_angstrom": 0.518,
+              "partner": {
+                "altloc": "",
+                "atom_name": "O",
+                "chain": "A",
+                "ins_code": "",
+                "res_name": "HOH",
+                "seq_num": 2184
+              }
+            }
+          ],
+          "finding_id": "variant_build/R468Q/A:468",
+          "frequency_percent": 16,
+          "from": "ARG",
+          "ins_code": "",
+          "rotamer": "mm-40",
+          "seq_num": 468,
+          "to": "GLN",
+          "uniprot": {
+            "accession": "P22304",
+            "position": 468
+          }
+        }
+      ],
+      "name": "R468Q",
+      "relaxation": {
+        "clashes_after": 0,
+        "clashes_before": 0,
+        "energy_kj_per_mol": {
+          "final": 245127.1,
+          "initial": 252280.2,
+          "note": "Total potential energy of the calculation, dominated by fixed-fixed terms; not comparable between systems. Only the change and the final force on mobile atoms are meaningful."
+        },
+        "frozen": [
+          {
+            "chain": "A",
+            "distance_angstrom": 5.07,
+            "ins_code": "",
+            "near": "ALS A:84",
+            "seq_num": 348
+          },
+          {
+            "chain": "A",
+            "distance_angstrom": 6.76,
+            "ins_code": "",
+            "near": "ALS A:84",
+            "seq_num": 466
+          },
+          {
+            "chain": "A",
+            "distance_angstrom": 9.29,
+            "ins_code": "",
+            "near": "ALS A:84",
+            "seq_num": 478
+          },
+          {
+            "chain": "A",
+            "distance_angstrom": 3.85,
+            "ins_code": "",
+            "near": "ALS A:84",
+            "seq_num": 479
+          }
+        ],
+        "left_out": [
+          {
+            "chain": "A",
+            "distance_angstrom": 10.18,
+            "ins_code": "",
+            "res_name": "ALS",
+            "seq_num": 84
+          },
+          {
+            "chain": "A",
+            "distance_angstrom": 12.51,
+            "ins_code": "",
+            "res_name": "CA",
+            "seq_num": 1551
+          },
+          {
+            "chain": "A",
+            "distance_angstrom": 23.07,
+            "ins_code": "",
+            "res_name": "CL",
+            "seq_num": 1567
+          },
+          {
+            "chain": "A",
+            "distance_angstrom": 28.59,
+            "ins_code": "",
+            "res_name": "CL",
+            "seq_num": 1568
+          },
+          {
+            "chain": "A",
+            "distance_angstrom": 15.91,
+            "ins_code": "",
+            "res_name": "CL",
+            "seq_num": 1569
+          }
+        ],
+        "max_displacement_angstrom": 0.72,
+        "max_mobile_force_kj_per_mol_nm": 19.16,
+        "mobile_atoms": 98,
+        "moved_atoms": 98,
+        "moved_residues": [
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 261
+          },
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 262
+          },
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 263
+          },
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 264
+          },
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 265
+          },
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 266
+          },
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 344
+          },
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 349
+          },
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 350
+          },
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 467
+          },
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 468
+          },
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 469
+          },
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 470
+          },
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 471
+          },
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 473
+          },
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 476
+          },
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 477
+          },
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 480
+          },
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 484
+          },
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 485
+          },
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 486
+          },
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 487
+          },
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 488
+          },
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 502
+          },
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 2125
+          },
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 2126
+          },
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 2127
+          },
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 2183
+          },
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 2184
+          }
+        ],
+        "openmm_version": "8.6.1",
+        "rms_displacement_angstrom": 0.156,
+        "shell_residues": 34,
+        "sites": [
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 468
+          }
+        ]
+      },
+      "unrelaxed_files": [
+        {
+          "format": "mmcif",
+          "path": "unrelaxed/system.cif",
+          "sha256": "fc9926bb36a2ff19dcda3063090d054d3975b88d4c49538e4b8c509129db5fa3"
+        },
+        {
+          "format": "pdb",
+          "path": "unrelaxed/system.pdb",
+          "sha256": "21e9dd7ab9faf4f9f9d75b38579df1565fe512b795528ed4d130ee64cbe1e87d"
+        }
+      ],
+      "work_order": [
+        {
+          "description": "Nonbonded 12-6-4 LJ-type ion model: CA site A:1551: likely_catalytic, coordination number 6",
+          "finding_id": "metals/A:1551",
+          "option_id": "nonbonded_12_6_4",
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 1551
+            }
+          ],
+          "stage": "parameterization"
+        },
+        {
+          "description": "Model FGly as the aldehyde hydrate (gem-diol, FGH): Formylglycine (sulfatase catalytic residue): ALS A:84",
+          "finding_id": "nonstandard_residues/A:84",
+          "option_id": "model_gem_diol",
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 84
+            }
+          ],
+          "stage": "chemistry"
+        },
+        {
+          "description": "Cap the first/last observed residue (neutral ACE/NME-style caps): Unobserved N-terminal residues: A:26-33 (8 residues)",
+          "finding_id": "missing_residues/A:26-33",
+          "option_id": "cap_termini",
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 26
+            },
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 27
+            },
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 28
+            },
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 29
+            },
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 30
+            },
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 31
+            },
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 32
+            },
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 33
+            }
+          ],
+          "stage": "modelling"
+        },
+        {
+          "description": "Model the missing loop: Internal gap (unobserved residues between observed ones): A:444-453 (10 residues)",
+          "finding_id": "missing_residues/A:444-453",
+          "option_id": "model_loop",
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 444
+            },
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 445
+            },
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 446
+            },
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 447
+            },
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 448
+            },
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 449
+            },
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 450
+            },
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 451
+            },
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 452
+            },
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 453
+            }
+          ],
+          "stage": "modelling"
+        },
+        {
+          "description": "Keep and parameterize outside the rule system: Unrecognized chemistry: CL at A:1567",
+          "finding_id": "unrecognized/group/A:1567",
+          "option_id": "parameterize_manually",
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 1567
+            }
+          ],
+          "stage": "parameterization"
+        },
+        {
+          "description": "Keep and parameterize outside the rule system: Unrecognized chemistry: CL at A:1568",
+          "finding_id": "unrecognized/group/A:1568",
+          "option_id": "parameterize_manually",
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 1568
+            }
+          ],
+          "stage": "parameterization"
+        },
+        {
+          "description": "Keep and parameterize outside the rule system: Unrecognized chemistry: CL at A:1569",
+          "finding_id": "unrecognized/group/A:1569",
+          "option_id": "parameterize_manually",
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 1569
+            }
+          ],
+          "stage": "parameterization"
+        },
+        {
+          "description": "A:468 ARG>GLN: the mutated residue has no hydrogens (TASK-005 decision 2)",
+          "finding_id": "variant_build/R468Q/A:468",
+          "option_id": "choose_rotamer",
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 468
+            }
+          ],
+          "stage": "protonation"
+        },
+        {
+          "description": "A:261: moved in relaxation, hydrogens removed",
+          "finding_id": "variant_build/R468Q/A:468",
+          "option_id": null,
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 261
+            }
+          ],
+          "stage": "protonation"
+        },
+        {
+          "description": "A:262: moved in relaxation, hydrogens removed",
+          "finding_id": "variant_build/R468Q/A:468",
+          "option_id": null,
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 262
+            }
+          ],
+          "stage": "protonation"
+        },
+        {
+          "description": "A:263: moved in relaxation, hydrogens removed",
+          "finding_id": "variant_build/R468Q/A:468",
+          "option_id": null,
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 263
+            }
+          ],
+          "stage": "protonation"
+        },
+        {
+          "description": "A:264: moved in relaxation, hydrogens removed",
+          "finding_id": "variant_build/R468Q/A:468",
+          "option_id": null,
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 264
+            }
+          ],
+          "stage": "protonation"
+        },
+        {
+          "description": "A:265: moved in relaxation, hydrogens removed",
+          "finding_id": "variant_build/R468Q/A:468",
+          "option_id": null,
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 265
+            }
+          ],
+          "stage": "protonation"
+        },
+        {
+          "description": "A:266: moved in relaxation, hydrogens removed",
+          "finding_id": "variant_build/R468Q/A:468",
+          "option_id": null,
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 266
+            }
+          ],
+          "stage": "protonation"
+        },
+        {
+          "description": "A:344: moved in relaxation, hydrogens removed",
+          "finding_id": "variant_build/R468Q/A:468",
+          "option_id": null,
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 344
+            }
+          ],
+          "stage": "protonation"
+        },
+        {
+          "description": "A:349: moved in relaxation, hydrogens removed",
+          "finding_id": "variant_build/R468Q/A:468",
+          "option_id": null,
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 349
+            }
+          ],
+          "stage": "protonation"
+        },
+        {
+          "description": "A:350: moved in relaxation, hydrogens removed",
+          "finding_id": "variant_build/R468Q/A:468",
+          "option_id": null,
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 350
+            }
+          ],
+          "stage": "protonation"
+        },
+        {
+          "description": "A:467: moved in relaxation, hydrogens removed",
+          "finding_id": "variant_build/R468Q/A:468",
+          "option_id": null,
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 467
+            }
+          ],
+          "stage": "protonation"
+        },
+        {
+          "description": "A:469: moved in relaxation, hydrogens removed",
+          "finding_id": "variant_build/R468Q/A:468",
+          "option_id": null,
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 469
+            }
+          ],
+          "stage": "protonation"
+        },
+        {
+          "description": "A:470: moved in relaxation, hydrogens removed",
+          "finding_id": "variant_build/R468Q/A:468",
+          "option_id": null,
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 470
+            }
+          ],
+          "stage": "protonation"
+        },
+        {
+          "description": "A:471: moved in relaxation, hydrogens removed",
+          "finding_id": "variant_build/R468Q/A:468",
+          "option_id": null,
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 471
+            }
+          ],
+          "stage": "protonation"
+        },
+        {
+          "description": "A:473: moved in relaxation, hydrogens removed",
+          "finding_id": "variant_build/R468Q/A:468",
+          "option_id": null,
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 473
+            }
+          ],
+          "stage": "protonation"
+        },
+        {
+          "description": "A:476: moved in relaxation, hydrogens removed",
+          "finding_id": "variant_build/R468Q/A:468",
+          "option_id": null,
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 476
+            }
+          ],
+          "stage": "protonation"
+        },
+        {
+          "description": "A:477: moved in relaxation, hydrogens removed",
+          "finding_id": "variant_build/R468Q/A:468",
+          "option_id": null,
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 477
+            }
+          ],
+          "stage": "protonation"
+        },
+        {
+          "description": "A:480: moved in relaxation, hydrogens removed",
+          "finding_id": "variant_build/R468Q/A:468",
+          "option_id": null,
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 480
+            }
+          ],
+          "stage": "protonation"
+        },
+        {
+          "description": "A:484: moved in relaxation, hydrogens removed",
+          "finding_id": "variant_build/R468Q/A:468",
+          "option_id": null,
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 484
+            }
+          ],
+          "stage": "protonation"
+        },
+        {
+          "description": "A:485: moved in relaxation, hydrogens removed",
+          "finding_id": "variant_build/R468Q/A:468",
+          "option_id": null,
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 485
+            }
+          ],
+          "stage": "protonation"
+        },
+        {
+          "description": "A:486: moved in relaxation, hydrogens removed",
+          "finding_id": "variant_build/R468Q/A:468",
+          "option_id": null,
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 486
+            }
+          ],
+          "stage": "protonation"
+        },
+        {
+          "description": "A:487: moved in relaxation, hydrogens removed",
+          "finding_id": "variant_build/R468Q/A:468",
+          "option_id": null,
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 487
+            }
+          ],
+          "stage": "protonation"
+        },
+        {
+          "description": "A:488: moved in relaxation, hydrogens removed",
+          "finding_id": "variant_build/R468Q/A:468",
+          "option_id": null,
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 488
+            }
+          ],
+          "stage": "protonation"
+        },
+        {
+          "description": "A:502: moved in relaxation, hydrogens removed",
+          "finding_id": "variant_build/R468Q/A:468",
+          "option_id": null,
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 502
+            }
+          ],
+          "stage": "protonation"
+        },
+        {
+          "description": "A:2125: moved in relaxation, hydrogens removed",
+          "finding_id": "variant_build/R468Q/A:468",
+          "option_id": null,
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 2125
+            }
+          ],
+          "stage": "protonation"
+        },
+        {
+          "description": "A:2126: moved in relaxation, hydrogens removed",
+          "finding_id": "variant_build/R468Q/A:468",
+          "option_id": null,
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 2126
+            }
+          ],
+          "stage": "protonation"
+        },
+        {
+          "description": "A:2127: moved in relaxation, hydrogens removed",
+          "finding_id": "variant_build/R468Q/A:468",
+          "option_id": null,
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 2127
+            }
+          ],
+          "stage": "protonation"
+        },
+        {
+          "description": "A:2183: moved in relaxation, hydrogens removed",
+          "finding_id": "variant_build/R468Q/A:468",
+          "option_id": null,
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 2183
+            }
+          ],
+          "stage": "protonation"
+        },
+        {
+          "description": "A:2184: moved in relaxation, hydrogens removed",
+          "finding_id": "variant_build/R468Q/A:468",
+          "option_id": null,
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 2184
+            }
+          ],
+          "stage": "protonation"
+        }
+      ]
+    },
+    {
+      "counts": [
+        {
+          "added": 0,
+          "excluded": 0,
+          "in": 507,
+          "modified": 24,
+          "out": 507,
+          "passed_through": 483,
+          "record_type": "polymer residues"
+        },
+        {
+          "added": 0,
+          "excluded": 0,
+          "in": 4,
+          "modified": 0,
+          "out": 4,
+          "passed_through": 4,
+          "record_type": "nonpolymer residues"
+        },
+        {
+          "added": 0,
+          "excluded": 0,
+          "in": 0,
+          "modified": 0,
+          "out": 0,
+          "passed_through": 0,
+          "record_type": "branched residues"
+        },
+        {
+          "added": 0,
+          "excluded": 0,
+          "in": 213,
+          "modified": 5,
+          "out": 213,
+          "passed_through": 208,
+          "record_type": "water residues"
+        },
+        {
+          "added": 8,
+          "excluded": 184,
+          "in": 8158,
+          "modified": 191,
+          "out": 7982,
+          "passed_through": 7783,
+          "record_type": "atom records"
+        },
+        {
+          "added": 0,
+          "excluded": 0,
+          "in": 11,
+          "modified": 0,
+          "out": 11,
+          "passed_through": 11,
+          "record_type": "struct_conn records"
+        },
+        {
+          "added": 0,
+          "excluded": 0,
+          "in": 8,
+          "modified": 0,
+          "out": 8,
+          "passed_through": 8,
+          "record_type": "pdbx_struct_mod_residue records"
+        },
+        {
+          "added": 0,
+          "excluded": 0,
+          "in": 18,
+          "modified": 0,
+          "out": 18,
+          "passed_through": 18,
+          "record_type": "unobserved polymer residues (annotation)"
+        }
+      ],
+      "directory": "R468W",
+      "files": [
+        {
+          "format": "mmcif",
+          "path": "system.cif",
+          "sha256": "b0ab209cff8e086e9ab0bbe6158ec3d8d2a51adf3ef8c9db34a646385d9d8627"
+        },
+        {
+          "format": "pdb",
+          "path": "system.pdb",
+          "sha256": "8884ce0a6277e71e4d797177f522f6ea1c877775de94d33ca9a7eea28704457a"
+        }
+      ],
+      "findings": [
+        {
+          "anchor_residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 468
+            }
+          ],
+          "base_severity": "warn",
+          "effective_severity": "warn",
+          "evidence": [
+            {
+              "key": "system",
+              "type": "label",
+              "value": "R468W"
+            },
+            {
+              "key": "clashes_before",
+              "type": "count",
+              "value": 10
+            },
+            {
+              "key": "clashes_after",
+              "type": "count",
+              "value": 2
+            },
+            {
+              "atoms": [
+                {
+                  "altloc": "",
+                  "atom_name": "NE1",
+                  "chain": "A",
+                  "ins_code": "",
+                  "res_name": "TRP",
+                  "seq_num": 468
+                },
+                {
+                  "altloc": "",
+                  "atom_name": "CZ3",
+                  "chain": "A",
+                  "ins_code": "",
+                  "res_name": "TRP",
+                  "seq_num": 502
+                }
+              ],
+              "key": "residual_clash",
+              "note": "NE1 - TRP A:502 CZ3, overlap 0.68 A",
+              "type": "distance",
+              "unit": "angstrom",
+              "value": 2.574
+            },
+            {
+              "atoms": [
+                {
+                  "altloc": "",
+                  "atom_name": "CE2",
+                  "chain": "A",
+                  "ins_code": "",
+                  "res_name": "TRP",
+                  "seq_num": 468
+                },
+                {
+                  "altloc": "",
+                  "atom_name": "O",
+                  "chain": "A",
+                  "ins_code": "",
+                  "res_name": "VAL",
+                  "seq_num": 262
+                }
+              ],
+              "key": "residual_clash",
+              "note": "CE2 - VAL A:262 O, overlap 0.47 A",
+              "type": "distance",
+              "unit": "angstrom",
+              "value": 2.751
+            }
+          ],
+          "id": "relaxation/R468W/A468",
+          "locus": {
+            "atom_names": [],
+            "chain": "A",
+            "extent": [
+              {
+                "chain": "A",
+                "ins_code": "",
+                "res_name": "TRP",
+                "seq_num": 468
+              }
+            ],
+            "ins_code": "",
+            "res_name": "TRP",
+            "seq_num": 468
+          },
+          "options": [
+            {
+              "cost_hint": "low",
+              "id": "accept",
+              "label": "Accept the relaxed system; the contacts are left to equilibration",
+              "prep_action": "record",
+              "prep_stage": "modelling",
+              "trade_offs": [
+                "Marginal contacts after a restrained minimization usually resolve during equilibration, but that is not checked here.",
+                "The contacts stay listed in the record for later review."
+              ]
+            },
+            {
+              "cost_hint": "high",
+              "id": "expert_review",
+              "label": "Needs expert review (for example a weaker restraint or another rotamer)",
+              "prep_action": "unresolved",
+              "trade_offs": [
+                "A human decides whether the protocol or the rotamer should change."
+              ]
+            }
+          ],
+          "rationale": "Relaxation moves side chains and waters within the shell under strong positional restraints (TASK-006), so close contacts can remain. They are judged with the variant_build criterion and reported, not hidden; clashes only flag (maintainer, TASK-005 review). One finding per relaxed system that still has clashes at a mutated residue.",
+          "recommendation_basis": "default",
+          "recommended_option": "accept",
+          "references": [],
+          "rule_family": "relaxation",
+          "rule_id": "relaxation.residual_clashes",
+          "severity_context": {
+            "min_distance_angstrom": null,
+            "nearest_region": null,
+            "proximity": "no_regions",
+            "raise_levels": 0
+          },
+          "title": "R468W: 2 clash(es) remain after relaxation",
+          "verify_flags": []
+        }
+      ],
+      "mutations": [
+        {
+          "chain": "A",
+          "chi_degree": [
+            -65,
+            95
+          ],
+          "closest_contacts": [
+            {
+              "atom_name": "NE1",
+              "distance_angstrom": 2.113,
+              "overlap_angstrom": 1.137,
+              "partner": {
+                "altloc": "",
+                "atom_name": "CZ3",
+                "chain": "A",
+                "ins_code": "",
+                "res_name": "TRP",
+                "seq_num": 502
+              }
+            },
+            {
+              "atom_name": "CD1",
+              "distance_angstrom": 2.401,
+              "overlap_angstrom": 0.999,
+              "partner": {
+                "altloc": "",
+                "atom_name": "CZ3",
+                "chain": "A",
+                "ins_code": "",
+                "res_name": "TRP",
+                "seq_num": 502
+              }
+            },
+            {
+              "atom_name": "CH2",
+              "distance_angstrom": 2.294,
+              "overlap_angstrom": 0.926,
+              "partner": {
+                "altloc": "",
+                "atom_name": "O",
+                "chain": "A",
+                "ins_code": "",
+                "res_name": "TYR",
+                "seq_num": 264
+              }
+            },
+            {
+              "atom_name": "NE1",
+              "distance_angstrom": 2.553,
+              "overlap_angstrom": 0.697,
+              "partner": {
+                "altloc": "",
+                "atom_name": "CH2",
+                "chain": "A",
+                "ins_code": "",
+                "res_name": "TRP",
+                "seq_num": 502
+              }
+            },
+            {
+              "atom_name": "CH2",
+              "distance_angstrom": 2.779,
+              "overlap_angstrom": 0.621,
+              "partner": {
+                "altloc": "",
+                "atom_name": "C",
+                "chain": "A",
+                "ins_code": "",
+                "res_name": "TYR",
+                "seq_num": 264
+              }
+            }
+          ],
+          "finding_id": "variant_build/R468W/A:468",
+          "frequency_percent": 34,
+          "from": "ARG",
+          "ins_code": "",
+          "rotamer": "m95",
+          "seq_num": 468,
+          "to": "TRP",
+          "uniprot": {
+            "accession": "P22304",
+            "position": 468
+          }
+        }
+      ],
+      "name": "R468W",
+      "relaxation": {
+        "clashes_after": 2,
+        "clashes_before": 10,
+        "energy_kj_per_mol": {
+          "final": 238098.2,
+          "initial": 245990.2,
+          "note": "Total potential energy of the calculation, dominated by fixed-fixed terms; not comparable between systems. Only the change and the final force on mobile atoms are meaningful."
+        },
+        "left_out": [
+          {
+            "chain": "A",
+            "distance_angstrom": 10.18,
+            "ins_code": "",
+            "res_name": "ALS",
+            "seq_num": 84
+          },
+          {
+            "chain": "A",
+            "distance_angstrom": 12.51,
+            "ins_code": "",
+            "res_name": "CA",
+            "seq_num": 1551
+          },
+          {
+            "chain": "A",
+            "distance_angstrom": 23.07,
+            "ins_code": "",
+            "res_name": "CL",
+            "seq_num": 1567
+          },
+          {
+            "chain": "A",
+            "distance_angstrom": 28.59,
+            "ins_code": "",
+            "res_name": "CL",
+            "seq_num": 1568
+          },
+          {
+            "chain": "A",
+            "distance_angstrom": 15.91,
+            "ins_code": "",
+            "res_name": "CL",
+            "seq_num": 1569
+          }
+        ],
+        "max_displacement_angstrom": 0.959,
+        "max_mobile_force_kj_per_mol_nm": 14.85,
+        "mobile_atoms": 103,
+        "moved_atoms": 103,
+        "moved_residues": [
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 261
+          },
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 262
+          },
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 263
+          },
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 264
+          },
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 265
+          },
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 266
+          },
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 344
+          },
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 349
+          },
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 350
+          },
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 467
+          },
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 468
+          },
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 469
+          },
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 470
+          },
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 471
+          },
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 473
+          },
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 476
+          },
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 477
+          },
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 480
+          },
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 484
+          },
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 485
+          },
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 486
+          },
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 487
+          },
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 488
+          },
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 502
+          },
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 2125
+          },
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 2126
+          },
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 2127
+          },
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 2183
+          },
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 2184
+          }
+        ],
+        "openmm_version": "8.6.1",
+        "rms_displacement_angstrom": 0.241,
+        "shell_residues": 34,
+        "sites": [
+          {
+            "chain": "A",
+            "ins_code": "",
+            "seq_num": 468
+          }
+        ]
+      },
+      "unrelaxed_files": [
+        {
+          "format": "mmcif",
+          "path": "unrelaxed/system.cif",
+          "sha256": "6481ffe7e8dda2ab2207b0d4dcef7a0ebf8de1168e7505825c75f76f7b35a1ef"
+        },
+        {
+          "format": "pdb",
+          "path": "unrelaxed/system.pdb",
+          "sha256": "bb5c858dd85c291f5ca1f18a73b3dda473a12e042f5c544277cbc0f9d9621179"
+        }
+      ],
+      "work_order": [
+        {
+          "description": "Nonbonded 12-6-4 LJ-type ion model: CA site A:1551: likely_catalytic, coordination number 6",
+          "finding_id": "metals/A:1551",
+          "option_id": "nonbonded_12_6_4",
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 1551
+            }
+          ],
+          "stage": "parameterization"
+        },
+        {
+          "description": "Model FGly as the aldehyde hydrate (gem-diol, FGH): Formylglycine (sulfatase catalytic residue): ALS A:84",
+          "finding_id": "nonstandard_residues/A:84",
+          "option_id": "model_gem_diol",
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 84
+            }
+          ],
+          "stage": "chemistry"
+        },
+        {
+          "description": "Cap the first/last observed residue (neutral ACE/NME-style caps): Unobserved N-terminal residues: A:26-33 (8 residues)",
+          "finding_id": "missing_residues/A:26-33",
+          "option_id": "cap_termini",
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 26
+            },
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 27
+            },
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 28
+            },
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 29
+            },
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 30
+            },
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 31
+            },
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 32
+            },
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 33
+            }
+          ],
+          "stage": "modelling"
+        },
+        {
+          "description": "Model the missing loop: Internal gap (unobserved residues between observed ones): A:444-453 (10 residues)",
+          "finding_id": "missing_residues/A:444-453",
+          "option_id": "model_loop",
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 444
+            },
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 445
+            },
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 446
+            },
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 447
+            },
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 448
+            },
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 449
+            },
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 450
+            },
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 451
+            },
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 452
+            },
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 453
+            }
+          ],
+          "stage": "modelling"
+        },
+        {
+          "description": "Keep and parameterize outside the rule system: Unrecognized chemistry: CL at A:1567",
+          "finding_id": "unrecognized/group/A:1567",
+          "option_id": "parameterize_manually",
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 1567
+            }
+          ],
+          "stage": "parameterization"
+        },
+        {
+          "description": "Keep and parameterize outside the rule system: Unrecognized chemistry: CL at A:1568",
+          "finding_id": "unrecognized/group/A:1568",
+          "option_id": "parameterize_manually",
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 1568
+            }
+          ],
+          "stage": "parameterization"
+        },
+        {
+          "description": "Keep and parameterize outside the rule system: Unrecognized chemistry: CL at A:1569",
+          "finding_id": "unrecognized/group/A:1569",
+          "option_id": "parameterize_manually",
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 1569
+            }
+          ],
+          "stage": "parameterization"
+        },
+        {
+          "description": "A:468 ARG>TRP: the mutated residue has no hydrogens (TASK-005 decision 2)",
+          "finding_id": "variant_build/R468W/A:468",
+          "option_id": "choose_rotamer",
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 468
+            }
+          ],
+          "stage": "protonation"
+        },
+        {
+          "description": "A:261: moved in relaxation, hydrogens removed",
+          "finding_id": "variant_build/R468W/A:468",
+          "option_id": null,
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 261
+            }
+          ],
+          "stage": "protonation"
+        },
+        {
+          "description": "A:262: moved in relaxation, hydrogens removed",
+          "finding_id": "variant_build/R468W/A:468",
+          "option_id": null,
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 262
+            }
+          ],
+          "stage": "protonation"
+        },
+        {
+          "description": "A:263: moved in relaxation, hydrogens removed",
+          "finding_id": "variant_build/R468W/A:468",
+          "option_id": null,
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 263
+            }
+          ],
+          "stage": "protonation"
+        },
+        {
+          "description": "A:264: moved in relaxation, hydrogens removed",
+          "finding_id": "variant_build/R468W/A:468",
+          "option_id": null,
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 264
+            }
+          ],
+          "stage": "protonation"
+        },
+        {
+          "description": "A:265: moved in relaxation, hydrogens removed",
+          "finding_id": "variant_build/R468W/A:468",
+          "option_id": null,
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 265
+            }
+          ],
+          "stage": "protonation"
+        },
+        {
+          "description": "A:266: moved in relaxation, hydrogens removed",
+          "finding_id": "variant_build/R468W/A:468",
+          "option_id": null,
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 266
+            }
+          ],
+          "stage": "protonation"
+        },
+        {
+          "description": "A:344: moved in relaxation, hydrogens removed",
+          "finding_id": "variant_build/R468W/A:468",
+          "option_id": null,
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 344
+            }
+          ],
+          "stage": "protonation"
+        },
+        {
+          "description": "A:349: moved in relaxation, hydrogens removed",
+          "finding_id": "variant_build/R468W/A:468",
+          "option_id": null,
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 349
+            }
+          ],
+          "stage": "protonation"
+        },
+        {
+          "description": "A:350: moved in relaxation, hydrogens removed",
+          "finding_id": "variant_build/R468W/A:468",
+          "option_id": null,
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 350
+            }
+          ],
+          "stage": "protonation"
+        },
+        {
+          "description": "A:467: moved in relaxation, hydrogens removed",
+          "finding_id": "variant_build/R468W/A:468",
+          "option_id": null,
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 467
+            }
+          ],
+          "stage": "protonation"
+        },
+        {
+          "description": "A:469: moved in relaxation, hydrogens removed",
+          "finding_id": "variant_build/R468W/A:468",
+          "option_id": null,
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 469
+            }
+          ],
+          "stage": "protonation"
+        },
+        {
+          "description": "A:470: moved in relaxation, hydrogens removed",
+          "finding_id": "variant_build/R468W/A:468",
+          "option_id": null,
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 470
+            }
+          ],
+          "stage": "protonation"
+        },
+        {
+          "description": "A:471: moved in relaxation, hydrogens removed",
+          "finding_id": "variant_build/R468W/A:468",
+          "option_id": null,
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 471
+            }
+          ],
+          "stage": "protonation"
+        },
+        {
+          "description": "A:473: moved in relaxation, hydrogens removed",
+          "finding_id": "variant_build/R468W/A:468",
+          "option_id": null,
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 473
+            }
+          ],
+          "stage": "protonation"
+        },
+        {
+          "description": "A:476: moved in relaxation, hydrogens removed",
+          "finding_id": "variant_build/R468W/A:468",
+          "option_id": null,
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 476
+            }
+          ],
+          "stage": "protonation"
+        },
+        {
+          "description": "A:477: moved in relaxation, hydrogens removed",
+          "finding_id": "variant_build/R468W/A:468",
+          "option_id": null,
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 477
+            }
+          ],
+          "stage": "protonation"
+        },
+        {
+          "description": "A:480: moved in relaxation, hydrogens removed",
+          "finding_id": "variant_build/R468W/A:468",
+          "option_id": null,
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 480
+            }
+          ],
+          "stage": "protonation"
+        },
+        {
+          "description": "A:484: moved in relaxation, hydrogens removed",
+          "finding_id": "variant_build/R468W/A:468",
+          "option_id": null,
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 484
+            }
+          ],
+          "stage": "protonation"
+        },
+        {
+          "description": "A:485: moved in relaxation, hydrogens removed",
+          "finding_id": "variant_build/R468W/A:468",
+          "option_id": null,
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 485
+            }
+          ],
+          "stage": "protonation"
+        },
+        {
+          "description": "A:486: moved in relaxation, hydrogens removed",
+          "finding_id": "variant_build/R468W/A:468",
+          "option_id": null,
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 486
+            }
+          ],
+          "stage": "protonation"
+        },
+        {
+          "description": "A:487: moved in relaxation, hydrogens removed",
+          "finding_id": "variant_build/R468W/A:468",
+          "option_id": null,
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 487
+            }
+          ],
+          "stage": "protonation"
+        },
+        {
+          "description": "A:488: moved in relaxation, hydrogens removed",
+          "finding_id": "variant_build/R468W/A:468",
+          "option_id": null,
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 488
+            }
+          ],
+          "stage": "protonation"
+        },
+        {
+          "description": "A:502: moved in relaxation, hydrogens removed",
+          "finding_id": "variant_build/R468W/A:468",
+          "option_id": null,
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 502
+            }
+          ],
+          "stage": "protonation"
+        },
+        {
+          "description": "A:2125: moved in relaxation, hydrogens removed",
+          "finding_id": "variant_build/R468W/A:468",
+          "option_id": null,
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 2125
+            }
+          ],
+          "stage": "protonation"
+        },
+        {
+          "description": "A:2126: moved in relaxation, hydrogens removed",
+          "finding_id": "variant_build/R468W/A:468",
+          "option_id": null,
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 2126
+            }
+          ],
+          "stage": "protonation"
+        },
+        {
+          "description": "A:2127: moved in relaxation, hydrogens removed",
+          "finding_id": "variant_build/R468W/A:468",
+          "option_id": null,
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 2127
+            }
+          ],
+          "stage": "protonation"
+        },
+        {
+          "description": "A:2183: moved in relaxation, hydrogens removed",
+          "finding_id": "variant_build/R468W/A:468",
+          "option_id": null,
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 2183
+            }
+          ],
+          "stage": "protonation"
+        },
+        {
+          "description": "A:2184: moved in relaxation, hydrogens removed",
+          "finding_id": "variant_build/R468W/A:468",
+          "option_id": null,
+          "residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 2184
+            }
+          ],
+          "stage": "protonation"
+        }
+      ]
+    }
+  ],
+  "wild_type": {
+    "directory": "wt",
+    "prep_record_sha256": "d5736873887d0229839bcc0269fdce45cac88c402f093df8c7c84ff754d9f4a2"
+  }
+}

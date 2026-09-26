@@ -24,31 +24,24 @@ rules:
         label: Build the side chain in the rotamer named in the decision
         cost_hint: low
         trade_offs:
-          - Rigid placement in the unrelaxed wild-type environment; neighbours and waters
-            do not move, so a real variant may pack differently.
-          - A rotamer with a clash is refused (TASK-005 decision 4); relaxation belongs to
-            a later stage.
+          - Placed rigidly in the wild-type environment, then relaxed with its
+            surroundings when the manifest's relaxation is enabled (TASK-006); the matched
+            wild type is relaxed the same way.
+          - Clashes only flag (maintainer, TASK-005 review); a clashing rotamer is built,
+            and the clashes that remain after relaxation are reported as a warning.
       - id: expert_review
         prep_action: unresolved
-        label: Needs expert review (no candidate is acceptable as placed)
+        label: Needs expert review before a side chain is built
         cost_hint: high
         trade_offs:
-          - Keeps the variant from being built until a human decides how to place it
-            (for example after relaxing its surroundings).
+          - Keeps the variant from being built until a human decides how to place it.
     recommended_option:
       default: choose_rotamer
-      conditions:
-        - name: every_candidate_clashes
-          when:
-            evidence:
-              all_candidates_clash: [true]
-          option: expert_review
-          reason: >-
-            Every rotamer candidate clashes with the kept atoms; v0.1 does not build a
-            clashing side chain (TASK-005 decision 4).
+      conditions: []
     rationale: >-
       A mutated side chain has no deposited coordinates, so its placement is a modelling
-      choice and is recorded like any other decision. Candidates are the rotamers of
+      choice and is recorded like any other decision. Clashes flag; they do not stop the
+      build (maintainer, TASK-005 review), and the relaxation step (TASK-006) follows. Candidates are the rotamers of
       knowledge/side_chains.yaml (plus the 180-degree flip of a planar amide); the
       recommended rotamer is the one with the fewest clashes, then the highest library
       frequency (recommended_rotamer evidence). A non-polar heavy-atom pair clashes when

@@ -20,6 +20,9 @@ dev = [
     "pytest==9.0.2",
     "ruff==0.15.8",
 ]
+relax = [
+    "openmm==8.6.1",
+]
 
 [project.scripts]
 simprep = "simprep.cli:main"

@@ -17,13 +17,13 @@ test("variant_build findings from the manifest are reviewed with the audit findi
   assert.ok(decidedIds(state).has("variant_build/R468Q/A:468"));
 });
 
-test("rotamer choices come from the candidate evidence; clashing ones are refused", () => {
+test("rotamer choices come from the candidate evidence; clashing ones are allowed (relaxation follows)", () => {
   const finding = variantFinding(opened());
   const choices = rotamerChoices(finding);
   assert.ok(choices.some((c) => c.id === "mm-40" && c.clashCount === 0));
   const clashing = choices.find((c) => c.clashCount > 0);
   assert.deepEqual(decisionProblems(finding, draft({ parameters: { rotamer: "mm-40" } })), []);
-  assert.match(decisionProblems(finding, draft({ parameters: { rotamer: clashing.id } }))[0], /will not build it/);
+  assert.deepEqual(decisionProblems(finding, draft({ parameters: { rotamer: clashing.id } })), []);
   assert.match(decisionProblems(finding, draft({ parameters: { rotamer: "zz" } }))[0], /not one of the candidates/);
   const decision = makeDecision(finding, draft({ parameters: { rotamer: "mm-40" } }), "2026-01-01T00:00:00Z");
   assert.deepEqual(decision.parameters, { rotamer: "mm-40" });

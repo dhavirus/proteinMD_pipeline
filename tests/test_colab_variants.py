@@ -8,6 +8,7 @@ import pytest
 import yaml
 
 from modules.variants_module import run_variants_job
+from simprep.knowledge import load_ruleset
 from simprep.prep.run import PrepRequest
 from simprep.variants.run import run_variants
 from tests.prep_helpers import decided_manifest
@@ -36,6 +37,7 @@ def undecided(tmp_path):
     path = decided_manifest(STRUCTURE, PREP["decisions"], tmp_path / "m.json")
     document = json.loads(path.read_text())
     document["variants"] = [v for v in FIXTURE["variants"] if v["name"] == "R468Q"]
+    document["relaxation"] = {**load_ruleset().relaxation, "enabled": False}  # speed
     path.write_text(json.dumps(document))
     return path
 

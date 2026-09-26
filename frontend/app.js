@@ -388,7 +388,7 @@ function altlocInput(finding, saved) {
 function rotamerInput(finding, saved) {
   const current = saved?.parameters?.rotamer || "";
   const label = (c) => `${c.id} · ${c.clashCount} clash${c.clashCount === 1 ? "" : "es"} · library ${c.frequency} %`;
-  return [el("label", { class: "field", for: "decision-rotamer", text: "Rotamer to build (clashing ones are refused)" }),
+  return [el("label", { class: "field", for: "decision-rotamer", text: "Rotamer to build (clashes are relaxed afterwards and reported)" }),
     el("select", { id: "decision-rotamer" }, el("option", { value: "", text: "Choose…" }),
       ...rotamerChoices(finding).map((c) => el("option", { value: c.id, text: label(c), selected: c.id === current })))];
 }
@@ -495,8 +495,23 @@ function renderVariants() {
     el("h2", { id: "variants-title", text: "Variants" }),
     el("p", { class: "msg" }, "Built from the prepared wild type by ", el("span", { class: "mono", text: "simprep variants" }),
       ", which proposes side-chain rotamers as findings to decide here."),
+    relaxationSummary(),
     ...state.variants.map(variantItem),
     form);
+}
+
+/** The manifest's relaxation protocol, read-only in v0.1 (TASK-006 decision 6). */
+function relaxationSummary() {
+  const protocol = state.baseManifest?.relaxation;
+  if (!protocol) {
+    return el("p", { class: "msg", id: "relaxation-protocol", text: "Relaxation: the knowledge-base defaults are filled in by simprep variants." });
+  }
+  const text = protocol.enabled
+    ? `Relaxation: ${protocol.engine}, ${protocol.force_field_files.join(" + ")}; shell ${protocol.mobile_shell_angstrom} Å; `
+      + `restraint ${protocol.restraint_kj_per_mol_nm2} kJ/mol/nm²; ${protocol.platform} platform, seed ${protocol.seed}. `
+      + "Edit it in the manifest JSON."
+    : "Relaxation: off (variants are rigid builds). Edit it in the manifest JSON.";
+  return el("p", { class: "msg", id: "relaxation-protocol", text });
 }
 
 function variantItem(variant) {

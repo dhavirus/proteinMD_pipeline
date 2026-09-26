@@ -61,7 +61,13 @@ def rule_files():
 
 def test_kb_lists_every_rule_file():
     listed = {path.name for path in rule_files()}
-    not_rules = {"kb.yaml", "audit_defaults.yaml", "residue_mappings.yaml", "side_chains.yaml"}
+    not_rules = {
+        "kb.yaml",
+        "audit_defaults.yaml",
+        "residue_mappings.yaml",
+        "side_chains.yaml",
+        "relaxation.yaml",
+    }
     present = {p.name for p in KNOWLEDGE_DIR.glob("*.yaml")} - not_rules
     assert listed == present
 

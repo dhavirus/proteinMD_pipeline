@@ -1,0 +1,43 @@
+schema_version: 0.1.0
+family: relaxation
+description: >-
+  Checks on systems after the restrained local relaxation of variant sites (TASK-006).
+  Evaluated by `simprep variants`, not by `simprep audit`.
+
+rules:
+  - rule_id: relaxation.residual_clashes
+    family: relaxation
+    version: 0.1.0
+    title: Clashes that remain after relaxation
+    priority: 0
+    matcher:
+      kind: residual_clashes
+      criterion_rule: variant_build.rotamer_choice
+    base_severity: warn
+    options:
+      - id: accept
+        prep_action: record
+        prep_stage: modelling
+        label: Accept the relaxed system; the contacts are left to equilibration
+        cost_hint: low
+        trade_offs:
+          - Marginal contacts after a restrained minimization usually resolve during
+            equilibration, but that is not checked here.
+          - The contacts stay listed in the record for later review.
+      - id: expert_review
+        prep_action: unresolved
+        label: Needs expert review (for example a weaker restraint or another rotamer)
+        cost_hint: high
+        trade_offs:
+          - A human decides whether the protocol or the rotamer should change.
+    recommended_option:
+      default: accept
+      conditions: []
+    rationale: >-
+      Relaxation moves side chains and waters within the shell under strong positional
+      restraints (TASK-006), so close contacts can remain. They are judged with the
+      variant_build criterion and reported, not hidden; clashes only flag (maintainer,
+      TASK-005 review). One finding per relaxed system that still has clashes at a
+      mutated residue.
+    references: []
+    verify_flags: []

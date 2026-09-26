@@ -19,6 +19,9 @@ PURE_MODULES = (
     "simprep.variants.validate",
     "simprep.variants.apply",
     "simprep.variants.report",
+    "simprep.variants.relaxation",
+    "simprep.relax.shell",
+    "simprep.relax.openmm_run",
 )
 
 PROBE = f"""

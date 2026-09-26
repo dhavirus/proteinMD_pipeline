@@ -25,13 +25,22 @@ expected:
     # Independent placements that all clash: PDBFixer 1.12.0 put the ring through the
     # Ser470 backbone (CH2 - C 1.02 A; coordinates below), and a 10-degree grid over
     # chi1/chi2 made in the TASK-005 session left at least 0.74 A of heavy-atom overlap.
+    # Clashes only flag (maintainer, TASK-005 review), so the fewest-clash rotamer is
+    # still the recommendation; relaxation follows (TASK-006).
     all_candidates_clash: true
-    recommended_option: expert_review
+    recommended_option: choose_rotamer
   R468Q:
     # Gln is shorter than the deposited Arg; the PDBFixer 1.12.0 placement (below) has
     # no heavy-atom contact closer than OE1 - Val262 O 2.49 A (a polar pair).
     all_candidates_clash: false
     recommended_option: choose_rotamer
+# TASK-006 relaxation (default protocol), from the spike in docs/tasks/TASK-006: the
+# relaxed wild type moves at most 0.40 A, R468Q stays clash-free, R468W goes from 10 site
+# clashes to at most 4, and whatever remains is a warn finding.
+relaxation:
+  wild_type_max_displacement_angstrom: 0.5
+  R468Q: {clashes_after_at_most: 0}
+  R468W: {clashes_before: 10, clashes_after_at_most: 4}
 # Side chains beyond CB placed by PDBFixer 1.12.0 / OpenMM 8.6.1 (applyMutations +
 # addMissingAtoms restricted to A:468) on the prep fixture's WT system, TASK-005 spike.
 pdbfixer_placements:

@@ -21,6 +21,7 @@ SCHEMA_NAMES = (
     "prep_record",
     "side_chains",
     "variant_record",
+    "relaxation",
 )
 __all__ = ["SCHEMA_NAMES", "SCHEMA_VERSION", "validate", "validation_errors"]
 
