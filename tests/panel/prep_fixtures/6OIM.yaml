@@ -1,0 +1,17 @@
+# Prep fixture (TASK-004): decides every 6OIM finding with a deliberate mix of options.
+# Decisions are test inputs, not scientific recommendations.
+structure: 6OIM.cif.gz
+reviewed: false
+decisions:
+  metals/A:301: {option: nonbonded_12_6, rationale: "fixture"}
+  missing_residues/A:-13--1: {option: truncate, rationale: "fixture: expression tag left out"}
+  missing_residues/A:105-107: {option: model_loop, rationale: "fixture"}
+  unrecognized/group/A:302: {option: parameterize_manually, rationale: "GDP kept"}
+  unrecognized/group/A:303: {option: parameterize_manually, rationale: "covalent inhibitor kept"}
+expected:
+  systems: [system]
+  excluded_residues: {chains: [], residues: []}
+  excluded_by_class: {branched: 0, nonpolymer: 0, polymer: 0, water: 0}
+  collapsed_altloc_residues: {}
+  added_links: []
+  work_order: {parameterization: 3, topology: 1, modelling: 1}

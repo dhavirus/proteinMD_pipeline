@@ -1,0 +1,29 @@
+# Prep fixture (TASK-004): decides every 3KS3 finding with a deliberate mix of options.
+# Decisions are test inputs, not scientific recommendations.
+structure: 3KS3.cif.gz
+reviewed: false
+decisions:
+  metals/A:262: {option: bonded_mcpb, rationale: "fixture: catalytic Zn2+, bonded model later"}
+  altlocs/water: {option: highest_occupancy, rationale: "fixture"}
+  altlocs/A:4: {option: highest_occupancy, rationale: "fixture"}
+  altlocs/A:14: {option: highest_occupancy, rationale: "fixture"}
+  altlocs/A:22: {option: highest_occupancy, rationale: "fixture"}
+  altlocs/A:34: {option: highest_occupancy, rationale: "fixture"}
+  altlocs/A:64: {option: highest_occupancy, rationale: "fixture"}
+  altlocs/A:80: {option: specific_altloc, parameters: {altloc: B}, rationale: "fixture: explicit altloc"}
+  altlocs/A:130: {option: highest_occupancy, rationale: "fixture"}
+  altlocs/A:133: {option: highest_occupancy, rationale: "fixture"}
+  altlocs/A:136: {option: highest_occupancy, rationale: "fixture"}
+  altlocs/A:152: {option: highest_occupancy, rationale: "fixture"}
+  altlocs/A:214: {option: highest_occupancy, rationale: "fixture"}
+  altlocs/A:215: {option: highest_occupancy, rationale: "fixture"}
+  altlocs/A:217: {option: highest_occupancy, rationale: "fixture"}
+  missing_residues/A:1-3: {option: truncate, rationale: "fixture: disordered N-terminus left out"}
+  unrecognized/group/A:304: {option: exclude, rationale: "glycerol from cryoprotection excluded"}
+expected:
+  systems: [system]
+  excluded_residues: {chains: [], residues: ["A:304"]}
+  excluded_by_class: {branched: 0, nonpolymer: 1, polymer: 0, water: 0}
+  collapsed_altloc_residues: {"A:80": B}
+  added_links: []
+  work_order: {parameterization: 1, topology: 1}

@@ -1,0 +1,23 @@
+# Prep fixture (TASK-004): decides every 1HZH finding with a deliberate mix of options.
+# Decisions are test inputs, not scientific recommendations.
+structure: 1HZH.cif.gz
+reviewed: false
+decisions:
+  missing_residues/K:130-136: {option: model_loop, rationale: "fixture"}
+  missing_residues/K:236-238: {option: truncate, rationale: "fixture"}
+  missing_residues/K:476-478: {option: cap_termini, rationale: "fixture"}
+  covalent_contacts/n_glycosylation/A:1-H:314: {option: add_link, rationale: "N-glycan on the Fc sequon Asn"}
+  covalent_contacts/n_glycosylation/B:1-K:314: {option: add_link, rationale: "N-glycan on the Fc sequon Asn"}
+  unrecognized/group/A:1: {option: parameterize_manually, rationale: "glycan kept, glycan force field later"}
+  unrecognized/group/B:1: {option: parameterize_manually, rationale: "glycan kept, glycan force field later"}
+expected:
+  # TASK-004 acceptance: both ASN-NAG bonds appear in the output struct_conn.
+  # Atoms from the TASK-003 spec (NAG 1 C1 to ASN 314 ND2 in chains H and K).
+  systems: [system]
+  excluded_residues: {chains: [], residues: []}
+  excluded_by_class: {branched: 0, nonpolymer: 0, polymer: 0, water: 0}
+  collapsed_altloc_residues: {}
+  added_links:
+    - {ligand: "A:1", ligand_atom: C1, polymer: "H:314", polymer_atom: ND2}
+    - {ligand: "B:1", ligand_atom: C1, polymer: "K:314", polymer_atom: ND2}
+  work_order: {modelling: 2, topology: 1, parameterization: 2}
