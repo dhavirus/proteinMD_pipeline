@@ -36,9 +36,50 @@
         }
       ]
     },
-    "decisions": {"type": "array", "items": {"$ref": "#/$defs/decision"}}
+    "decisions": {"type": "array", "items": {"$ref": "#/$defs/decision"}},
+    "variants": {
+      "description": "Variants to build from the prepared wild-type system (TASK-005). Optional.",
+      "type": "array",
+      "items": {"$ref": "#/$defs/variant"}
+    },
+    "variant_snapshot": {
+      "description": "variant_build findings for `variants` (written by `simprep variants`); decided in `decisions` like any other finding. variants_sha256 is the RFC 8785 hash of the variants list the findings were computed for.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["generated_at", "variants_sha256", "findings_sha256", "findings"],
+      "properties": {
+        "generated_at": {"type": "string", "format": "date-time"},
+        "variants_sha256": {"$ref": "#/$defs/sha256"},
+        "findings_sha256": {"$ref": "#/$defs/sha256"},
+        "findings": {"type": "array", "items": {"$ref": "urn:simprep:schema:finding"}}
+      }
+    }
   },
   "$defs": {
+    "variant": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "mutations", "rationale", "references"],
+      "properties": {
+        "name": {"type": "string", "pattern": "^[A-Za-z0-9_-]+$"},
+        "mutations": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/mutation"}},
+        "rationale": {"type": "string", "minLength": 1},
+        "references": {"type": "array", "items": {"$ref": "urn:simprep:schema:finding#/$defs/reference"}}
+      }
+    },
+    "mutation": {
+      "description": "Replace the residue at chain/seq_num/ins_code (author numbering) whose name is `from` by `to` (chemical component ids).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["chain", "seq_num", "ins_code", "from", "to"],
+      "properties": {
+        "chain": {"type": "string", "minLength": 1},
+        "seq_num": {"type": "integer"},
+        "ins_code": {"type": "string", "maxLength": 1},
+        "from": {"type": "string", "pattern": "^[A-Z0-9]{1,5}$"},
+        "to": {"type": "string", "pattern": "^[A-Z0-9]{1,5}$"}
+      }
+    },
     "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
     "input": {
       "type": "object",

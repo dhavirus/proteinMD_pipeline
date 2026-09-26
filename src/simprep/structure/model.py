@@ -115,6 +115,25 @@ class UnobservedResidue:
 
 
 @dataclass(frozen=True)
+class SequenceReference:
+    """An author-numbered range of a chain aligned to a sequence database entry
+    (struct_ref_seq joined with struct_ref)."""
+
+    chain: str
+    db_name: str
+    db_accession: str
+    auth_begin: int
+    auth_end: int
+    db_begin: int
+
+    def db_position(self, seq_num: int) -> int | None:
+        """Database position of author residue ``seq_num``, or None outside this range."""
+        if self.auth_begin <= seq_num <= self.auth_end:
+            return self.db_begin + seq_num - self.auth_begin
+        return None
+
+
+@dataclass(frozen=True)
 class Structure:
     """A single model of an asymmetric unit plus the annotations detectors rely on.
 
@@ -135,6 +154,7 @@ class Structure:
     annotation_categories: frozenset[str] = field(default_factory=frozenset)
     crystallization_details: str | None = None
     polymer_sequences: tuple[tuple[str, tuple[str, ...]], ...] = ()
+    sequence_references: tuple[SequenceReference, ...] = ()
 
     @cached_property
     def residue_index(self) -> dict[ResidueId, Residue]:

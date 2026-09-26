@@ -14,6 +14,8 @@ from simprep.schemas import validate
 KB_MANIFEST = "kb.yaml"
 AUDIT_DEFAULTS = "audit_defaults.yaml"
 RESIDUE_MAPPINGS = "residue_mappings.yaml"
+SIDE_CHAINS = "side_chains.yaml"
+DATA_FILES = (RESIDUE_MAPPINGS, SIDE_CHAINS)
 
 
 def load_rule_file(path: Path) -> tuple[Rule, ...]:
@@ -37,10 +39,11 @@ def load_ruleset(knowledge_dir: Path = KNOWLEDGE_DIR) -> RuleSet:
     fixed = [knowledge_dir / KB_MANIFEST, knowledge_dir / AUDIT_DEFAULTS]
     return RuleSet(
         version=kb["kb_version"],
-        sha256=_hash_files([*fixed, *rule_files, knowledge_dir / RESIDUE_MAPPINGS]),
+        sha256=_hash_files([*fixed, *rule_files, *(knowledge_dir / name for name in DATA_FILES)]),
         rules=rules,
         audit_defaults=yaml.safe_load((knowledge_dir / AUDIT_DEFAULTS).read_text()),
         residue_mappings=load_residue_mappings(knowledge_dir / RESIDUE_MAPPINGS),
+        side_chains=load_side_chains(knowledge_dir / SIDE_CHAINS),
     )
 
 
@@ -53,6 +56,13 @@ def load_residue_mappings(path: Path) -> tuple[dict, ...]:
     if duplicates:
         raise RuleConsistencyError(f"{path.name}: more than one mapping for {duplicates}")
     return tuple(data["mappings"])
+
+
+def load_side_chains(path: Path) -> dict:
+    """Schema-validated side-chain building data per residue type (variants)."""
+    data = yaml.safe_load(path.read_text())
+    validate(data, "side_chains")
+    return data["residues"]
 
 
 def _hash_files(paths: list[Path]) -> str:

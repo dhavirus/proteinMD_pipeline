@@ -42,7 +42,7 @@
       "additionalProperties": false,
       "required": ["stage", "finding_id", "option_id", "description", "residues"],
       "properties": {
-        "stage": {"enum": ["modelling", "chemistry", "parameterization", "topology", "decision"]},
+        "stage": {"enum": ["modelling", "chemistry", "parameterization", "topology", "protonation", "decision"]},
         "finding_id": {"type": "string", "minLength": 1},
         "option_id": {"type": ["string", "null"]},
         "description": {"type": "string", "minLength": 1},

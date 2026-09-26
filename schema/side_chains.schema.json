@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:simprep:schema:side_chains",
+  "x-schema-version": "0.1.0",
+  "title": "simprep side-chain building data (variants)",
+  "description": "Ideal internal coordinates and rotamers used to build a mutated side chain from the kept backbone (N, CA, C, CB) of the wild-type residue (TASK-005 decision 1). A residue type absent here cannot be a mutation target.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "references", "verify_flags", "residues"],
+  "properties": {
+    "schema_version": {"const": "0.1.0"},
+    "references": {"type": "array", "items": {"$ref": "urn:simprep:schema:finding#/$defs/reference"}},
+    "verify_flags": {"type": "array", "items": {"type": "string", "pattern": "^\\[VERIFY\\]"}},
+    "residues": {
+      "type": "object",
+      "propertyNames": {"pattern": "^[A-Z]{3}$"},
+      "additionalProperties": {"$ref": "#/$defs/residue"}
+    }
+  },
+  "$defs": {
+    "atom_name": {"type": "string", "pattern": "^[A-Z0-9']{1,4}$"},
+    "residue": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["atoms", "rotamers"],
+      "properties": {
+        "atoms": {
+          "description": "Side-chain atoms beyond CB, placed in order; each is defined from three atoms already placed (or N, CA, CB).",
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "#/$defs/atom"}
+        },
+        "flip_chi": {
+          "description": "Chi index of a planar terminal group whose 180-degree flip is a separate candidate (Asn/Gln/His; Lovell et al. 2000).",
+          "type": "integer",
+          "minimum": 1
+        },
+        "rotamers": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/rotamer"}}
+      }
+    },
+    "atom": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "element", "refs", "bond_angstrom", "angle_degree", "dihedral"],
+      "properties": {
+        "name": {"$ref": "#/$defs/atom_name"},
+        "element": {"type": "string", "pattern": "^[A-Z]{1,2}$"},
+        "refs": {"type": "array", "items": {"$ref": "#/$defs/atom_name"}, "minItems": 3, "maxItems": 3},
+        "bond_angstrom": {"type": "number", "exclusiveMinimum": 0},
+        "angle_degree": {"type": "number", "exclusiveMinimum": 0, "exclusiveMaximum": 180},
+        "dihedral": {
+          "description": "Fixed dihedral in degrees, or chi n plus an offset.",
+          "oneOf": [
+            {"type": "number"},
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["chi"],
+              "properties": {
+                "chi": {"type": "integer", "minimum": 1},
+                "offset_degree": {"type": "number"}
+              }
+            }
+          ]
+        }
+      }
+    },
+    "rotamer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "chi_degree", "frequency_percent"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^[a-z0-9-]+$"},
+        "chi_degree": {"type": "array", "minItems": 1, "items": {"type": "number"}},
+        "frequency_percent": {"type": "number", "minimum": 0, "maximum": 100}
+      }
+    }
+  }
+}

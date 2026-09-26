@@ -2,19 +2,21 @@
 
 Counts compare each output system with the input, per record type:
 ``in = passed_through + modified + excluded`` and ``out = passed_through + modified + added``.
-An atom record counts as modified when its residue was modified (altlocs collapsed,
-renamed by a mapping); atoms a modification dropped count as excluded.
+Atoms of a changed residue are matched by name: an atom name kept counts as modified,
+extra records of a name (other altlocs) or names that disappear count as excluded, and
+new names (a built side chain, a mapped rename) count as added.
 """
 
 from __future__ import annotations
 
+from collections import Counter
 from dataclasses import dataclass
 
 from simprep import SCHEMA_VERSION
 from simprep.prep.apply import System
 from simprep.prep.plan import Action, PrepPlan, WorkItem
 from simprep.rules import RuleSet
-from simprep.structure.model import ResidueClass, ResidueId, Structure
+from simprep.structure.model import Residue, ResidueClass, ResidueId, Structure
 
 
 @dataclass(frozen=True)
@@ -105,12 +107,25 @@ def _atom_row(before: Structure, after: Structure) -> dict:
     row = dict.fromkeys(("passed_through", "modified", "excluded"), 0)
     for residue in before.residues:
         kept = out.get(residue.id)
-        kept_atoms = 0 if kept is None else len(kept.atoms)
-        row["excluded"] += len(residue.atoms) - kept_atoms
-        row["passed_through" if kept == residue else "modified"] += kept_atoms
+        if kept is None:
+            row["excluded"] += len(residue.atoms)
+        elif kept == residue:
+            row["passed_through"] += len(residue.atoms)
+        else:
+            modified, excluded = _changed_atoms(residue, kept)
+            row["modified"] += modified
+            row["excluded"] += excluded
     total_in = sum(len(r.atoms) for r in before.residues)
     total_out = sum(len(r.atoms) for r in after.residues)
     return _row("atom records", (total_in, total_out), row)
+
+
+def _changed_atoms(before: Residue, after: Residue) -> tuple[int, int]:
+    """(modified, excluded) atom records of a changed residue, matched by atom name."""
+    names_before = Counter(atom.name for atom in before.atoms)
+    names_after = Counter(atom.name for atom in after.atoms)
+    kept = sum(min(count, names_after[name]) for name, count in names_before.items())
+    return kept, len(before.atoms) - kept
 
 
 def _keyed_row(record_type: str, before: dict, after: dict) -> dict:

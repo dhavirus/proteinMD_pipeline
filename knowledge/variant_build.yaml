@@ -1,0 +1,71 @@
+schema_version: 0.1.0
+family: variant_build
+description: >-
+  Side-chain placement for variants (TASK-005). Every mutated residue gets a recorded
+  rotamer choice; each candidate's contacts with the prepared wild-type system are the
+  evidence. Evaluated by `simprep variants`, not by `simprep audit`.
+
+rules:
+  - rule_id: variant_build.rotamer_choice
+    family: variant_build
+    version: 0.1.0
+    title: Side-chain placement for a mutated residue
+    priority: 0
+    matcher:
+      kind: side_chain_placement
+      overlap_angstrom: 0.4
+      polar_elements: [N, O]
+      polar_min_distance_angstrom: 2.3
+      radii_angstrom: {C: 1.70, N: 1.55, O: 1.52, S: 1.80, P: 1.80, CL: 1.75}
+    base_severity: blocking
+    options:
+      - id: choose_rotamer
+        prep_action: apply
+        label: Build the side chain in the rotamer named in the decision
+        cost_hint: low
+        trade_offs:
+          - Rigid placement in the unrelaxed wild-type environment; neighbours and waters
+            do not move, so a real variant may pack differently.
+          - A rotamer with a clash is refused (TASK-005 decision 4); relaxation belongs to
+            a later stage.
+      - id: expert_review
+        prep_action: unresolved
+        label: Needs expert review (no candidate is acceptable as placed)
+        cost_hint: high
+        trade_offs:
+          - Keeps the variant from being built until a human decides how to place it
+            (for example after relaxing its surroundings).
+    recommended_option:
+      default: choose_rotamer
+      conditions:
+        - name: every_candidate_clashes
+          when:
+            evidence:
+              all_candidates_clash: [true]
+          option: expert_review
+          reason: >-
+            Every rotamer candidate clashes with the kept atoms; v0.1 does not build a
+            clashing side chain (TASK-005 decision 4).
+    rationale: >-
+      A mutated side chain has no deposited coordinates, so its placement is a modelling
+      choice and is recorded like any other decision. Candidates are the rotamers of
+      knowledge/side_chains.yaml (plus the 180-degree flip of a planar amide); the
+      recommended rotamer is the one with the fewest clashes, then the highest library
+      frequency (recommended_rotamer evidence). A non-polar heavy-atom pair clashes when
+      the sum of van der Waals radii minus its distance reaches 0.4 A, the overlap Lovell
+      et al. 2000 use to remove uncertain residues (abstract, read in this session). A
+      pair of polar atoms (N/O) can be a hydrogen bond, which overlaps by more than
+      0.4 A in heavy-atom radii; it clashes only below 2.3 A. That limit is empirical:
+      of 1592 polar side-chain contacts with positive overlap in the committed panel,
+      0.1 % are shorter than 2.27 A and 1 % shorter than 2.36 A (measured in this
+      session; test_variant_check.py recomputes it). Hydrogens are ignored.
+    references:
+      - citation: "Lovell SC, Word JM, Richardson JS, Richardson DC. The penultimate rotamer library. Proteins 2000;40:389-408."
+        doi: "10.1002/1097-0134(20000815)40:3<389::AID-PROT50>3.0.CO;2-2"
+        pmid: "10861930"
+      - citation: "Bondi A. van der Waals volumes and radii. J Phys Chem 1964;68:441-451."
+        doi: "10.1021/j100785a001"
+        note: "Radii C 1.70, N 1.55, O 1.52, S 1.80, P 1.80, Cl 1.75 A."
+    verify_flags:
+      - "[VERIFY] van der Waals radii recalled from Bondi 1964 (not in PubMed; paper and DOI not checked in this session)."
+      - "[VERIFY] The 0.4 A overlap is taken from the Lovell et al. 2000 abstract, where it selects uncertain residues with all hydrogens and probe-based contacts; here it is applied to heavy atoms only."

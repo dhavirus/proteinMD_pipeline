@@ -1,0 +1,93 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:simprep:schema:variant_record",
+  "x-schema-version": "0.1.0",
+  "title": "simprep variant record (variant_record.json)",
+  "description": "What `simprep variants` built (TASK-005): per variant the mutations with the chosen rotamer and its closest contacts, the files written, record accounting against the prepared wild type, and the work order (the wild type's plus a protonation item per mutated residue).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "generated_at", "simprep", "knowledge_base", "input", "manifest_sha256",
+    "wild_type", "variants"
+  ],
+  "properties": {
+    "schema_version": {"const": "0.1.0"},
+    "generated_at": {"type": "string", "format": "date-time"},
+    "simprep": {"$ref": "urn:simprep:schema:manifest#/$defs/simprep"},
+    "knowledge_base": {"$ref": "urn:simprep:schema:manifest#/$defs/knowledge_base"},
+    "input": {"$ref": "urn:simprep:schema:manifest#/$defs/input"},
+    "manifest_sha256": {"$ref": "urn:simprep:schema:manifest#/$defs/sha256"},
+    "wild_type": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["directory", "prep_record_sha256"],
+      "properties": {
+        "directory": {"type": "string", "minLength": 1},
+        "prep_record_sha256": {"$ref": "urn:simprep:schema:manifest#/$defs/sha256"}
+      }
+    },
+    "variants": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/variant"}}
+  },
+  "$defs": {
+    "variant": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "directory", "mutations", "files", "counts", "work_order"],
+      "properties": {
+        "name": {"type": "string", "pattern": "^[A-Za-z0-9_-]+$"},
+        "directory": {"type": "string", "minLength": 1},
+        "mutations": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/mutation"}},
+        "files": {"$ref": "urn:simprep:schema:prep_record#/$defs/system/properties/files"},
+        "counts": {"type": "array", "minItems": 1, "items": {"$ref": "urn:simprep:schema:prep_record#/$defs/count"}},
+        "work_order": {"type": "array", "items": {"$ref": "urn:simprep:schema:prep_record#/$defs/work_item"}}
+      }
+    },
+    "mutation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "finding_id", "chain", "seq_num", "ins_code", "from", "to", "uniprot", "rotamer",
+        "chi_degree", "frequency_percent", "closest_contacts"
+      ],
+      "properties": {
+        "finding_id": {"type": "string", "minLength": 1},
+        "chain": {"type": "string", "minLength": 1},
+        "seq_num": {"type": "integer"},
+        "ins_code": {"type": "string", "maxLength": 1},
+        "from": {"type": "string", "pattern": "^[A-Z0-9]{1,5}$"},
+        "to": {"type": "string", "pattern": "^[A-Z0-9]{1,5}$"},
+        "uniprot": {
+          "oneOf": [
+            {"type": "null"},
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["accession", "position"],
+              "properties": {
+                "accession": {"type": "string", "minLength": 1},
+                "position": {"type": "integer", "minimum": 1}
+              }
+            }
+          ]
+        },
+        "rotamer": {"type": "string", "pattern": "^[a-z0-9-]+$"},
+        "chi_degree": {"type": "array", "minItems": 1, "items": {"type": "number"}},
+        "frequency_percent": {"type": "number", "minimum": 0, "maximum": 100},
+        "closest_contacts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["atom_name", "partner", "distance_angstrom", "overlap_angstrom"],
+            "properties": {
+              "atom_name": {"type": "string", "minLength": 1},
+              "partner": {"$ref": "urn:simprep:schema:finding#/$defs/atom_ref"},
+              "distance_angstrom": {"type": "number", "minimum": 0},
+              "overlap_angstrom": {"type": "number"}
+            }
+          }
+        }
+      }
+    }
+  }
+}
