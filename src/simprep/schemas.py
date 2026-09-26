@@ -12,7 +12,7 @@ from referencing import Registry, Resource
 from simprep import SCHEMA_VERSION
 from simprep.paths import SCHEMA_DIR, require_dir
 
-SCHEMA_NAMES = ("finding", "rule", "manifest", "findings_report")
+SCHEMA_NAMES = ("finding", "rule", "manifest", "findings_report", "residue_mappings", "prep_record")
 __all__ = ["SCHEMA_NAMES", "SCHEMA_VERSION", "validate", "validation_errors"]
 
 

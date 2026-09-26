@@ -8,11 +8,12 @@ from pathlib import Path
 import yaml
 
 from simprep.paths import KNOWLEDGE_DIR, require_dir
-from simprep.rules import Rule, RuleSet, check_rule, check_unique_ids
+from simprep.rules import Rule, RuleConsistencyError, RuleSet, check_rule, check_unique_ids
 from simprep.schemas import validate
 
 KB_MANIFEST = "kb.yaml"
 AUDIT_DEFAULTS = "audit_defaults.yaml"
+RESIDUE_MAPPINGS = "residue_mappings.yaml"
 
 
 def load_rule_file(path: Path) -> tuple[Rule, ...]:
@@ -26,20 +27,32 @@ def load_rule_file(path: Path) -> tuple[Rule, ...]:
 
 
 def load_ruleset(knowledge_dir: Path = KNOWLEDGE_DIR) -> RuleSet:
-    """Load every rule file listed in ``kb.yaml``; rule ids must be unique."""
+    """Load every rule file listed in ``kb.yaml`` plus the residue mappings; rule ids
+    must be unique. The knowledge-base hash covers all of these files."""
     require_dir(knowledge_dir)
     kb = yaml.safe_load((knowledge_dir / KB_MANIFEST).read_text())
-    files = [knowledge_dir / KB_MANIFEST, knowledge_dir / AUDIT_DEFAULTS] + [
-        knowledge_dir / name for name in kb["rule_files"]
-    ]
-    rules = tuple(rule for path in files[2:] for rule in load_rule_file(path))
+    rule_files = [knowledge_dir / name for name in kb["rule_files"]]
+    rules = tuple(rule for path in rule_files for rule in load_rule_file(path))
     check_unique_ids(rules)
+    fixed = [knowledge_dir / KB_MANIFEST, knowledge_dir / AUDIT_DEFAULTS]
     return RuleSet(
         version=kb["kb_version"],
-        sha256=_hash_files(files),
+        sha256=_hash_files([*fixed, *rule_files, knowledge_dir / RESIDUE_MAPPINGS]),
         rules=rules,
         audit_defaults=yaml.safe_load((knowledge_dir / AUDIT_DEFAULTS).read_text()),
+        residue_mappings=load_residue_mappings(knowledge_dir / RESIDUE_MAPPINGS),
     )
+
+
+def load_residue_mappings(path: Path) -> tuple[dict, ...]:
+    """Schema-validated revert_to_parent atom mappings; one entry per source component."""
+    data = yaml.safe_load(path.read_text())
+    validate(data, "residue_mappings")
+    sources = [mapping["from"] for mapping in data["mappings"]]
+    duplicates = sorted({name for name in sources if sources.count(name) > 1})
+    if duplicates:
+        raise RuleConsistencyError(f"{path.name}: more than one mapping for {duplicates}")
+    return tuple(data["mappings"])
 
 
 def _hash_files(paths: list[Path]) -> str:

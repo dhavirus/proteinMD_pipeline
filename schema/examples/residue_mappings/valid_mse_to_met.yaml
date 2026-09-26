@@ -1,0 +1,10 @@
+# Example only (not shipped in knowledge/): selenomethionine back to methionine.
+schema_version: 0.1.0
+mappings:
+  - from: MSE
+    to: MET
+    rename: {SE: SD}
+    rename_elements: {SD: S}
+    delete: []
+    rationale: Example mapping used in tests.
+    references: []
