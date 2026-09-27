@@ -26,6 +26,9 @@ SCHEMA_NAMES = (
     "model_record",
     "protonation",
     "protonation_record",
+    "parameterization",
+    "lj1264",
+    "parameterization_record",
 )
 __all__ = ["SCHEMA_NAMES", "SCHEMA_VERSION", "validate", "validation_errors"]
 

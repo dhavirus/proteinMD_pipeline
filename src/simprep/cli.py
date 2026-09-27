@@ -1,5 +1,5 @@
 """Command line: ``simprep audit``, ``simprep manifest init|status``, ``simprep prep``,
-``simprep model``, ``simprep variants`` and ``simprep protonate``."""
+``simprep model``, ``simprep variants``, ``simprep protonate`` and ``simprep parameterize``."""
 
 from __future__ import annotations
 
@@ -22,6 +22,7 @@ from simprep.manifest import (
 )
 from simprep.manifest.manifest import sha256_text
 from simprep.model.run import LoopRejected, run_model
+from simprep.parameterize.run import run_parameterize
 from simprep.paths import KNOWLEDGE_DIR
 from simprep.prep.run import RECORD_FILE, PrepRequest, run_prep
 from simprep.prep.run import REPORT_FILE as PREP_REPORT_FILE
@@ -133,6 +134,18 @@ def protonate(args: argparse.Namespace) -> int:
     return 0
 
 
+def parameterize(args: argparse.Namespace) -> int:
+    """Parameterize every protonated system in a directory (protonation_record.json)."""
+    record = run_parameterize(args.directory, args.manifest, args.knowledge)
+    for system in record["systems"]:
+        print(
+            f"{system['name']}: {system['particles']} particles, net charge "
+            f"{system['net_charge']:+g} -> {args.directory / system['directory']}"
+        )
+    print(f"record: {args.directory / 'parameterization_record.json'}")
+    return 0
+
+
 def variants(args: argparse.Namespace) -> int:
     """Pass 1: candidate findings into manifest.json (exit 3). Pass 2: build the variants."""
     try:
@@ -202,6 +215,12 @@ def build_parser() -> argparse.ArgumentParser:
     protonate_parser.add_argument("--manifest", type=Path, required=True)
     protonate_parser.add_argument("--out", type=Path, required=True, help="output directory")
     protonate_parser.set_defaults(handler=protonate)
+    parameterize_parser = commands.add_parser(
+        "parameterize", help="build and check force-field parameters for protonated systems"
+    )
+    parameterize_parser.add_argument("directory", type=Path, help="output of protonate/variants")
+    parameterize_parser.add_argument("--manifest", type=Path, required=True)
+    parameterize_parser.set_defaults(handler=parameterize)
     variants_parser = commands.add_parser(
         "variants", help="build the manifest's variants from the prepared wild type"
     )

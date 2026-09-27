@@ -18,7 +18,17 @@ SIDE_CHAINS = "side_chains.yaml"
 RELAXATION = "relaxation.yaml"
 MODELLING = "modelling.yaml"
 PROTONATION = "protonation.yaml"
-DATA_FILES = (RESIDUE_MAPPINGS, SIDE_CHAINS, RELAXATION, MODELLING, PROTONATION)
+PARAMETERIZATION = "parameterization.yaml"
+DATA_FILES = (
+    RESIDUE_MAPPINGS,
+    SIDE_CHAINS,
+    RELAXATION,
+    MODELLING,
+    PROTONATION,
+    PARAMETERIZATION,
+    "forcefield/ddz.xml",
+    "forcefield/lj1264.yaml",
+)
 
 
 def load_rule_file(path: Path) -> tuple[Rule, ...]:
@@ -50,6 +60,7 @@ def load_ruleset(knowledge_dir: Path = KNOWLEDGE_DIR) -> RuleSet:
         relaxation=load_relaxation(knowledge_dir / RELAXATION),
         modelling=load_modelling(knowledge_dir / MODELLING),
         protonation=load_protonation(knowledge_dir / PROTONATION),
+        parameterization=load_parameterization(knowledge_dir),
     )
 
 
@@ -90,6 +101,18 @@ def load_protonation(path: Path) -> dict:
     data = yaml.safe_load(path.read_text())
     validate(data, "protonation")
     return {"method": data["method"], "residue_definitions": data["residue_definitions"]}
+
+
+def load_parameterization(knowledge_dir: Path) -> dict:
+    """Schema-validated parameterization protocol and 12-6-4 data (TASK-010); generated
+    force-field files are returned as absolute paths."""
+    data = yaml.safe_load((knowledge_dir / PARAMETERIZATION).read_text())
+    validate(data, "parameterization")
+    protocol = data["protocol"]
+    lj1264 = yaml.safe_load((knowledge_dir / protocol["lj1264_file"]).read_text())
+    validate(lj1264, "lj1264")
+    generated = [str(knowledge_dir / name) for name in protocol["generated_force_field_files"]]
+    return {"protocol": protocol, "generated_files": generated, "lj1264": lj1264}
 
 
 def _hash_files(paths: list[Path]) -> str:

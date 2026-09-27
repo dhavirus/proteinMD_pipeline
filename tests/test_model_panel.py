@@ -165,3 +165,57 @@ def test_every_variant_carries_the_same_loop(variants, name):
     assert variant[ResidueId("A", 468)].residue_class is ResidueClass.POLYMER
     record = json.loads((variants / "variant_record.json").read_text())
     assert record["wild_type"]["modelled"]["directory"] == "wt_modelled"
+
+
+CHARGE = {"ASP": -1, "GLU": -1, "HIP": 1, "LYS": 1}  # formal charge per recorded variant
+PROTONATION = yaml.safe_load((PANEL_DIR / "protonation_fixtures" / "5FQL.yaml").read_text())
+
+
+def test_the_modelled_wild_type_protonates_and_parameterizes_completely(modelled):
+    """TASK-009/010 on the modelled wild type: every atom gets parameters; the net charge
+    equals the formal charges of the recorded states, Arg, the termini and the ions."""
+    import openmm
+
+    from simprep.parameterize.run import run_parameterize
+    from simprep.prep.run import PrepRequest, load_inputs
+    from simprep.protonate.run import protonate, write_protonation
+
+    record, root = modelled
+    document = json.loads((root / "m.json").read_text())
+    document["protonation"] = PROTONATION["protonation"]
+    (root / "mp.json").write_text(json.dumps(document))
+    inputs = load_inputs(PrepRequest(STRUCTURE, root / "mp.json", root))
+    structure = read_structure(root / "wt_modelled" / "system.cif")
+    wild_type = protonate("wt", structure, ("wt_modelled", "wt_protonated"), inputs)
+    protonation = write_protonation([wild_type], (inputs, record["work_order"]), root)
+    parameters = run_parameterize(root, root / "mp.json")
+    (system,) = parameters["systems"]
+    states = protonation["systems"][0]["states"]
+    arginines = sum(1 for r in structure.polymer_residues("A") if r.name == "ARG")
+    ions = sum(2 if r.name == "CA" else -1 for r in structure.residues if r.name in ("CA", "CL"))
+    termini = 1 - 1  # N-terminal Thr34 NH3+, C-terminal Pro550 COO-
+    expected = sum(CHARGE.get(s["variant"], 0) for s in states) + arginines + ions + termini
+    assert system["net_charge"] == expected
+    assert system["checks"]["angles"] == system["checks"]["angles_expected"]
+    (ion,) = system["ion_models"]
+    assert (ion["res_name"], ion["seq_num"], ion["model"]) == ("CA", 1551, "lj1264")
+    built = openmm.XmlSerializer.deserialize(
+        (root / system["directory"] / "system.xml").read_text()
+    )
+    c4 = next(f for f in built.getForces() if isinstance(f, openmm.CustomNonbondedForce))
+    water_oxygens = [
+        a.index
+        for r in _topology(root).residues()
+        if r.name == "HOH"
+        for a in r.atoms()
+        if a.element.symbol == "O"
+    ]
+    assert c4.getParticleParameters(water_oxygens[0])[1] == pytest.approx(
+        87.3 * 4.184e-4
+    )  # C4(Ca, OW)
+
+
+def _topology(root):
+    from openmm import app
+
+    return app.PDBFile(str(root / "wt_protonated" / "system.pdb")).topology

@@ -1,0 +1,11 @@
+# Valid: the shipped defaults (knowledge/parameterization.yaml).
+schema_version: 0.1.0
+protocol:
+  force_field_files: [amber14-all.xml, amber14/tip3p.xml]
+  generated_force_field_files: [forcefield/ddz.xml]
+  lj1264_file: forcefield/lj1264.yaml
+  metal_models: {nonbonded_12_6_4: lj1264}
+  check_nonbonded_method: NoCutoff
+references: []
+verify_flags:
+  - "[VERIFY] Li & Merz 2014 (JCTC 10:289; the 12-6-4 set), Li et al. 2013 (JCTC 9:2733; 12-6 +2 ions), Joung & Cheatham 2008 (J Phys Chem B 112:9020; Cl-) and Miller 1990 (JACS 112:8533; polarizabilities) are cited from AmberTools / OpenMM file headers; PubMed was unavailable in the TASK-010 session."

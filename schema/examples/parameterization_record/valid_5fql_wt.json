@@ -1,0 +1,124 @@
+{
+  "generated_at": "2026-09-27T05:16:04Z",
+  "input": {
+    "format": "mmcif",
+    "path": "tests/panel/5FQL.cif.gz",
+    "sha256": "ac5ffc6fed697e7b2659f6747ad4d0638eb949220cd7ca7c8c3b372ce183f8d5"
+  },
+  "knowledge_base": {
+    "sha256": "96b4be1a20d57412c88389bd161d7a6e514acebff9e7e9108297e4932017b978",
+    "version": "0.8.0"
+  },
+  "manifest_sha256": "a7191ab3fd8223db18d1fd8318748776db3913ddee80065c0639cc102e6756c2",
+  "openmm_version": "8.6.1",
+  "protocol": {
+    "check_nonbonded_method": "NoCutoff",
+    "force_field_files": [
+      "amber14-all.xml",
+      "amber14/tip3p.xml"
+    ],
+    "generated_force_field_files": [
+      "forcefield/ddz.xml"
+    ],
+    "lj1264_file": "forcefield/lj1264.yaml",
+    "metal_models": {
+      "nonbonded_12_6_4": "lj1264"
+    }
+  },
+  "protonation_record_sha256": "c7e94fed2cb2754f191ff0f03c7ade75ac2b1c981c90060ddb6253e7096969d0",
+  "schema_version": "0.1.0",
+  "simprep": {
+    "git_commit": "11581366b7581264dfc63b19c79fbca0d0d65e2b-dirty",
+    "version": "0.1.0"
+  },
+  "systems": [
+    {
+      "checks": {
+        "angles": 15151,
+        "angles_expected": 15151,
+        "bonds": 8686,
+        "bonds_expected": 8686
+      },
+      "directory": "wt_parameterized",
+      "files": [
+        {
+          "format": "openmm_system_xml",
+          "path": "system.xml",
+          "sha256": "1ad6df801bc2d8e92b0d87788cf799c7e1928eee85b8eacbeb05942848a3e32f"
+        }
+      ],
+      "ion_models": [
+        {
+          "c4_pairs": 8769,
+          "chain": "A",
+          "finding_id": "metals/A:1551",
+          "ins_code": "",
+          "model": "lj1264",
+          "res_name": "CA",
+          "seq_num": 1551
+        }
+      ],
+      "name": "wt",
+      "net_charge": -15.0,
+      "particles": 8770,
+      "residue_sources": {
+        "12-6-4 Li-Merz TIP3P set (knowledge/forcefield/lj1264.yaml)": 1,
+        "Amber ff14SB (OpenMM amber14/protein.ff14SB.xml)": 516,
+        "Cl- Joung-Cheatham 12-6 (OpenMM amber14/tip3p.xml)": 3,
+        "DDZ: AM1-BCC + GAFF2 side chain, ff14SB backbone (knowledge/forcefield/ddz.xml)": 1,
+        "TIP3P (OpenMM amber14/tip3p.xml)": 213
+      },
+      "source": "wt_protonated"
+    }
+  ],
+  "work_order": [
+    {
+      "description": "Truncate at the observed residue with a charged terminus (NH3+ / COO-): Unobserved N-terminal residues: A:26-33 (8 residues); charged N-terminus (NH3+) at THR A:34",
+      "finding_id": "missing_residues/A:26-33",
+      "option_id": "truncate",
+      "residues": [
+        {
+          "chain": "A",
+          "ins_code": "",
+          "seq_num": 26
+        },
+        {
+          "chain": "A",
+          "ins_code": "",
+          "seq_num": 27
+        },
+        {
+          "chain": "A",
+          "ins_code": "",
+          "seq_num": 28
+        },
+        {
+          "chain": "A",
+          "ins_code": "",
+          "seq_num": 29
+        },
+        {
+          "chain": "A",
+          "ins_code": "",
+          "seq_num": 30
+        },
+        {
+          "chain": "A",
+          "ins_code": "",
+          "seq_num": 31
+        },
+        {
+          "chain": "A",
+          "ins_code": "",
+          "seq_num": 32
+        },
+        {
+          "chain": "A",
+          "ins_code": "",
+          "seq_num": 33
+        }
+      ],
+      "stage": "topology"
+    }
+  ]
+}
