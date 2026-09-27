@@ -68,6 +68,7 @@ def test_kb_lists_every_rule_file():
         "side_chains.yaml",
         "relaxation.yaml",
         "modelling.yaml",
+        "protonation.yaml",
     }
     present = {p.name for p in KNOWLEDGE_DIR.glob("*.yaml")} - not_rules
     assert listed == present

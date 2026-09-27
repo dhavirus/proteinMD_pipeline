@@ -1,0 +1,75 @@
+schema_version: 0.1.0
+family: protonation
+description: >-
+  Protonation-state findings (TASK-009), evaluated per system by `simprep protonate` and
+  `simprep variants`, not by `simprep audit`. Thresholds live in the protonation method
+  (knowledge/protonation.yaml). An undecided finding takes its recommended option, and
+  the record says so; a decision (finding id protonation/<system>/<residue>) overrides.
+
+x-state-options: &state_options
+  - id: predicted_state
+    prep_action: apply
+    prep_stage: protonation
+    label: Use the state the pKa estimate gives at the study's pH
+    cost_hint: low
+    trade_offs:
+      - Follows the structure-based estimate.
+      - The estimate's error (about one pH unit) is comparable to its distance from the pH.
+  - id: standard_state
+    prep_action: apply
+    prep_stage: protonation
+    label: Use the state of the residue's model pKa (the unperturbed value) at the study's pH
+    cost_hint: low
+    trade_offs:
+      - Ignores the environment's shift, which may be real.
+      - Robust where the estimate cannot see part of the environment.
+  - id: specific_state
+    prep_action: apply
+    prep_stage: protonation
+    label: Use the state named in the decision (parameters.state, e.g. HID, ASH, LYN)
+    cost_hint: low
+    trade_offs:
+      - Encodes outside knowledge (experiment, literature, a better calculation).
+      - Must name a variant the residue has.
+
+rules:
+  - rule_id: protonation.ambiguous_state
+    family: protonation
+    version: 0.1.0
+    title: Protonation state close to the pKa
+    priority: 0
+    matcher:
+      kind: ambiguous_pka
+    base_severity: warn
+    options: *state_options
+    recommended_option:
+      default: predicted_state
+      conditions: []
+    rationale: >-
+      The estimated pKa lies within the method's ambiguity window of the study's pH, so
+      both states are populated and the choice is within the estimate's error.
+    references:
+      - citation: "Olsson MHM, Søndergaard CR, Rostkowski M, Jensen JH. PROPKA3: Consistent Treatment of Internal and Surface Residues in Empirical pKa Predictions. J Chem Theory Comput 2011;7:525-37."
+        doi: "10.1021/ct100578z"
+        pmid: "26596171"
+    verify_flags: []
+
+  - rule_id: protonation.unreliable_estimate
+    family: protonation
+    version: 0.1.0
+    title: pKa estimate near chemistry the method ignores
+    priority: 10
+    matcher:
+      kind: unreliable_pka
+    base_severity: warn
+    options: *state_options
+    recommended_option:
+      default: standard_state
+      conditions: []
+    rationale: >-
+      PROPKA does not include metal ions or non-standard residues, so a titratable
+      residue close to one gets an estimate from an incomplete environment (at 5FQL the
+      lysines around the former sulfate come out 3-4 units low). Metal ligands annotated
+      in struct_conn follow the metal rule instead and get no finding.
+    references: []
+    verify_flags: []

@@ -81,14 +81,14 @@ def run_model(request: PrepRequest) -> dict:
     """``simprep model``: prepare the wild type, build its loops, write everything."""
     inputs = load_inputs(request)
     plan = build_plan(inputs.structure, inputs.manifest, inputs.ruleset)
-    modelled = model_wild_type(inputs, plan, _single_system(inputs, plan))
+    modelled = model_wild_type(inputs, plan, single_system(inputs, plan))
     if modelled is None:
         raise ModelError("the manifest decides no gap model_loop; there is nothing to model")
     wt_record = write_prep(inputs, plan, request.out_dir / WILD_TYPE_DIR)
     return write_model(modelled, (inputs, wt_record), request.out_dir)
 
 
-def _single_system(inputs: PrepInputs, plan: PrepPlan) -> Structure:
+def single_system(inputs: PrepInputs, plan: PrepPlan) -> Structure:
     systems = apply_plan(inputs.structure, plan)
     if len(systems) != 1:
         raise ModelError("modelling v0.1 builds on one wild-type system; choose one altloc first")

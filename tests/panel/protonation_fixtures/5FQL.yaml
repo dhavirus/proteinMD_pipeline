@@ -1,0 +1,20 @@
+# Protonation fixture (TASK-009) for 5FQL at pH 7.2. Expected values are written by hand
+# from the file's own records (struct_conn metalc1-7, disulf1-2), the CCD (DDZ hydrogens)
+# and the distances measured in the TASK-009 spec, not read back from simprep protonate.
+# The 444-453 gap stays a chain break here (variant fixture prep_overrides), so no loop is
+# built. reviewed: false until the maintainer reviews.
+structure: 5FQL.cif.gz
+reviewed: false
+protonation: {ph: 7.2, ph_rationale: "ER lumen, where folding is decided (TASK-009 decision 1)"}
+expected:
+  # struct_conn metalc1, metalc2, metalc6 (carboxylates) and metalc7 (His NE2) to CA A:1551.
+  metal_rule: {"A:45": ASP, "A:46": ASP, "A:334": ASP, "A:335": HID}
+  # struct_conn disulf1, disulf2.
+  disulfide: ["A:171", "A:184", "A:422", "A:432"]
+  # Titratable residues other than metal ligands with a heavy atom within 6.0 A of DDZ A:84
+  # or CA A:1551 (spec: K135 3.5, H138 2.7, H229 4.3, K347 4.4, K479 6.0 A; R88 has no
+  # alternative state and gets no finding).
+  unreliable: ["A:135", "A:138", "A:229", "A:347", "A:479"]
+  unreliable_default: standard_state
+  # CCD DDZ hydrogens (H2 only at an N-terminus).
+  ddz_hydrogens: [H, HA, HB, HG1, HG2]

@@ -25,10 +25,12 @@ from simprep.prep.record import system_counts
 from simprep.prep.run import RECORD_FILE as PREP_RECORD_FILE
 from simprep.prep.run import PrepInputs, PrepRequest, load_inputs, write_prep
 from simprep.prep.write import write_system
+from simprep.protonate.run import PROTONATED_SUFFIX, protonate, write_protonation
 from simprep.provenance import sha256_file, simprep_provenance, utc_now
 from simprep.schemas import validate
 from simprep.severity import apply_context
 from simprep.structure.model import ResidueId, Structure
+from simprep.structure.parse import read_structure
 from simprep.variants.apply import apply_mutations, mutated_residue
 from simprep.variants.findings import Evaluation, evaluate_site, finding_id, site_finding
 from simprep.variants.relaxation import (
@@ -100,7 +102,31 @@ def run_variants(request: PrepRequest) -> VariantOutcome:
     relaxed_wts, relaxed = _relax_all(built, context) if protocol["enabled"] else ([], {})
     entries = [_variant_entry(b, relaxed.get(b.name), context) for b in built]
     record = _record(context, entries, relaxed_wts)
+    if "protonation" in inputs.manifest:
+        _protonate_all(record, context)
     return VariantOutcome("built", record=record)
+
+
+def _protonate_all(record: dict, context: Context) -> None:
+    """Protonate every system written (TASK-009): the wild type the variants were built
+    on first (the others are compared with it), then relaxed wild types and variants."""
+    out_dir, inputs = context.out_dir, context.inputs
+    wild_type = record["wild_type"].get("modelled", record["wild_type"])["directory"]
+    names = [
+        (WILD_TYPE_DIR, wild_type),
+        *((w["name"], w["directory"]) for w in record["relaxed_wild_types"]),
+        *((v["name"], v["directory"]) for v in record["variants"]),
+    ]
+    systems = [
+        protonate(
+            name,
+            read_structure(out_dir / directory / f"{SYSTEM_NAME}.cif"),
+            (directory, f"{name}{PROTONATED_SUFFIX}"),
+            inputs,
+        )
+        for name, directory in names
+    ]
+    write_protonation(systems, (inputs, context.wt_record["work_order"]), out_dir)
 
 
 def _wild_type(inputs: PrepInputs, plan) -> Structure:

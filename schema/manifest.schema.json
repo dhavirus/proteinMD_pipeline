@@ -45,6 +45,10 @@
       "description": "Loop-modelling protocol for gaps decided `model_loop` (TASK-007); when absent, the defaults in knowledge/modelling.yaml are used and recorded in model_record.json.",
       "$ref": "urn:simprep:schema:modelling#/$defs/protocol"
     },
+    "protonation": {
+      "description": "The study's pH (with rationale) and optionally the protonation method (TASK-009); required by simprep protonate, and by simprep variants to protonate its systems.",
+      "$ref": "urn:simprep:schema:protonation#/$defs/manifest_protonation"
+    },
     "variants": {
       "description": "Variants to build from the prepared wild-type system (TASK-005). Optional.",
       "type": "array",

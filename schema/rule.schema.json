@@ -235,6 +235,9 @@
         },
         {
           "$ref": "#/$defs/matcher_loop_contacts"
+        },
+        {
+          "$ref": "#/$defs/matcher_pka"
         }
       ]
     },
@@ -798,6 +801,13 @@
       "additionalProperties": false,
       "required": ["kind"],
       "properties": {"kind": {"const": "loop_geometry"}}
+    },
+    "matcher_pka": {
+      "description": "Protonation-state findings from pKa estimates (TASK-009); thresholds come from the protonation method. Evaluated by `simprep protonate` / `simprep variants`, not by `simprep audit`.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind"],
+      "properties": {"kind": {"enum": ["ambiguous_pka", "unreliable_pka"]}}
     },
     "matcher_loop_contacts": {
       "description": "Clashes of a modelled loop's heavy atoms, judged with the variant_build criterion (TASK-007).",

@@ -1,0 +1,2498 @@
+{
+  "generated_at": "2026-09-27T02:30:51Z",
+  "input": {
+    "format": "mmcif",
+    "path": "tests/panel/5FQL.cif.gz",
+    "sha256": "ac5ffc6fed697e7b2659f6747ad4d0638eb949220cd7ca7c8c3b372ce183f8d5"
+  },
+  "knowledge_base": {
+    "sha256": "6d6499fb969960ee7d69ef0611b5498549251f08f622b48175259981c5d5b67b",
+    "version": "0.8.0"
+  },
+  "manifest_sha256": "a7191ab3fd8223db18d1fd8318748776db3913ddee80065c0639cc102e6756c2",
+  "method": {
+    "ambiguity_window_ph": 1.0,
+    "hydrogen_tool": "openmm_modeller",
+    "pka_tool": "propka",
+    "pka_tool_version": "3.5.1",
+    "platform": "Reference",
+    "seed": 20260927,
+    "unreliable_within_angstrom": 6.0
+  },
+  "ph_rationale": "ER lumen (folding question), TASK-009 decision 1",
+  "propka_version": "3.5.1",
+  "schema_version": "0.1.0",
+  "simprep": {
+    "git_commit": "fe91df01358926252a685100756515747fada81b-dirty",
+    "version": "0.1.0"
+  },
+  "systems": [
+    {
+      "counts": [
+        {
+          "added": 10,
+          "excluded": 0,
+          "in": 507,
+          "modified": 507,
+          "out": 517,
+          "passed_through": 0,
+          "record_type": "polymer residues"
+        },
+        {
+          "added": 0,
+          "excluded": 2,
+          "in": 6,
+          "modified": 0,
+          "out": 4,
+          "passed_through": 4,
+          "record_type": "nonpolymer residues"
+        },
+        {
+          "added": 0,
+          "excluded": 13,
+          "in": 13,
+          "modified": 0,
+          "out": 0,
+          "passed_through": 0,
+          "record_type": "branched residues"
+        },
+        {
+          "added": 0,
+          "excluded": 0,
+          "in": 213,
+          "modified": 213,
+          "out": 213,
+          "passed_through": 0,
+          "record_type": "water residues"
+        },
+        {
+          "added": 625,
+          "excluded": 431,
+          "in": 8576,
+          "modified": 8141,
+          "out": 8770,
+          "passed_through": 4,
+          "record_type": "atom records"
+        },
+        {
+          "added": 0,
+          "excluded": 17,
+          "in": 26,
+          "modified": 3,
+          "out": 9,
+          "passed_through": 6,
+          "record_type": "struct_conn records"
+        },
+        {
+          "added": 1,
+          "excluded": 1,
+          "in": 8,
+          "modified": 0,
+          "out": 8,
+          "passed_through": 7,
+          "record_type": "pdbx_struct_mod_residue records"
+        },
+        {
+          "added": 0,
+          "excluded": 10,
+          "in": 18,
+          "modified": 0,
+          "out": 8,
+          "passed_through": 8,
+          "record_type": "unobserved polymer residues (annotation)"
+        }
+      ],
+      "differs_from_wild_type": [],
+      "directory": "wt_protonated",
+      "files": [
+        {
+          "format": "mmcif",
+          "path": "system.cif",
+          "sha256": "c735d95b644eeeee5b55facfa7c5348b7f9eab86a4b2400f4442eabe10bb8628"
+        },
+        {
+          "format": "pdb",
+          "path": "system.pdb",
+          "sha256": "db2ef6827c477b38d7ee727abccea178a862019ed815b8fabc3e131e93042708"
+        }
+      ],
+      "findings": [
+        {
+          "anchor_residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 135
+            }
+          ],
+          "base_severity": "warn",
+          "effective_severity": "warn",
+          "evidence": [
+            {
+              "key": "pka",
+              "type": "number",
+              "unit": "pH",
+              "value": 7.426
+            },
+            {
+              "key": "model_pka",
+              "type": "number",
+              "unit": "pH",
+              "value": 10.5
+            },
+            {
+              "key": "ph",
+              "type": "number",
+              "unit": "pH",
+              "value": 7.2
+            },
+            {
+              "key": "near",
+              "type": "label",
+              "value": "DDZ A:84"
+            },
+            {
+              "key": "distance_to_ignored_chemistry",
+              "type": "number",
+              "unit": "angstrom",
+              "value": 3.478
+            }
+          ],
+          "id": "protonation/wt/A:135",
+          "locus": {
+            "atom_names": [],
+            "chain": "A",
+            "extent": [
+              {
+                "chain": "A",
+                "ins_code": "",
+                "res_name": "LYS",
+                "seq_num": 135
+              }
+            ],
+            "ins_code": "",
+            "res_name": "LYS",
+            "seq_num": 135
+          },
+          "options": [
+            {
+              "cost_hint": "low",
+              "id": "predicted_state",
+              "label": "Use the state the pKa estimate gives at the study's pH",
+              "prep_action": "apply",
+              "prep_stage": "protonation",
+              "trade_offs": [
+                "Follows the structure-based estimate.",
+                "The estimate's error (about one pH unit) is comparable to its distance from the pH."
+              ]
+            },
+            {
+              "cost_hint": "low",
+              "id": "standard_state",
+              "label": "Use the state of the residue's model pKa (the unperturbed value) at the study's pH",
+              "prep_action": "apply",
+              "prep_stage": "protonation",
+              "trade_offs": [
+                "Ignores the environment's shift, which may be real.",
+                "Robust where the estimate cannot see part of the environment."
+              ]
+            },
+            {
+              "cost_hint": "low",
+              "id": "specific_state",
+              "label": "Use the state named in the decision (parameters.state, e.g. HID, ASH, LYN)",
+              "prep_action": "apply",
+              "prep_stage": "protonation",
+              "trade_offs": [
+                "Encodes outside knowledge (experiment, literature, a better calculation).",
+                "Must name a variant the residue has."
+              ]
+            }
+          ],
+          "rationale": "PROPKA does not include metal ions or non-standard residues, so a titratable residue close to one gets an estimate from an incomplete environment (at 5FQL the lysines around the former sulfate come out 3-4 units low). Metal ligands annotated in struct_conn follow the metal rule instead and get no finding.",
+          "recommendation_basis": "default",
+          "recommended_option": "standard_state",
+          "references": [],
+          "rule_family": "protonation",
+          "rule_id": "protonation.unreliable_estimate",
+          "severity_context": {
+            "min_distance_angstrom": null,
+            "nearest_region": null,
+            "proximity": "no_regions",
+            "raise_levels": 0
+          },
+          "title": "pKa estimate near chemistry the method ignores: LYS A:135 (wt)",
+          "verify_flags": []
+        },
+        {
+          "anchor_residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 138
+            }
+          ],
+          "base_severity": "warn",
+          "effective_severity": "warn",
+          "evidence": [
+            {
+              "key": "pka",
+              "type": "number",
+              "unit": "pH",
+              "value": 1.114
+            },
+            {
+              "key": "model_pka",
+              "type": "number",
+              "unit": "pH",
+              "value": 6.5
+            },
+            {
+              "key": "ph",
+              "type": "number",
+              "unit": "pH",
+              "value": 7.2
+            },
+            {
+              "key": "near",
+              "type": "label",
+              "value": "DDZ A:84"
+            },
+            {
+              "key": "distance_to_ignored_chemistry",
+              "type": "number",
+              "unit": "angstrom",
+              "value": 2.741
+            }
+          ],
+          "id": "protonation/wt/A:138",
+          "locus": {
+            "atom_names": [],
+            "chain": "A",
+            "extent": [
+              {
+                "chain": "A",
+                "ins_code": "",
+                "res_name": "HIS",
+                "seq_num": 138
+              }
+            ],
+            "ins_code": "",
+            "res_name": "HIS",
+            "seq_num": 138
+          },
+          "options": [
+            {
+              "cost_hint": "low",
+              "id": "predicted_state",
+              "label": "Use the state the pKa estimate gives at the study's pH",
+              "prep_action": "apply",
+              "prep_stage": "protonation",
+              "trade_offs": [
+                "Follows the structure-based estimate.",
+                "The estimate's error (about one pH unit) is comparable to its distance from the pH."
+              ]
+            },
+            {
+              "cost_hint": "low",
+              "id": "standard_state",
+              "label": "Use the state of the residue's model pKa (the unperturbed value) at the study's pH",
+              "prep_action": "apply",
+              "prep_stage": "protonation",
+              "trade_offs": [
+                "Ignores the environment's shift, which may be real.",
+                "Robust where the estimate cannot see part of the environment."
+              ]
+            },
+            {
+              "cost_hint": "low",
+              "id": "specific_state",
+              "label": "Use the state named in the decision (parameters.state, e.g. HID, ASH, LYN)",
+              "prep_action": "apply",
+              "prep_stage": "protonation",
+              "trade_offs": [
+                "Encodes outside knowledge (experiment, literature, a better calculation).",
+                "Must name a variant the residue has."
+              ]
+            }
+          ],
+          "rationale": "PROPKA does not include metal ions or non-standard residues, so a titratable residue close to one gets an estimate from an incomplete environment (at 5FQL the lysines around the former sulfate come out 3-4 units low). Metal ligands annotated in struct_conn follow the metal rule instead and get no finding.",
+          "recommendation_basis": "default",
+          "recommended_option": "standard_state",
+          "references": [],
+          "rule_family": "protonation",
+          "rule_id": "protonation.unreliable_estimate",
+          "severity_context": {
+            "min_distance_angstrom": null,
+            "nearest_region": null,
+            "proximity": "no_regions",
+            "raise_levels": 0
+          },
+          "title": "pKa estimate near chemistry the method ignores: HIS A:138 (wt)",
+          "verify_flags": []
+        },
+        {
+          "anchor_residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 179
+            }
+          ],
+          "base_severity": "warn",
+          "effective_severity": "warn",
+          "evidence": [
+            {
+              "key": "pka",
+              "type": "number",
+              "unit": "pH",
+              "value": 7.059
+            },
+            {
+              "key": "model_pka",
+              "type": "number",
+              "unit": "pH",
+              "value": 6.5
+            },
+            {
+              "key": "ph",
+              "type": "number",
+              "unit": "pH",
+              "value": 7.2
+            }
+          ],
+          "id": "protonation/wt/A:179",
+          "locus": {
+            "atom_names": [],
+            "chain": "A",
+            "extent": [
+              {
+                "chain": "A",
+                "ins_code": "",
+                "res_name": "HIS",
+                "seq_num": 179
+              }
+            ],
+            "ins_code": "",
+            "res_name": "HIS",
+            "seq_num": 179
+          },
+          "options": [
+            {
+              "cost_hint": "low",
+              "id": "predicted_state",
+              "label": "Use the state the pKa estimate gives at the study's pH",
+              "prep_action": "apply",
+              "prep_stage": "protonation",
+              "trade_offs": [
+                "Follows the structure-based estimate.",
+                "The estimate's error (about one pH unit) is comparable to its distance from the pH."
+              ]
+            },
+            {
+              "cost_hint": "low",
+              "id": "standard_state",
+              "label": "Use the state of the residue's model pKa (the unperturbed value) at the study's pH",
+              "prep_action": "apply",
+              "prep_stage": "protonation",
+              "trade_offs": [
+                "Ignores the environment's shift, which may be real.",
+                "Robust where the estimate cannot see part of the environment."
+              ]
+            },
+            {
+              "cost_hint": "low",
+              "id": "specific_state",
+              "label": "Use the state named in the decision (parameters.state, e.g. HID, ASH, LYN)",
+              "prep_action": "apply",
+              "prep_stage": "protonation",
+              "trade_offs": [
+                "Encodes outside knowledge (experiment, literature, a better calculation).",
+                "Must name a variant the residue has."
+              ]
+            }
+          ],
+          "rationale": "The estimated pKa lies within the method's ambiguity window of the study's pH, so both states are populated and the choice is within the estimate's error.",
+          "recommendation_basis": "default",
+          "recommended_option": "predicted_state",
+          "references": [
+            {
+              "citation": "Olsson MHM, S\u00f8ndergaard CR, Rostkowski M, Jensen JH. PROPKA3: Consistent Treatment of Internal and Surface Residues in Empirical pKa Predictions. J Chem Theory Comput 2011;7:525-37.",
+              "doi": "10.1021/ct100578z",
+              "pmid": "26596171"
+            }
+          ],
+          "rule_family": "protonation",
+          "rule_id": "protonation.ambiguous_state",
+          "severity_context": {
+            "min_distance_angstrom": null,
+            "nearest_region": null,
+            "proximity": "no_regions",
+            "raise_levels": 0
+          },
+          "title": "Protonation state close to the pKa: HIS A:179 (wt)",
+          "verify_flags": []
+        },
+        {
+          "anchor_residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 226
+            }
+          ],
+          "base_severity": "warn",
+          "effective_severity": "warn",
+          "evidence": [
+            {
+              "key": "pka",
+              "type": "number",
+              "unit": "pH",
+              "value": 6.816
+            },
+            {
+              "key": "model_pka",
+              "type": "number",
+              "unit": "pH",
+              "value": 6.5
+            },
+            {
+              "key": "ph",
+              "type": "number",
+              "unit": "pH",
+              "value": 7.2
+            }
+          ],
+          "id": "protonation/wt/A:226",
+          "locus": {
+            "atom_names": [],
+            "chain": "A",
+            "extent": [
+              {
+                "chain": "A",
+                "ins_code": "",
+                "res_name": "HIS",
+                "seq_num": 226
+              }
+            ],
+            "ins_code": "",
+            "res_name": "HIS",
+            "seq_num": 226
+          },
+          "options": [
+            {
+              "cost_hint": "low",
+              "id": "predicted_state",
+              "label": "Use the state the pKa estimate gives at the study's pH",
+              "prep_action": "apply",
+              "prep_stage": "protonation",
+              "trade_offs": [
+                "Follows the structure-based estimate.",
+                "The estimate's error (about one pH unit) is comparable to its distance from the pH."
+              ]
+            },
+            {
+              "cost_hint": "low",
+              "id": "standard_state",
+              "label": "Use the state of the residue's model pKa (the unperturbed value) at the study's pH",
+              "prep_action": "apply",
+              "prep_stage": "protonation",
+              "trade_offs": [
+                "Ignores the environment's shift, which may be real.",
+                "Robust where the estimate cannot see part of the environment."
+              ]
+            },
+            {
+              "cost_hint": "low",
+              "id": "specific_state",
+              "label": "Use the state named in the decision (parameters.state, e.g. HID, ASH, LYN)",
+              "prep_action": "apply",
+              "prep_stage": "protonation",
+              "trade_offs": [
+                "Encodes outside knowledge (experiment, literature, a better calculation).",
+                "Must name a variant the residue has."
+              ]
+            }
+          ],
+          "rationale": "The estimated pKa lies within the method's ambiguity window of the study's pH, so both states are populated and the choice is within the estimate's error.",
+          "recommendation_basis": "default",
+          "recommended_option": "predicted_state",
+          "references": [
+            {
+              "citation": "Olsson MHM, S\u00f8ndergaard CR, Rostkowski M, Jensen JH. PROPKA3: Consistent Treatment of Internal and Surface Residues in Empirical pKa Predictions. J Chem Theory Comput 2011;7:525-37.",
+              "doi": "10.1021/ct100578z",
+              "pmid": "26596171"
+            }
+          ],
+          "rule_family": "protonation",
+          "rule_id": "protonation.ambiguous_state",
+          "severity_context": {
+            "min_distance_angstrom": null,
+            "nearest_region": null,
+            "proximity": "no_regions",
+            "raise_levels": 0
+          },
+          "title": "Protonation state close to the pKa: HIS A:226 (wt)",
+          "verify_flags": []
+        },
+        {
+          "anchor_residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 229
+            }
+          ],
+          "base_severity": "warn",
+          "effective_severity": "warn",
+          "evidence": [
+            {
+              "key": "pka",
+              "type": "number",
+              "unit": "pH",
+              "value": 0.635
+            },
+            {
+              "key": "model_pka",
+              "type": "number",
+              "unit": "pH",
+              "value": 6.5
+            },
+            {
+              "key": "ph",
+              "type": "number",
+              "unit": "pH",
+              "value": 7.2
+            },
+            {
+              "key": "near",
+              "type": "label",
+              "value": "CA A:1551"
+            },
+            {
+              "key": "distance_to_ignored_chemistry",
+              "type": "number",
+              "unit": "angstrom",
+              "value": 4.297
+            }
+          ],
+          "id": "protonation/wt/A:229",
+          "locus": {
+            "atom_names": [],
+            "chain": "A",
+            "extent": [
+              {
+                "chain": "A",
+                "ins_code": "",
+                "res_name": "HIS",
+                "seq_num": 229
+              }
+            ],
+            "ins_code": "",
+            "res_name": "HIS",
+            "seq_num": 229
+          },
+          "options": [
+            {
+              "cost_hint": "low",
+              "id": "predicted_state",
+              "label": "Use the state the pKa estimate gives at the study's pH",
+              "prep_action": "apply",
+              "prep_stage": "protonation",
+              "trade_offs": [
+                "Follows the structure-based estimate.",
+                "The estimate's error (about one pH unit) is comparable to its distance from the pH."
+              ]
+            },
+            {
+              "cost_hint": "low",
+              "id": "standard_state",
+              "label": "Use the state of the residue's model pKa (the unperturbed value) at the study's pH",
+              "prep_action": "apply",
+              "prep_stage": "protonation",
+              "trade_offs": [
+                "Ignores the environment's shift, which may be real.",
+                "Robust where the estimate cannot see part of the environment."
+              ]
+            },
+            {
+              "cost_hint": "low",
+              "id": "specific_state",
+              "label": "Use the state named in the decision (parameters.state, e.g. HID, ASH, LYN)",
+              "prep_action": "apply",
+              "prep_stage": "protonation",
+              "trade_offs": [
+                "Encodes outside knowledge (experiment, literature, a better calculation).",
+                "Must name a variant the residue has."
+              ]
+            }
+          ],
+          "rationale": "PROPKA does not include metal ions or non-standard residues, so a titratable residue close to one gets an estimate from an incomplete environment (at 5FQL the lysines around the former sulfate come out 3-4 units low). Metal ligands annotated in struct_conn follow the metal rule instead and get no finding.",
+          "recommendation_basis": "default",
+          "recommended_option": "standard_state",
+          "references": [],
+          "rule_family": "protonation",
+          "rule_id": "protonation.unreliable_estimate",
+          "severity_context": {
+            "min_distance_angstrom": null,
+            "nearest_region": null,
+            "proximity": "no_regions",
+            "raise_levels": 0
+          },
+          "title": "pKa estimate near chemistry the method ignores: HIS A:229 (wt)",
+          "verify_flags": []
+        },
+        {
+          "anchor_residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 252
+            }
+          ],
+          "base_severity": "warn",
+          "effective_severity": "warn",
+          "evidence": [
+            {
+              "key": "pka",
+              "type": "number",
+              "unit": "pH",
+              "value": 7.936
+            },
+            {
+              "key": "model_pka",
+              "type": "number",
+              "unit": "pH",
+              "value": 3.8
+            },
+            {
+              "key": "ph",
+              "type": "number",
+              "unit": "pH",
+              "value": 7.2
+            }
+          ],
+          "id": "protonation/wt/A:252",
+          "locus": {
+            "atom_names": [],
+            "chain": "A",
+            "extent": [
+              {
+                "chain": "A",
+                "ins_code": "",
+                "res_name": "ASP",
+                "seq_num": 252
+              }
+            ],
+            "ins_code": "",
+            "res_name": "ASP",
+            "seq_num": 252
+          },
+          "options": [
+            {
+              "cost_hint": "low",
+              "id": "predicted_state",
+              "label": "Use the state the pKa estimate gives at the study's pH",
+              "prep_action": "apply",
+              "prep_stage": "protonation",
+              "trade_offs": [
+                "Follows the structure-based estimate.",
+                "The estimate's error (about one pH unit) is comparable to its distance from the pH."
+              ]
+            },
+            {
+              "cost_hint": "low",
+              "id": "standard_state",
+              "label": "Use the state of the residue's model pKa (the unperturbed value) at the study's pH",
+              "prep_action": "apply",
+              "prep_stage": "protonation",
+              "trade_offs": [
+                "Ignores the environment's shift, which may be real.",
+                "Robust where the estimate cannot see part of the environment."
+              ]
+            },
+            {
+              "cost_hint": "low",
+              "id": "specific_state",
+              "label": "Use the state named in the decision (parameters.state, e.g. HID, ASH, LYN)",
+              "prep_action": "apply",
+              "prep_stage": "protonation",
+              "trade_offs": [
+                "Encodes outside knowledge (experiment, literature, a better calculation).",
+                "Must name a variant the residue has."
+              ]
+            }
+          ],
+          "rationale": "The estimated pKa lies within the method's ambiguity window of the study's pH, so both states are populated and the choice is within the estimate's error.",
+          "recommendation_basis": "default",
+          "recommended_option": "predicted_state",
+          "references": [
+            {
+              "citation": "Olsson MHM, S\u00f8ndergaard CR, Rostkowski M, Jensen JH. PROPKA3: Consistent Treatment of Internal and Surface Residues in Empirical pKa Predictions. J Chem Theory Comput 2011;7:525-37.",
+              "doi": "10.1021/ct100578z",
+              "pmid": "26596171"
+            }
+          ],
+          "rule_family": "protonation",
+          "rule_id": "protonation.ambiguous_state",
+          "severity_context": {
+            "min_distance_angstrom": null,
+            "nearest_region": null,
+            "proximity": "no_regions",
+            "raise_levels": 0
+          },
+          "title": "Protonation state close to the pKa: ASP A:252 (wt)",
+          "verify_flags": []
+        },
+        {
+          "anchor_residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 308
+            }
+          ],
+          "base_severity": "warn",
+          "effective_severity": "warn",
+          "evidence": [
+            {
+              "key": "pka",
+              "type": "number",
+              "unit": "pH",
+              "value": 7.461
+            },
+            {
+              "key": "model_pka",
+              "type": "number",
+              "unit": "pH",
+              "value": 3.8
+            },
+            {
+              "key": "ph",
+              "type": "number",
+              "unit": "pH",
+              "value": 7.2
+            }
+          ],
+          "id": "protonation/wt/A:308",
+          "locus": {
+            "atom_names": [],
+            "chain": "A",
+            "extent": [
+              {
+                "chain": "A",
+                "ins_code": "",
+                "res_name": "ASP",
+                "seq_num": 308
+              }
+            ],
+            "ins_code": "",
+            "res_name": "ASP",
+            "seq_num": 308
+          },
+          "options": [
+            {
+              "cost_hint": "low",
+              "id": "predicted_state",
+              "label": "Use the state the pKa estimate gives at the study's pH",
+              "prep_action": "apply",
+              "prep_stage": "protonation",
+              "trade_offs": [
+                "Follows the structure-based estimate.",
+                "The estimate's error (about one pH unit) is comparable to its distance from the pH."
+              ]
+            },
+            {
+              "cost_hint": "low",
+              "id": "standard_state",
+              "label": "Use the state of the residue's model pKa (the unperturbed value) at the study's pH",
+              "prep_action": "apply",
+              "prep_stage": "protonation",
+              "trade_offs": [
+                "Ignores the environment's shift, which may be real.",
+                "Robust where the estimate cannot see part of the environment."
+              ]
+            },
+            {
+              "cost_hint": "low",
+              "id": "specific_state",
+              "label": "Use the state named in the decision (parameters.state, e.g. HID, ASH, LYN)",
+              "prep_action": "apply",
+              "prep_stage": "protonation",
+              "trade_offs": [
+                "Encodes outside knowledge (experiment, literature, a better calculation).",
+                "Must name a variant the residue has."
+              ]
+            }
+          ],
+          "rationale": "The estimated pKa lies within the method's ambiguity window of the study's pH, so both states are populated and the choice is within the estimate's error.",
+          "recommendation_basis": "default",
+          "recommended_option": "predicted_state",
+          "references": [
+            {
+              "citation": "Olsson MHM, S\u00f8ndergaard CR, Rostkowski M, Jensen JH. PROPKA3: Consistent Treatment of Internal and Surface Residues in Empirical pKa Predictions. J Chem Theory Comput 2011;7:525-37.",
+              "doi": "10.1021/ct100578z",
+              "pmid": "26596171"
+            }
+          ],
+          "rule_family": "protonation",
+          "rule_id": "protonation.ambiguous_state",
+          "severity_context": {
+            "min_distance_angstrom": null,
+            "nearest_region": null,
+            "proximity": "no_regions",
+            "raise_levels": 0
+          },
+          "title": "Protonation state close to the pKa: ASP A:308 (wt)",
+          "verify_flags": []
+        },
+        {
+          "anchor_residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 342
+            }
+          ],
+          "base_severity": "warn",
+          "effective_severity": "warn",
+          "evidence": [
+            {
+              "key": "pka",
+              "type": "number",
+              "unit": "pH",
+              "value": 8.1
+            },
+            {
+              "key": "model_pka",
+              "type": "number",
+              "unit": "pH",
+              "value": 6.5
+            },
+            {
+              "key": "ph",
+              "type": "number",
+              "unit": "pH",
+              "value": 7.2
+            }
+          ],
+          "id": "protonation/wt/A:342",
+          "locus": {
+            "atom_names": [],
+            "chain": "A",
+            "extent": [
+              {
+                "chain": "A",
+                "ins_code": "",
+                "res_name": "HIS",
+                "seq_num": 342
+              }
+            ],
+            "ins_code": "",
+            "res_name": "HIS",
+            "seq_num": 342
+          },
+          "options": [
+            {
+              "cost_hint": "low",
+              "id": "predicted_state",
+              "label": "Use the state the pKa estimate gives at the study's pH",
+              "prep_action": "apply",
+              "prep_stage": "protonation",
+              "trade_offs": [
+                "Follows the structure-based estimate.",
+                "The estimate's error (about one pH unit) is comparable to its distance from the pH."
+              ]
+            },
+            {
+              "cost_hint": "low",
+              "id": "standard_state",
+              "label": "Use the state of the residue's model pKa (the unperturbed value) at the study's pH",
+              "prep_action": "apply",
+              "prep_stage": "protonation",
+              "trade_offs": [
+                "Ignores the environment's shift, which may be real.",
+                "Robust where the estimate cannot see part of the environment."
+              ]
+            },
+            {
+              "cost_hint": "low",
+              "id": "specific_state",
+              "label": "Use the state named in the decision (parameters.state, e.g. HID, ASH, LYN)",
+              "prep_action": "apply",
+              "prep_stage": "protonation",
+              "trade_offs": [
+                "Encodes outside knowledge (experiment, literature, a better calculation).",
+                "Must name a variant the residue has."
+              ]
+            }
+          ],
+          "rationale": "The estimated pKa lies within the method's ambiguity window of the study's pH, so both states are populated and the choice is within the estimate's error.",
+          "recommendation_basis": "default",
+          "recommended_option": "predicted_state",
+          "references": [
+            {
+              "citation": "Olsson MHM, S\u00f8ndergaard CR, Rostkowski M, Jensen JH. PROPKA3: Consistent Treatment of Internal and Surface Residues in Empirical pKa Predictions. J Chem Theory Comput 2011;7:525-37.",
+              "doi": "10.1021/ct100578z",
+              "pmid": "26596171"
+            }
+          ],
+          "rule_family": "protonation",
+          "rule_id": "protonation.ambiguous_state",
+          "severity_context": {
+            "min_distance_angstrom": null,
+            "nearest_region": null,
+            "proximity": "no_regions",
+            "raise_levels": 0
+          },
+          "title": "Protonation state close to the pKa: HIS A:342 (wt)",
+          "verify_flags": []
+        },
+        {
+          "anchor_residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 347
+            }
+          ],
+          "base_severity": "warn",
+          "effective_severity": "warn",
+          "evidence": [
+            {
+              "key": "pka",
+              "type": "number",
+              "unit": "pH",
+              "value": 6.722
+            },
+            {
+              "key": "model_pka",
+              "type": "number",
+              "unit": "pH",
+              "value": 10.5
+            },
+            {
+              "key": "ph",
+              "type": "number",
+              "unit": "pH",
+              "value": 7.2
+            },
+            {
+              "key": "near",
+              "type": "label",
+              "value": "CA A:1551"
+            },
+            {
+              "key": "distance_to_ignored_chemistry",
+              "type": "number",
+              "unit": "angstrom",
+              "value": 4.394
+            }
+          ],
+          "id": "protonation/wt/A:347",
+          "locus": {
+            "atom_names": [],
+            "chain": "A",
+            "extent": [
+              {
+                "chain": "A",
+                "ins_code": "",
+                "res_name": "LYS",
+                "seq_num": 347
+              }
+            ],
+            "ins_code": "",
+            "res_name": "LYS",
+            "seq_num": 347
+          },
+          "options": [
+            {
+              "cost_hint": "low",
+              "id": "predicted_state",
+              "label": "Use the state the pKa estimate gives at the study's pH",
+              "prep_action": "apply",
+              "prep_stage": "protonation",
+              "trade_offs": [
+                "Follows the structure-based estimate.",
+                "The estimate's error (about one pH unit) is comparable to its distance from the pH."
+              ]
+            },
+            {
+              "cost_hint": "low",
+              "id": "standard_state",
+              "label": "Use the state of the residue's model pKa (the unperturbed value) at the study's pH",
+              "prep_action": "apply",
+              "prep_stage": "protonation",
+              "trade_offs": [
+                "Ignores the environment's shift, which may be real.",
+                "Robust where the estimate cannot see part of the environment."
+              ]
+            },
+            {
+              "cost_hint": "low",
+              "id": "specific_state",
+              "label": "Use the state named in the decision (parameters.state, e.g. HID, ASH, LYN)",
+              "prep_action": "apply",
+              "prep_stage": "protonation",
+              "trade_offs": [
+                "Encodes outside knowledge (experiment, literature, a better calculation).",
+                "Must name a variant the residue has."
+              ]
+            }
+          ],
+          "rationale": "PROPKA does not include metal ions or non-standard residues, so a titratable residue close to one gets an estimate from an incomplete environment (at 5FQL the lysines around the former sulfate come out 3-4 units low). Metal ligands annotated in struct_conn follow the metal rule instead and get no finding.",
+          "recommendation_basis": "default",
+          "recommended_option": "standard_state",
+          "references": [],
+          "rule_family": "protonation",
+          "rule_id": "protonation.unreliable_estimate",
+          "severity_context": {
+            "min_distance_angstrom": null,
+            "nearest_region": null,
+            "proximity": "no_regions",
+            "raise_levels": 0
+          },
+          "title": "pKa estimate near chemistry the method ignores: LYS A:347 (wt)",
+          "verify_flags": []
+        },
+        {
+          "anchor_residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 441
+            }
+          ],
+          "base_severity": "warn",
+          "effective_severity": "warn",
+          "evidence": [
+            {
+              "key": "pka",
+              "type": "number",
+              "unit": "pH",
+              "value": 6.258
+            },
+            {
+              "key": "model_pka",
+              "type": "number",
+              "unit": "pH",
+              "value": 6.5
+            },
+            {
+              "key": "ph",
+              "type": "number",
+              "unit": "pH",
+              "value": 7.2
+            }
+          ],
+          "id": "protonation/wt/A:441",
+          "locus": {
+            "atom_names": [],
+            "chain": "A",
+            "extent": [
+              {
+                "chain": "A",
+                "ins_code": "",
+                "res_name": "HIS",
+                "seq_num": 441
+              }
+            ],
+            "ins_code": "",
+            "res_name": "HIS",
+            "seq_num": 441
+          },
+          "options": [
+            {
+              "cost_hint": "low",
+              "id": "predicted_state",
+              "label": "Use the state the pKa estimate gives at the study's pH",
+              "prep_action": "apply",
+              "prep_stage": "protonation",
+              "trade_offs": [
+                "Follows the structure-based estimate.",
+                "The estimate's error (about one pH unit) is comparable to its distance from the pH."
+              ]
+            },
+            {
+              "cost_hint": "low",
+              "id": "standard_state",
+              "label": "Use the state of the residue's model pKa (the unperturbed value) at the study's pH",
+              "prep_action": "apply",
+              "prep_stage": "protonation",
+              "trade_offs": [
+                "Ignores the environment's shift, which may be real.",
+                "Robust where the estimate cannot see part of the environment."
+              ]
+            },
+            {
+              "cost_hint": "low",
+              "id": "specific_state",
+              "label": "Use the state named in the decision (parameters.state, e.g. HID, ASH, LYN)",
+              "prep_action": "apply",
+              "prep_stage": "protonation",
+              "trade_offs": [
+                "Encodes outside knowledge (experiment, literature, a better calculation).",
+                "Must name a variant the residue has."
+              ]
+            }
+          ],
+          "rationale": "The estimated pKa lies within the method's ambiguity window of the study's pH, so both states are populated and the choice is within the estimate's error.",
+          "recommendation_basis": "default",
+          "recommended_option": "predicted_state",
+          "references": [
+            {
+              "citation": "Olsson MHM, S\u00f8ndergaard CR, Rostkowski M, Jensen JH. PROPKA3: Consistent Treatment of Internal and Surface Residues in Empirical pKa Predictions. J Chem Theory Comput 2011;7:525-37.",
+              "doi": "10.1021/ct100578z",
+              "pmid": "26596171"
+            }
+          ],
+          "rule_family": "protonation",
+          "rule_id": "protonation.ambiguous_state",
+          "severity_context": {
+            "min_distance_angstrom": null,
+            "nearest_region": null,
+            "proximity": "no_regions",
+            "raise_levels": 0
+          },
+          "title": "Protonation state close to the pKa: HIS A:441 (wt)",
+          "verify_flags": []
+        },
+        {
+          "anchor_residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 479
+            }
+          ],
+          "base_severity": "warn",
+          "effective_severity": "warn",
+          "evidence": [
+            {
+              "key": "pka",
+              "type": "number",
+              "unit": "pH",
+              "value": 8.932
+            },
+            {
+              "key": "model_pka",
+              "type": "number",
+              "unit": "pH",
+              "value": 10.5
+            },
+            {
+              "key": "ph",
+              "type": "number",
+              "unit": "pH",
+              "value": 7.2
+            },
+            {
+              "key": "near",
+              "type": "label",
+              "value": "DDZ A:84"
+            },
+            {
+              "key": "distance_to_ignored_chemistry",
+              "type": "number",
+              "unit": "angstrom",
+              "value": 5.997
+            }
+          ],
+          "id": "protonation/wt/A:479",
+          "locus": {
+            "atom_names": [],
+            "chain": "A",
+            "extent": [
+              {
+                "chain": "A",
+                "ins_code": "",
+                "res_name": "LYS",
+                "seq_num": 479
+              }
+            ],
+            "ins_code": "",
+            "res_name": "LYS",
+            "seq_num": 479
+          },
+          "options": [
+            {
+              "cost_hint": "low",
+              "id": "predicted_state",
+              "label": "Use the state the pKa estimate gives at the study's pH",
+              "prep_action": "apply",
+              "prep_stage": "protonation",
+              "trade_offs": [
+                "Follows the structure-based estimate.",
+                "The estimate's error (about one pH unit) is comparable to its distance from the pH."
+              ]
+            },
+            {
+              "cost_hint": "low",
+              "id": "standard_state",
+              "label": "Use the state of the residue's model pKa (the unperturbed value) at the study's pH",
+              "prep_action": "apply",
+              "prep_stage": "protonation",
+              "trade_offs": [
+                "Ignores the environment's shift, which may be real.",
+                "Robust where the estimate cannot see part of the environment."
+              ]
+            },
+            {
+              "cost_hint": "low",
+              "id": "specific_state",
+              "label": "Use the state named in the decision (parameters.state, e.g. HID, ASH, LYN)",
+              "prep_action": "apply",
+              "prep_stage": "protonation",
+              "trade_offs": [
+                "Encodes outside knowledge (experiment, literature, a better calculation).",
+                "Must name a variant the residue has."
+              ]
+            }
+          ],
+          "rationale": "PROPKA does not include metal ions or non-standard residues, so a titratable residue close to one gets an estimate from an incomplete environment (at 5FQL the lysines around the former sulfate come out 3-4 units low). Metal ligands annotated in struct_conn follow the metal rule instead and get no finding.",
+          "recommendation_basis": "default",
+          "recommended_option": "standard_state",
+          "references": [],
+          "rule_family": "protonation",
+          "rule_id": "protonation.unreliable_estimate",
+          "severity_context": {
+            "min_distance_angstrom": null,
+            "nearest_region": null,
+            "proximity": "no_regions",
+            "raise_levels": 0
+          },
+          "title": "pKa estimate near chemistry the method ignores: LYS A:479 (wt)",
+          "verify_flags": []
+        },
+        {
+          "anchor_residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 518
+            }
+          ],
+          "base_severity": "warn",
+          "effective_severity": "warn",
+          "evidence": [
+            {
+              "key": "pka",
+              "type": "number",
+              "unit": "pH",
+              "value": 7.575
+            },
+            {
+              "key": "model_pka",
+              "type": "number",
+              "unit": "pH",
+              "value": 6.5
+            },
+            {
+              "key": "ph",
+              "type": "number",
+              "unit": "pH",
+              "value": 7.2
+            }
+          ],
+          "id": "protonation/wt/A:518",
+          "locus": {
+            "atom_names": [],
+            "chain": "A",
+            "extent": [
+              {
+                "chain": "A",
+                "ins_code": "",
+                "res_name": "HIS",
+                "seq_num": 518
+              }
+            ],
+            "ins_code": "",
+            "res_name": "HIS",
+            "seq_num": 518
+          },
+          "options": [
+            {
+              "cost_hint": "low",
+              "id": "predicted_state",
+              "label": "Use the state the pKa estimate gives at the study's pH",
+              "prep_action": "apply",
+              "prep_stage": "protonation",
+              "trade_offs": [
+                "Follows the structure-based estimate.",
+                "The estimate's error (about one pH unit) is comparable to its distance from the pH."
+              ]
+            },
+            {
+              "cost_hint": "low",
+              "id": "standard_state",
+              "label": "Use the state of the residue's model pKa (the unperturbed value) at the study's pH",
+              "prep_action": "apply",
+              "prep_stage": "protonation",
+              "trade_offs": [
+                "Ignores the environment's shift, which may be real.",
+                "Robust where the estimate cannot see part of the environment."
+              ]
+            },
+            {
+              "cost_hint": "low",
+              "id": "specific_state",
+              "label": "Use the state named in the decision (parameters.state, e.g. HID, ASH, LYN)",
+              "prep_action": "apply",
+              "prep_stage": "protonation",
+              "trade_offs": [
+                "Encodes outside knowledge (experiment, literature, a better calculation).",
+                "Must name a variant the residue has."
+              ]
+            }
+          ],
+          "rationale": "The estimated pKa lies within the method's ambiguity window of the study's pH, so both states are populated and the choice is within the estimate's error.",
+          "recommendation_basis": "default",
+          "recommended_option": "predicted_state",
+          "references": [
+            {
+              "citation": "Olsson MHM, S\u00f8ndergaard CR, Rostkowski M, Jensen JH. PROPKA3: Consistent Treatment of Internal and Surface Residues in Empirical pKa Predictions. J Chem Theory Comput 2011;7:525-37.",
+              "doi": "10.1021/ct100578z",
+              "pmid": "26596171"
+            }
+          ],
+          "rule_family": "protonation",
+          "rule_id": "protonation.ambiguous_state",
+          "severity_context": {
+            "min_distance_angstrom": null,
+            "nearest_region": null,
+            "proximity": "no_regions",
+            "raise_levels": 0
+          },
+          "title": "Protonation state close to the pKa: HIS A:518 (wt)",
+          "verify_flags": []
+        },
+        {
+          "anchor_residues": [
+            {
+              "chain": "A",
+              "ins_code": "",
+              "seq_num": 533
+            }
+          ],
+          "base_severity": "warn",
+          "effective_severity": "warn",
+          "evidence": [
+            {
+              "key": "pka",
+              "type": "number",
+              "unit": "pH",
+              "value": 6.72
+            },
+            {
+              "key": "model_pka",
+              "type": "number",
+              "unit": "pH",
+              "value": 6.5
+            },
+            {
+              "key": "ph",
+              "type": "number",
+              "unit": "pH",
+              "value": 7.2
+            }
+          ],
+          "id": "protonation/wt/A:533",
+          "locus": {
+            "atom_names": [],
+            "chain": "A",
+            "extent": [
+              {
+                "chain": "A",
+                "ins_code": "",
+                "res_name": "HIS",
+                "seq_num": 533
+              }
+            ],
+            "ins_code": "",
+            "res_name": "HIS",
+            "seq_num": 533
+          },
+          "options": [
+            {
+              "cost_hint": "low",
+              "id": "predicted_state",
+              "label": "Use the state the pKa estimate gives at the study's pH",
+              "prep_action": "apply",
+              "prep_stage": "protonation",
+              "trade_offs": [
+                "Follows the structure-based estimate.",
+                "The estimate's error (about one pH unit) is comparable to its distance from the pH."
+              ]
+            },
+            {
+              "cost_hint": "low",
+              "id": "standard_state",
+              "label": "Use the state of the residue's model pKa (the unperturbed value) at the study's pH",
+              "prep_action": "apply",
+              "prep_stage": "protonation",
+              "trade_offs": [
+                "Ignores the environment's shift, which may be real.",
+                "Robust where the estimate cannot see part of the environment."
+              ]
+            },
+            {
+              "cost_hint": "low",
+              "id": "specific_state",
+              "label": "Use the state named in the decision (parameters.state, e.g. HID, ASH, LYN)",
+              "prep_action": "apply",
+              "prep_stage": "protonation",
+              "trade_offs": [
+                "Encodes outside knowledge (experiment, literature, a better calculation).",
+                "Must name a variant the residue has."
+              ]
+            }
+          ],
+          "rationale": "The estimated pKa lies within the method's ambiguity window of the study's pH, so both states are populated and the choice is within the estimate's error.",
+          "recommendation_basis": "default",
+          "recommended_option": "predicted_state",
+          "references": [
+            {
+              "citation": "Olsson MHM, S\u00f8ndergaard CR, Rostkowski M, Jensen JH. PROPKA3: Consistent Treatment of Internal and Surface Residues in Empirical pKa Predictions. J Chem Theory Comput 2011;7:525-37.",
+              "doi": "10.1021/ct100578z",
+              "pmid": "26596171"
+            }
+          ],
+          "rule_family": "protonation",
+          "rule_id": "protonation.ambiguous_state",
+          "severity_context": {
+            "min_distance_angstrom": null,
+            "nearest_region": null,
+            "proximity": "no_regions",
+            "raise_levels": 0
+          },
+          "title": "Protonation state close to the pKa: HIS A:533 (wt)",
+          "verify_flags": []
+        }
+      ],
+      "name": "wt",
+      "source": "wt_modelled",
+      "states": [
+        {
+          "basis": "pka",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 3.68,
+          "res_name": "ASP",
+          "seq_num": 35,
+          "variant": "ASP"
+        },
+        {
+          "basis": "metal rule: OD1 bound to CA A:1551",
+          "chain": "A",
+          "ins_code": "",
+          "pka": -8.09,
+          "res_name": "ASP",
+          "seq_num": 45,
+          "variant": "ASP"
+        },
+        {
+          "basis": "metal rule: OD1 bound to CA A:1551",
+          "chain": "A",
+          "ins_code": "",
+          "pka": -0.89,
+          "res_name": "ASP",
+          "seq_num": 46,
+          "variant": "ASP"
+        },
+        {
+          "basis": "pka",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 14.64,
+          "res_name": "CYS",
+          "seq_num": 53,
+          "variant": "CYS"
+        },
+        {
+          "basis": "pka",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 4.09,
+          "res_name": "ASP",
+          "seq_num": 56,
+          "variant": "ASP"
+        },
+        {
+          "basis": "pka",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 10.44,
+          "res_name": "LYS",
+          "seq_num": 57,
+          "variant": "LYS"
+        },
+        {
+          "basis": "pka",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 6.19,
+          "res_name": "ASP",
+          "seq_num": 65,
+          "variant": "ASP"
+        },
+        {
+          "basis": "pka; tautomer by hydrogen bonding",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 5.44,
+          "res_name": "HIS",
+          "seq_num": 70,
+          "variant": "HID"
+        },
+        {
+          "basis": "pka",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 4.48,
+          "res_name": "ASP",
+          "seq_num": 98,
+          "variant": "ASP"
+        },
+        {
+          "basis": "pka",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 4.42,
+          "res_name": "ASP",
+          "seq_num": 104,
+          "variant": "ASP"
+        },
+        {
+          "basis": "pka; tautomer by hydrogen bonding",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 5.39,
+          "res_name": "HIS",
+          "seq_num": 112,
+          "variant": "HID"
+        },
+        {
+          "basis": "pka",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 9.59,
+          "res_name": "LYS",
+          "seq_num": 124,
+          "variant": "LYS"
+        },
+        {
+          "basis": "pka",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 5.15,
+          "res_name": "GLU",
+          "seq_num": 125,
+          "variant": "GLU"
+        },
+        {
+          "basis": "standard_state (recommended, undecided)",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 7.43,
+          "res_name": "LYS",
+          "seq_num": 135,
+          "variant": "LYS"
+        },
+        {
+          "basis": "standard_state (recommended, undecided); tautomer by hydrogen bonding",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 1.11,
+          "res_name": "HIS",
+          "seq_num": 138,
+          "variant": "HID"
+        },
+        {
+          "basis": "pka; tautomer by hydrogen bonding",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 6.17,
+          "res_name": "HIS",
+          "seq_num": 145,
+          "variant": "HID"
+        },
+        {
+          "basis": "pka",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 4.01,
+          "res_name": "ASP",
+          "seq_num": 147,
+          "variant": "ASP"
+        },
+        {
+          "basis": "pka",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 4.4,
+          "res_name": "ASP",
+          "seq_num": 148,
+          "variant": "ASP"
+        },
+        {
+          "basis": "pka",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 8.76,
+          "res_name": "HIS",
+          "seq_num": 159,
+          "variant": "HIP"
+        },
+        {
+          "basis": "pka",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 5.51,
+          "res_name": "GLU",
+          "seq_num": 163,
+          "variant": "GLU"
+        },
+        {
+          "basis": "pka",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 10.77,
+          "res_name": "LYS",
+          "seq_num": 164,
+          "variant": "LYS"
+        },
+        {
+          "basis": "pka",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 3.64,
+          "res_name": "GLU",
+          "seq_num": 166,
+          "variant": "GLU"
+        },
+        {
+          "basis": "pka",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 11.27,
+          "res_name": "LYS",
+          "seq_num": 169,
+          "variant": "LYS"
+        },
+        {
+          "basis": "disulfide disulf1",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 99.99,
+          "res_name": "CYS",
+          "seq_num": 171,
+          "variant": "CYX"
+        },
+        {
+          "basis": "pka",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 4.15,
+          "res_name": "ASP",
+          "seq_num": 175,
+          "variant": "ASP"
+        },
+        {
+          "basis": "pka",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 4.59,
+          "res_name": "GLU",
+          "seq_num": 177,
+          "variant": "GLU"
+        },
+        {
+          "basis": "predicted_state (recommended, undecided); tautomer by hydrogen bonding",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 7.06,
+          "res_name": "HIS",
+          "seq_num": 179,
+          "variant": "HID"
+        },
+        {
+          "basis": "disulfide disulf1",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 99.99,
+          "res_name": "CYS",
+          "seq_num": 184,
+          "variant": "CYX"
+        },
+        {
+          "basis": "pka",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 3.1,
+          "res_name": "ASP",
+          "seq_num": 187,
+          "variant": "ASP"
+        },
+        {
+          "basis": "pka",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 2.29,
+          "res_name": "ASP",
+          "seq_num": 190,
+          "variant": "ASP"
+        },
+        {
+          "basis": "pka",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 4.03,
+          "res_name": "GLU",
+          "seq_num": 193,
+          "variant": "GLU"
+        },
+        {
+          "basis": "pka",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 5.47,
+          "res_name": "ASP",
+          "seq_num": 198,
+          "variant": "ASP"
+        },
+        {
+          "basis": "pka",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 9.56,
+          "res_name": "LYS",
+          "seq_num": 199,
+          "variant": "LYS"
+        },
+        {
+          "basis": "pka",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 5.06,
+          "res_name": "GLU",
+          "seq_num": 203,
+          "variant": "GLU"
+        },
+        {
+          "basis": "pka",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 4.8,
+          "res_name": "GLU",
+          "seq_num": 210,
+          "variant": "GLU"
+        },
+        {
+          "basis": "pka",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 10.38,
+          "res_name": "LYS",
+          "seq_num": 211,
+          "variant": "LYS"
+        },
+        {
+          "basis": "pka",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 10.26,
+          "res_name": "LYS",
+          "seq_num": 213,
+          "variant": "LYS"
+        },
+        {
+          "basis": "predicted_state (recommended, undecided); tautomer by hydrogen bonding",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 6.82,
+          "res_name": "HIS",
+          "seq_num": 226,
+          "variant": "HID"
+        },
+        {
+          "basis": "pka",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 10.19,
+          "res_name": "LYS",
+          "seq_num": 227,
+          "variant": "LYS"
+        },
+        {
+          "basis": "standard_state (recommended, undecided); tautomer by hydrogen bonding",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 0.63,
+          "res_name": "HIS",
+          "seq_num": 229,
+          "variant": "HID"
+        },
+        {
+          "basis": "pka",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 10.77,
+          "res_name": "LYS",
+          "seq_num": 236,
+          "variant": "LYS"
+        },
+        {
+          "basis": "pka",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 4.23,
+          "res_name": "GLU",
+          "seq_num": 237,
+          "variant": "GLU"
+        },
+        {
+          "basis": "pka",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 10.29,
+          "res_name": "LYS",
+          "seq_num": 240,
+          "variant": "LYS"
+        },
+        {
+          "basis": "pka",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 3.93,
+          "res_name": "GLU",
+          "seq_num": 245,
+          "variant": "GLU"
+        },
+        {
+          "basis": "predicted_state (recommended, undecided)",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 7.94,
+          "res_name": "ASP",
+          "seq_num": 252,
+          "variant": "ASH"
+        },
+        {
+          "basis": "pka",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 4.69,
+          "res_name": "GLU",
+          "seq_num": 254,
+          "variant": "GLU"
+        },
+        {
+          "basis": "pka",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 3.92,
+          "res_name": "ASP",
+          "seq_num": 257,
+          "variant": "ASP"
+        },
+        {
+          "basis": "pka",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 3.37,
+          "res_name": "ASP",
+          "seq_num": 269,
+          "variant": "ASP"
+        },
+        {
+          "basis": "pka",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 2.51,
+          "res_name": "GLU",
+          "seq_num": 274,
+          "variant": "GLU"
+        },
+        {
+          "basis": "pka",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 4.72,
+          "res_name": "ASP",
+          "seq_num": 275,
+          "variant": "ASP"
+        },
+        {
+          "basis": "pka",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 3.55,
+          "res_name": "ASP",
+          "seq_num": 291,
+          "variant": "ASP"
+        },
+        {
+          "basis": "pka",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 10.1,
+          "res_name": "LYS",
+          "seq_num": 295,
+          "variant": "LYS"
+        },
+        {
+          "basis": "predicted_state (recommended, undecided)",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 7.46,
+          "res_name": "ASP",
+          "seq_num": 308,
+          "variant": "ASH"
+        },
+        {
+          "basis": "pka",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 5.05,
+          "res_name": "ASP",
+          "seq_num": 319,
+          "variant": "ASP"
+        },
+        {
+          "basis": "pka",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 3.47,
+          "res_name": "ASP",
+          "seq_num": 320,
+          "variant": "ASP"
+        },
+        {
+          "basis": "metal rule: OD2 bound to CA A:1551",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 4.95,
+          "res_name": "ASP",
+          "seq_num": 334,
+          "variant": "ASP"
+        },
+        {
+          "basis": "metal rule: NE2 bound to CA A:1551",
+          "chain": "A",
+          "ins_code": "",
+          "pka": -0.65,
+          "res_name": "HIS",
+          "seq_num": 335,
+          "variant": "HID"
+        },
+        {
+          "basis": "pka",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 2.39,
+          "res_name": "GLU",
+          "seq_num": 341,
+          "variant": "GLU"
+        },
+        {
+          "basis": "predicted_state (recommended, undecided)",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 8.1,
+          "res_name": "HIS",
+          "seq_num": 342,
+          "variant": "HIP"
+        },
+        {
+          "basis": "pka",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 10.17,
+          "res_name": "GLU",
+          "seq_num": 344,
+          "variant": "GLH"
+        },
+        {
+          "basis": "standard_state (recommended, undecided)",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 6.72,
+          "res_name": "LYS",
+          "seq_num": 347,
+          "variant": "LYS"
+        },
+        {
+          "basis": "pka",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 1.05,
+          "res_name": "ASP",
+          "seq_num": 352,
+          "variant": "ASP"
+        },
+        {
+          "basis": "pka; tautomer by hydrogen bonding",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 4.16,
+          "res_name": "HIS",
+          "seq_num": 356,
+          "variant": "HIE"
+        },
+        {
+          "basis": "pka",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 4.89,
+          "res_name": "GLU",
+          "seq_num": 372,
+          "variant": "GLU"
+        },
+        {
+          "basis": "pka",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 3.97,
+          "res_name": "GLU",
+          "seq_num": 375,
+          "variant": "GLU"
+        },
+        {
+          "basis": "pka",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 11.29,
+          "res_name": "LYS",
+          "seq_num": 376,
+          "variant": "LYS"
+        },
+        {
+          "basis": "pka",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 3.62,
+          "res_name": "ASP",
+          "seq_num": 382,
+          "variant": "ASP"
+        },
+        {
+          "basis": "pka",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 4.47,
+          "res_name": "ASP",
+          "seq_num": 385,
+          "variant": "ASP"
+        },
+        {
+          "basis": "pka",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 4.21,
+          "res_name": "GLU",
+          "seq_num": 392,
+          "variant": "GLU"
+        },
+        {
+          "basis": "pka",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 1.76,
+          "res_name": "ASP",
+          "seq_num": 399,
+          "variant": "ASP"
+        },
+        {
+          "basis": "pka",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 4.17,
+          "res_name": "GLU",
+          "seq_num": 402,
+          "variant": "GLU"
+        },
+        {
+          "basis": "disulfide disulf2",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 99.99,
+          "res_name": "CYS",
+          "seq_num": 422,
+          "variant": "CYX"
+        },
+        {
+          "basis": "pka; tautomer by hydrogen bonding",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 6.16,
+          "res_name": "HIS",
+          "seq_num": 428,
+          "variant": "HID"
+        },
+        {
+          "basis": "pka",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 3.9,
+          "res_name": "GLU",
+          "seq_num": 430,
+          "variant": "GLU"
+        },
+        {
+          "basis": "disulfide disulf2",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 99.99,
+          "res_name": "CYS",
+          "seq_num": 432,
+          "variant": "CYX"
+        },
+        {
+          "basis": "pka",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 4.76,
+          "res_name": "GLU",
+          "seq_num": 434,
+          "variant": "GLU"
+        },
+        {
+          "basis": "pka",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 9.03,
+          "res_name": "LYS",
+          "seq_num": 436,
+          "variant": "LYS"
+        },
+        {
+          "basis": "pka",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 10.29,
+          "res_name": "LYS",
+          "seq_num": 440,
+          "variant": "LYS"
+        },
+        {
+          "basis": "predicted_state (recommended, undecided); tautomer by hydrogen bonding",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 6.26,
+          "res_name": "HIS",
+          "seq_num": 441,
+          "variant": "HID"
+        },
+        {
+          "basis": "pka",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 4.04,
+          "res_name": "ASP",
+          "seq_num": 446,
+          "variant": "ASP"
+        },
+        {
+          "basis": "pka",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 5.08,
+          "res_name": "GLU",
+          "seq_num": 448,
+          "variant": "GLU"
+        },
+        {
+          "basis": "pka",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 4.63,
+          "res_name": "GLU",
+          "seq_num": 449,
+          "variant": "GLU"
+        },
+        {
+          "basis": "pka",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 4.38,
+          "res_name": "ASP",
+          "seq_num": 450,
+          "variant": "ASP"
+        },
+        {
+          "basis": "pka",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 3.71,
+          "res_name": "GLU",
+          "seq_num": 459,
+          "variant": "GLU"
+        },
+        {
+          "basis": "pka",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 3.54,
+          "res_name": "ASP",
+          "seq_num": 471,
+          "variant": "ASP"
+        },
+        {
+          "basis": "pka",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 5.38,
+          "res_name": "ASP",
+          "seq_num": 478,
+          "variant": "ASP"
+        },
+        {
+          "basis": "standard_state (recommended, undecided)",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 8.93,
+          "res_name": "LYS",
+          "seq_num": 479,
+          "variant": "LYS"
+        },
+        {
+          "basis": "pka",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 10.72,
+          "res_name": "LYS",
+          "seq_num": 483,
+          "variant": "LYS"
+        },
+        {
+          "basis": "pka",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 3.85,
+          "res_name": "ASP",
+          "seq_num": 484,
+          "variant": "ASP"
+        },
+        {
+          "basis": "pka",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 10.43,
+          "res_name": "LYS",
+          "seq_num": 486,
+          "variant": "LYS"
+        },
+        {
+          "basis": "pka",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 4.49,
+          "res_name": "ASP",
+          "seq_num": 496,
+          "variant": "ASP"
+        },
+        {
+          "basis": "pka",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 4.02,
+          "res_name": "ASP",
+          "seq_num": 508,
+          "variant": "ASP"
+        },
+        {
+          "basis": "pka",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 4.76,
+          "res_name": "GLU",
+          "seq_num": 509,
+          "variant": "GLU"
+        },
+        {
+          "basis": "pka",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 3.45,
+          "res_name": "ASP",
+          "seq_num": 516,
+          "variant": "ASP"
+        },
+        {
+          "basis": "predicted_state (recommended, undecided)",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 7.58,
+          "res_name": "HIS",
+          "seq_num": 518,
+          "variant": "HIP"
+        },
+        {
+          "basis": "pka",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 5.68,
+          "res_name": "GLU",
+          "seq_num": 521,
+          "variant": "GLU"
+        },
+        {
+          "basis": "pka",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 4.01,
+          "res_name": "ASP",
+          "seq_num": 526,
+          "variant": "ASP"
+        },
+        {
+          "basis": "pka",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 3.9,
+          "res_name": "ASP",
+          "seq_num": 528,
+          "variant": "ASP"
+        },
+        {
+          "basis": "pka",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 2.07,
+          "res_name": "ASP",
+          "seq_num": 532,
+          "variant": "ASP"
+        },
+        {
+          "basis": "predicted_state (recommended, undecided); tautomer by hydrogen bonding",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 6.72,
+          "res_name": "HIS",
+          "seq_num": 533,
+          "variant": "HID"
+        },
+        {
+          "basis": "pka",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 3.97,
+          "res_name": "ASP",
+          "seq_num": 538,
+          "variant": "ASP"
+        },
+        {
+          "basis": "pka",
+          "chain": "A",
+          "ins_code": "",
+          "pka": 4.42,
+          "res_name": "ASP",
+          "seq_num": 543,
+          "variant": "ASP"
+        }
+      ]
+    }
+  ],
+  "work_order": [
+    {
+      "description": "Nonbonded 12-6-4 LJ-type ion model: CA site A:1551: likely_catalytic, coordination number 6",
+      "finding_id": "metals/A:1551",
+      "option_id": "nonbonded_12_6_4",
+      "residues": [
+        {
+          "chain": "A",
+          "ins_code": "",
+          "seq_num": 1551
+        }
+      ],
+      "stage": "parameterization"
+    },
+    {
+      "description": "Truncate at the observed residue with a charged terminus (NH3+ / COO-): Unobserved N-terminal residues: A:26-33 (8 residues); charged N-terminus (NH3+) at THR A:34",
+      "finding_id": "missing_residues/A:26-33",
+      "option_id": "truncate",
+      "residues": [
+        {
+          "chain": "A",
+          "ins_code": "",
+          "seq_num": 26
+        },
+        {
+          "chain": "A",
+          "ins_code": "",
+          "seq_num": 27
+        },
+        {
+          "chain": "A",
+          "ins_code": "",
+          "seq_num": 28
+        },
+        {
+          "chain": "A",
+          "ins_code": "",
+          "seq_num": 29
+        },
+        {
+          "chain": "A",
+          "ins_code": "",
+          "seq_num": 30
+        },
+        {
+          "chain": "A",
+          "ins_code": "",
+          "seq_num": 31
+        },
+        {
+          "chain": "A",
+          "ins_code": "",
+          "seq_num": 32
+        },
+        {
+          "chain": "A",
+          "ins_code": "",
+          "seq_num": 33
+        }
+      ],
+      "stage": "topology"
+    },
+    {
+      "description": "Keep and parameterize outside the rule system: Unrecognized chemistry: CL at A:1567",
+      "finding_id": "unrecognized/group/A:1567",
+      "option_id": "parameterize_manually",
+      "residues": [
+        {
+          "chain": "A",
+          "ins_code": "",
+          "seq_num": 1567
+        }
+      ],
+      "stage": "parameterization"
+    },
+    {
+      "description": "Keep and parameterize outside the rule system: Unrecognized chemistry: CL at A:1568",
+      "finding_id": "unrecognized/group/A:1568",
+      "option_id": "parameterize_manually",
+      "residues": [
+        {
+          "chain": "A",
+          "ins_code": "",
+          "seq_num": 1568
+        }
+      ],
+      "stage": "parameterization"
+    },
+    {
+      "description": "Keep and parameterize outside the rule system: Unrecognized chemistry: CL at A:1569",
+      "finding_id": "unrecognized/group/A:1569",
+      "option_id": "parameterize_manually",
+      "residues": [
+        {
+          "chain": "A",
+          "ins_code": "",
+          "seq_num": 1569
+        }
+      ],
+      "stage": "parameterization"
+    }
+  ]
+}

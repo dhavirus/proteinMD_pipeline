@@ -17,7 +17,8 @@ RESIDUE_MAPPINGS = "residue_mappings.yaml"
 SIDE_CHAINS = "side_chains.yaml"
 RELAXATION = "relaxation.yaml"
 MODELLING = "modelling.yaml"
-DATA_FILES = (RESIDUE_MAPPINGS, SIDE_CHAINS, RELAXATION, MODELLING)
+PROTONATION = "protonation.yaml"
+DATA_FILES = (RESIDUE_MAPPINGS, SIDE_CHAINS, RELAXATION, MODELLING, PROTONATION)
 
 
 def load_rule_file(path: Path) -> tuple[Rule, ...]:
@@ -48,6 +49,7 @@ def load_ruleset(knowledge_dir: Path = KNOWLEDGE_DIR) -> RuleSet:
         side_chains=load_side_chains(knowledge_dir / SIDE_CHAINS),
         relaxation=load_relaxation(knowledge_dir / RELAXATION),
         modelling=load_modelling(knowledge_dir / MODELLING),
+        protonation=load_protonation(knowledge_dir / PROTONATION),
     )
 
 
@@ -81,6 +83,13 @@ def load_modelling(path: Path) -> dict:
     data = yaml.safe_load(path.read_text())
     validate(data, "modelling")
     return data["protocol"]
+
+
+def load_protonation(path: Path) -> dict:
+    """Schema-validated protonation method and residue definitions (TASK-009)."""
+    data = yaml.safe_load(path.read_text())
+    validate(data, "protonation")
+    return {"method": data["method"], "residue_definitions": data["residue_definitions"]}
 
 
 def _hash_files(paths: list[Path]) -> str:
