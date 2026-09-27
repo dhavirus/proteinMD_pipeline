@@ -1,0 +1,39 @@
+generated_by: tools/parameterize_ddz.py
+fragment_smiles: CC(=O)N[C@@H](C(O)O)C(=O)NC
+rdkit_seed: 20260927
+tools:
+  ambertools: '26.0'
+  parmed: 4.3.1
+  rdkit: 2026.03.1
+am1bcc_charges:
+  N: -0.5419
+  H: 0.3355
+  CA: 0.0117
+  HA: 0.0997
+  C: 0.6561
+  O: -0.5961
+  CB: 0.3179
+  HB: 0.0747
+  OG1: -0.6343
+  OG2: -0.6343
+  HG1: 0.435
+  HG2: 0.435
+side_chain_shift: 0.010167
+backbone_from: OpenMM amber14/protein.ff14SB.xml, residue SER
+gaff2_types:
+  N: ns
+  CA: c3
+  CB: c3
+  OG1: oh
+  OG2: oh
+  C: c
+  O: o
+  H: hn
+  HA: h1
+  HB: h2
+  HG1: ho
+  HG2: ho
+terms:
+  bonds: 4
+  angles: 8
+  torsions: 13

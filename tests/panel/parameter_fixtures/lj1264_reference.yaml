@@ -1,0 +1,33 @@
+note: C4 between Ca2+ and each Amber atom type of a tleap system (ACE-ASP-HIE-LYS-SER-CYS-NME,
+  Ca2+, Cl-, one TIP3P water) after ParmEd add12_6_4 (watermodel TIP3P, tunfactor
+  1.0); written by tools/lj1264_data.py, independent of simprep's implementation.
+c4_kcal_per_mol_a4:
+  2C: 64.144945
+  C: 81.73795
+  C8: 64.144945
+  CC: 81.73795
+  CO: 81.73795
+  CR: 81.73795
+  CT: 64.144945
+  CW: 81.73795
+  CX: 64.144945
+  Ca2+: 28.838019
+  Cl-: 195.578601
+  H: 23.396884
+  H1: 23.396884
+  H4: 23.396884
+  H5: 23.396884
+  HC: 23.396884
+  HO: 0.0
+  HP: 23.396884
+  HS: 23.396884
+  HW: 0.0
+  N: 65.898199
+  N3: 65.898199
+  NA: 65.898199
+  NB: 65.898199
+  O: 34.400069
+  O2: 34.400069
+  OH: 38.51115
+  OW: 87.3
+  SH: 181.371191

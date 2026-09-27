@@ -1,0 +1,184 @@
+schema_version: 0.1.0
+generated_by: tools/lj1264_data.py
+ambertools: '26.0'
+parmed: 4.3.1
+ions:
+  CA:
+    openmm_class: tip3p_standard-Ca2+
+    rmin_half_angstrom: 1.642
+    epsilon_kcal_per_mol: 0.10185975
+    source: 'AmberTools frcmod.ions234lm_1264_tip3p: 12-6-4 set for TIP3P water from
+      Li and Merz, JCTC, 2014, 10, 289'
+    c4_water_kcal_per_mol_a4: 87.3
+    c4_source: ParmEd 4.3.1 parmed/tools/add1264.py, TIP3P table
+water_polarizability_cubic_angstrom: 1.444
+tuning_factor: 0
+polarizabilities:
+  2C:
+    amber_type: 2C
+    value_cubic_angstrom: 1.061
+    source: Referenced or adopted from Miller JACS,112,8533(1990)
+  3C:
+    amber_type: 3C
+    value_cubic_angstrom: 1.061
+    source: Referenced or adopted from Miller JACS,112,8533(1990)
+  C:
+    amber_type: C
+    value_cubic_angstrom: 1.352
+    source: Referenced or adopted from Miller JACS,112,8533(1990)
+  C*:
+    amber_type: C*
+    value_cubic_angstrom: 1.352
+    source: Referenced or adopted from Miller JACS,112,8533(1990)
+  C8:
+    amber_type: C8
+    value_cubic_angstrom: 1.061
+    source: Referenced or adopted from Miller JACS,112,8533(1990)
+  CA:
+    amber_type: CA
+    value_cubic_angstrom: 1.352
+    source: Referenced or adopted from Miller JACS,112,8533(1990)
+  CB:
+    amber_type: CB
+    value_cubic_angstrom: 1.352
+    source: Referenced or adopted from Miller JACS,112,8533(1990)
+  CC:
+    amber_type: CC
+    value_cubic_angstrom: 1.352
+    source: Referenced or adopted from Miller JACS,112,8533(1990)
+  CN:
+    amber_type: CN
+    value_cubic_angstrom: 1.352
+    source: Referenced or adopted from Miller JACS,112,8533(1990)
+  CO:
+    amber_type: CO
+    value_cubic_angstrom: 1.352
+    source: Referenced or adopted from Miller JACS,112,8533(1990)
+  CR:
+    amber_type: CR
+    value_cubic_angstrom: 1.352
+    source: Referenced or adopted from Miller JACS,112,8533(1990)
+  CT:
+    amber_type: CT
+    value_cubic_angstrom: 1.061
+    source: Referenced or adopted from Miller JACS,112,8533(1990)
+  CV:
+    amber_type: CV
+    value_cubic_angstrom: 1.352
+    source: Referenced or adopted from Miller JACS,112,8533(1990)
+  CW:
+    amber_type: CW
+    value_cubic_angstrom: 1.352
+    source: Referenced or adopted from Miller JACS,112,8533(1990)
+  CX:
+    amber_type: CX
+    value_cubic_angstrom: 1.061
+    source: Referenced or adopted from Miller JACS,112,8533(1990)
+  H:
+    amber_type: H
+    value_cubic_angstrom: 0.387
+    source: Referenced or adopted from Miller JACS,112,8533(1990)
+  H1:
+    amber_type: H1
+    value_cubic_angstrom: 0.387
+    source: Referenced or adopted from Miller JACS,112,8533(1990)
+  H4:
+    amber_type: H4
+    value_cubic_angstrom: 0.387
+    source: Referenced or adopted from Miller JACS,112,8533(1990)
+  H5:
+    amber_type: H5
+    value_cubic_angstrom: 0.387
+    source: Referenced or adopted from Miller JACS,112,8533(1990)
+  HA:
+    amber_type: HA
+    value_cubic_angstrom: 0.387
+    source: Referenced or adopted from Miller JACS,112,8533(1990)
+  HC:
+    amber_type: HC
+    value_cubic_angstrom: 0.387
+    source: Referenced or adopted from Miller JACS,112,8533(1990)
+  HO:
+    amber_type: HO
+    value_cubic_angstrom: 0.0
+    source: Keep its C4 terms consistent with its 12-6 LJ parameters
+  HP:
+    amber_type: HP
+    value_cubic_angstrom: 0.387
+    source: Referenced or adopted from Miller JACS,112,8533(1990)
+  HS:
+    amber_type: HS
+    value_cubic_angstrom: 0.387
+    source: Referenced or adopted from Miller JACS,112,8533(1990)
+  N:
+    amber_type: N
+    value_cubic_angstrom: 1.09
+    source: Referenced or adopted from Miller JACS,112,8533(1990)
+  N2:
+    amber_type: N2
+    value_cubic_angstrom: 1.09
+    source: Referenced or adopted from Miller JACS,112,8533(1990)
+  N3:
+    amber_type: N3
+    value_cubic_angstrom: 1.09
+    source: Referenced or adopted from Miller JACS,112,8533(1990)
+  NA:
+    amber_type: NA
+    value_cubic_angstrom: 1.09
+    source: Referenced or adopted from Miller JACS,112,8533(1990)
+  NB:
+    amber_type: NB
+    value_cubic_angstrom: 1.09
+    source: Referenced or adopted from Miller JACS,112,8533(1990)
+  O:
+    amber_type: O
+    value_cubic_angstrom: 0.569
+    source: Referenced or adopted from Miller JACS,112,8533(1990)
+  O2:
+    amber_type: O2
+    value_cubic_angstrom: 0.569
+    source: Referenced or adopted from Miller JACS,112,8533(1990)
+  OH:
+    amber_type: OH
+    value_cubic_angstrom: 0.637
+    source: Referenced or adopted from Miller JACS,112,8533(1990)
+  S:
+    amber_type: S
+    value_cubic_angstrom: 3.0
+    source: Referenced or adopted from Miller JACS,112,8533(1990)
+  SH:
+    amber_type: SH
+    value_cubic_angstrom: 3.0
+    source: Referenced or adopted from Miller JACS,112,8533(1990)
+  ddz-c3:
+    amber_type: c3
+    value_cubic_angstrom: 1.061
+    source: Referenced or adopted from Miller JACS,112,8533(1990)
+  ddz-h2:
+    amber_type: h2
+    value_cubic_angstrom: 0.387
+    source: Referenced or adopted from Miller JACS,112,8533(1990)
+  ddz-ho:
+    amber_type: ho
+    value_cubic_angstrom: 0.0
+    source: Keep its C4 terms consistent with its 12-6 LJ parameters
+  ddz-oh:
+    amber_type: oh
+    value_cubic_angstrom: 0.637
+    source: Referenced or adopted from Miller JACS,112,8533(1990)
+  tip3p-H:
+    amber_type: HW
+    value_cubic_angstrom: 0.0
+    source: Water hydrogen, dummy atom or lone pair
+  tip3p-O:
+    amber_type: OW
+    value_cubic_angstrom: 1.444
+    source: From "The Structure and Properties of Water" by D. Eisenberg and W. Kauzmann
+  tip3p_standard-Ca2+:
+    amber_type: Ca2+
+    value_cubic_angstrom: 0.477
+    source: Caculated from B3LYP/6-311++G(2d,2p) level of theory
+  tip3p_standard-Cl-:
+    amber_type: Cl-
+    value_cubic_angstrom: 3.235
+    source: 'From Sangster and Atwood J. Phys. C: Solid State Phys.11,1541(1978)'

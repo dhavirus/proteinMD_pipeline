@@ -1,13 +1,13 @@
 {
   "schema_version": "0.1.0",
-  "generated_at": "2026-09-27T02:32:55Z",
+  "generated_at": "2026-09-27T05:17:06Z",
   "simprep": {
     "version": "0.1.0",
-    "git_commit": "fe91df01358926252a685100756515747fada81b-dirty"
+    "git_commit": "11581366b7581264dfc63b19c79fbca0d0d65e2b-dirty"
   },
   "knowledge_base": {
-    "version": "0.8.0",
-    "sha256": "6d6499fb969960ee7d69ef0611b5498549251f08f622b48175259981c5d5b67b"
+    "version": "0.9.0",
+    "sha256": "7e73108efe9672e69a50899aa6ae32e5e8932af518a167a182cd7f1b4116d21a"
   },
   "input": {
     "path": "tests/panel/5FQL.cif.gz",

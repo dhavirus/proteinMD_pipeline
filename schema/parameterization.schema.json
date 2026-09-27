@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:simprep:schema:parameterization",
+  "x-schema-version": "0.1.0",
+  "title": "simprep parameterization defaults (knowledge/parameterization.yaml)",
+  "description": "Force-field files, generated parameter files and the ion models the parameterization stage applies (TASK-010).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "protocol",
+    "references",
+    "verify_flags"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "0.1.0"
+    },
+    "protocol": {
+      "$ref": "#/$defs/protocol"
+    },
+    "references": {
+      "type": "array",
+      "items": {
+        "$ref": "urn:simprep:schema:finding#/$defs/reference"
+      }
+    },
+    "verify_flags": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^\\[VERIFY\\]"
+      }
+    }
+  },
+  "$defs": {
+    "protocol": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "force_field_files",
+        "generated_force_field_files",
+        "lj1264_file",
+        "metal_models",
+        "check_nonbonded_method"
+      ],
+      "properties": {
+        "force_field_files": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "generated_force_field_files": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^forcefield/"
+          }
+        },
+        "lj1264_file": {
+          "type": "string",
+          "pattern": "^forcefield/"
+        },
+        "metal_models": {
+          "type": "object",
+          "additionalProperties": {
+            "enum": [
+              "lj1264"
+            ]
+          }
+        },
+        "check_nonbonded_method": {
+          "const": "NoCutoff"
+        }
+      }
+    }
+  }
+}

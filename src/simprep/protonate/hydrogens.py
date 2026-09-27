@@ -32,7 +32,7 @@ def add_hydrogens(structure: Structure, states: list[State], protonation: dict) 
     from openmm import app, unit
 
     definitions = protonation["residue_definitions"]
-    _load_definitions(app, definitions)
+    load_definitions(app, definitions)
     heavy = without_hydrogens(structure)
     polymer, waters, _ = _partition(heavy, definitions)
     topology, positions, order = _topology(app, [*segments(polymer), waters])
@@ -123,7 +123,7 @@ def _with(residue: Residue, hydrogens: tuple) -> Residue:
     return replace(residue, atoms=residue.atoms + new)
 
 
-def _load_definitions(app, definitions: dict) -> None:
+def load_definitions(app, definitions: dict) -> None:
     """Bond and hydrogen definitions for non-standard polymer residues, as OpenMM XML."""
     with tempfile.TemporaryDirectory() as directory:
         bonds, hydrogens = Path(directory) / "bonds.xml", Path(directory) / "hydrogens.xml"

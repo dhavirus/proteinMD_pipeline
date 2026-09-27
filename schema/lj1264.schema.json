@@ -1,0 +1,103 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:simprep:schema:lj1264",
+  "x-schema-version": "0.1.0",
+  "title": "simprep 12-6-4 ion model data (knowledge/forcefield/lj1264.yaml)",
+  "description": "knowledge/forcefield/lj1264.yaml, written by tools/lj1264_data.py.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "generated_by",
+    "ambertools",
+    "parmed",
+    "ions",
+    "water_polarizability_cubic_angstrom",
+    "tuning_factor",
+    "polarizabilities"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "0.1.0"
+    },
+    "generated_by": {
+      "type": "string"
+    },
+    "ambertools": {
+      "type": "string"
+    },
+    "parmed": {
+      "type": "string"
+    },
+    "ions": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "openmm_class",
+          "rmin_half_angstrom",
+          "epsilon_kcal_per_mol",
+          "source",
+          "c4_water_kcal_per_mol_a4",
+          "c4_source"
+        ],
+        "properties": {
+          "openmm_class": {
+            "type": "string"
+          },
+          "rmin_half_angstrom": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          "epsilon_kcal_per_mol": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          "source": {
+            "type": "string"
+          },
+          "c4_water_kcal_per_mol_a4": {
+            "type": "number",
+            "minimum": 0
+          },
+          "c4_source": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "water_polarizability_cubic_angstrom": {
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "tuning_factor": {
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "polarizabilities": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "amber_type",
+          "value_cubic_angstrom",
+          "source"
+        ],
+        "properties": {
+          "amber_type": {
+            "type": "string"
+          },
+          "value_cubic_angstrom": {
+            "type": "number",
+            "minimum": 0
+          },
+          "source": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}
