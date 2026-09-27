@@ -131,7 +131,8 @@ get an exact, recorded meaning for the topology stage.
 ## Acceptance criteria
 - 5FQL with `model_loop` for A:444-453 and `truncate` for A:26-33:
   - 10 residues FRDLEEDPYL appear between 443 and 454;
-  - every junction C-N is 1.33 +/- 0.05 A and every CA-CA 3.8 +/- 0.1 A (trans);
+  - every junction C-N is 1.33 +/- 0.05 A and every CA-CA 3.8 +/- 0.15 A (trans; widened
+    from 0.1 by the maintainer on 2026-09-27, see the ADR-0007 amendment);
   - the output is deterministic;
   - the residues are marked as modelled;
   - the same loop appears in WT, R468Q and R468W.
