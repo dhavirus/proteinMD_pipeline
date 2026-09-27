@@ -103,3 +103,60 @@ implementation and what the session's measurements forced.
 - The rigid-variant and relaxation panel tests decide 444-453 `truncate` (fixture
   `prep_overrides`) so they do not rebuild the loop.
 - Another seed gives another loop. Loop ensembles are out of scope (TASK-007).
+
+## Amendment (2026-09-26, after CI rejected the TASK-008 loop)
+
+CI (numpy 2.4.6) rejected the 5FQL loop that passed locally (numpy 2.5.3): one CA-CA of
+3.901 A. Reproduced locally; Python 3.11 and 3.12 gave identical files with numpy 2.4.6,
+so PDBFixer's placement depends on the numpy version. Investigating the margin found a
+defect in decision 5:
+
+- `relax()` adds hydrogens to the placed residues while some are still D, so their HA
+  sits on the D side. The pre-stage flips CB through the backbone plane, but HA stays:
+  the torsion restraints then hold an inconsistent centre (impropers only 19-21
+  degrees), and releasing them flips seven residues back to D even from a clash-free
+  structure. The strain also stretched CA-CA.
+- Keeping Amber's 1-4 terms in the final stage, or full vacuum electrostatics, did not
+  help (CA-CA up to 4.04 and 3.93 A): the sterics-only final stage stays.
+
+Changes:
+1. **Two passes.** Pass 1 as before (pre-stage and final stage with the torsion
+   restraints). Pass 2 re-adds hydrogens to the corrected heavy atoms (relax drops the
+   hydrogens of moved residues) and repeats the sterics-only final stage without torsion
+   restraints. Every residue is then L on its own (impropers 28-38 degrees). The record's
+   displacements are measured from the placed loop.
+2. **Flank restraint 1,000 kJ/mol/nm^2** (was 10,000): at 10,000 Pro454 was held so
+   stiffly that Leu453-Pro454 stayed at CA-CA 3.90 A (ideal trans X-Pro 3.81 A). At 1,000
+   the flanks move at most 0.9 A (backbone at most 0.53 A; deposited B 108-150 A^2).
+3. **numpy pinned (2.4.6)** in the `relax` extra, so builds agree across machines. The
+   output is byte-identical for one set of versions; a different numpy (or BLAS build)
+   gives a different loop, which the checks then judge.
+
+Result (5FQL, numpy 2.4.6, flank restraint 1,000): with A:84 as ALS, CA-CA 3.80-3.90 A,
+C-N 1.334-1.355 A, omega within 11 degrees of trans, every residue L (impropers 28-38
+degrees without restraints), 41 loop clashes -> 0; with A:84 as DDZ (TASK-008), CA-CA
+3.80-3.86 A, C-N 1.335-1.346 A.
+
+### Implicit-solvent spike and the CA-CA tolerance (2026-09-27)
+
+With the two-pass fix, one junction still sat on the limit (Leu453-Pro454 CA-CA 3.900 A,
+numpy 2.4.6, A:84 as ALS). A spike replaced pass 2 with full ff14SB in implicit solvent
+(measured on this machine, 5FQL):
+
+| pass 2 | loop CA-CA | over 3.9 A | build |
+|---|---|---|---|
+| sterics only | 3.80-3.90 A | 0 | about 165 s |
+| ff14SB + GBn2 | 3.86-3.95 A | 2 | 344 s |
+| ff14SB + OBC2 | 3.85-3.95 A | 3 | 349 s |
+
+Controls on observed segments (same shell, flanks restrained): loop 386-392 deposited
+3.80-3.83 A, sterics-only 3.79-3.83 A, ff14SB + GBn2 3.84-3.90 A; segment 377-385
+sterics-only lengthens the Pro379 bond 3.815 -> 3.858 A. 5FQL's refined trans CA-CA span
+3.76-3.86 A (X-Pro 3.80-3.84 A, n = 41). Full ff14SB lengthens trans CA-CA by 0.05-0.08 A
+even on observed loops, so implicit solvent is not used; the sterics-only final stage
+stays.
+
+**Decision (maintainer, 2026-09-27):** the CA-CA tolerance is 0.15 A (window
+3.65-3.95 A). It still rejects cis peptides (about 2.9 A) and strained bonds; chirality
+has its own check. The sterics margin is 2.0 nm (a mobile atom moved 1.53 nm with numpy
+2.4.6).
