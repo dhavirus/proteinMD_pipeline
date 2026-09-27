@@ -65,6 +65,18 @@ Protocol defaults: `knowledge/modelling.yaml` (override in the manifest's `model
 `truncate` means charged termini, listed for the topology stage. A build takes about two
 minutes. See ADR-0007.
 
+## Protonation
+
+State the pH in the manifest (`"protonation": {"ph": 7.2, "ph_rationale": "..."}`; simprep
+never defaults it), then run `simprep protonate STRUCTURE --manifest M --out DIR` for the
+wild type, or `simprep variants` to protonate every system it writes. PROPKA 3.5.1
+estimates pKa values per system; disulfide cysteines and metal ligands (from
+`struct_conn`) follow fixed rules; residues near chemistry PROPKA ignores, or within one
+pH unit of their pKa, become `protonation` findings with a recorded default; OpenMM adds
+every hydrogen (deposited ones are replaced). Outputs: `*_protonated/` systems,
+`protonation_record.json` (pH, method, per-residue state and why, differences from the
+wild type) and `protonation_report.md`. See ADR-0009.
+
 ## Variants
 
 List variants in the manifest (`"variants"`, or the review page's variant editor, e.g.

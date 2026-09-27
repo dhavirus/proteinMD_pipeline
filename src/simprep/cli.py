@@ -1,5 +1,5 @@
 """Command line: ``simprep audit``, ``simprep manifest init|status``, ``simprep prep``,
-``simprep model`` and ``simprep variants``."""
+``simprep model``, ``simprep variants`` and ``simprep protonate``."""
 
 from __future__ import annotations
 
@@ -25,6 +25,7 @@ from simprep.model.run import LoopRejected, run_model
 from simprep.paths import KNOWLEDGE_DIR
 from simprep.prep.run import RECORD_FILE, PrepRequest, run_prep
 from simprep.prep.run import REPORT_FILE as PREP_REPORT_FILE
+from simprep.protonate.run import run_protonate
 from simprep.provenance import input_info, sha256_file, simprep_provenance, utc_now
 from simprep.report import render_report
 from simprep.schemas import validate
@@ -116,6 +117,22 @@ def model(args: argparse.Namespace) -> int:
     return 0
 
 
+def protonate(args: argparse.Namespace) -> int:
+    """Protonate the (prepared or modelled) wild type at the manifest's pH."""
+    try:
+        record = run_protonate(PrepRequest(args.file, args.manifest, args.out, args.knowledge))
+    except LoopRejected as error:
+        print(f"simprep: {error}", file=sys.stderr)
+        return EXIT_BLOCKING_UNDECIDED
+    (system,) = record["systems"]
+    print(
+        f"pH {record['ph']}: {len(system['states'])} titratable residues, "
+        f"{len(system['findings'])} findings -> {args.out / system['directory']}"
+    )
+    print(f"record: {args.out / 'protonation_record.json'}")
+    return 0
+
+
 def variants(args: argparse.Namespace) -> int:
     """Pass 1: candidate findings into manifest.json (exit 3). Pass 2: build the variants."""
     try:
@@ -178,6 +195,13 @@ def build_parser() -> argparse.ArgumentParser:
     model_parser.add_argument("--manifest", type=Path, required=True)
     model_parser.add_argument("--out", type=Path, required=True, help="output directory")
     model_parser.set_defaults(handler=model)
+    protonate_parser = commands.add_parser(
+        "protonate", help="protonate the wild type at the manifest's pH -> wt_protonated/"
+    )
+    protonate_parser.add_argument("file", type=Path)
+    protonate_parser.add_argument("--manifest", type=Path, required=True)
+    protonate_parser.add_argument("--out", type=Path, required=True, help="output directory")
+    protonate_parser.set_defaults(handler=protonate)
     variants_parser = commands.add_parser(
         "variants", help="build the manifest's variants from the prepared wild type"
     )

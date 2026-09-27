@@ -26,6 +26,7 @@ relax = [
     # PDBFixer places loops with numpy linear algebra: pin it so builds agree across
     # machines (numpy 2.4.6 and 2.5.3 gave different loops; ADR-0007, amended).
     "numpy==2.4.6",
+    "propka==3.5.1",
 ]
 
 [project.scripts]

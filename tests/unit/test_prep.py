@@ -12,6 +12,7 @@ from simprep.paths import KNOWLEDGE_DIR, SCHEMA_DIR
 from simprep.prep.apply import apply_plan
 from simprep.prep.plan import OPERATIONS, PrepError, build_plan
 from simprep.prep.record import system_counts
+from simprep.protonate.states import APPLIED_OPTIONS as PROTONATION_OPTIONS
 from simprep.structure.model import ModifiedResidue, ResidueId
 from simprep.variants.findings import FAMILY as VARIANT_FAMILY
 from simprep.variants.run import APPLIED_OPTIONS
@@ -299,6 +300,7 @@ def apply_options(prep_families: bool, stage: str | None = None) -> set[str]:
 def test_every_apply_option_in_the_knowledge_base_has_an_operation():
     assert apply_options(prep_families=True) and apply_options(True) <= set(OPERATIONS)
     assert apply_options(prep_families=True, stage="modelling") == set(MODEL_OPTIONS)
+    assert apply_options(prep_families=True, stage="protonation") == set(PROTONATION_OPTIONS)
     assert apply_options(prep_families=False) == set(APPLIED_OPTIONS)
 
 

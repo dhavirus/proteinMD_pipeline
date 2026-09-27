@@ -1,0 +1,28 @@
+# Valid: the shipped defaults (knowledge/protonation.yaml).
+schema_version: 0.1.0
+method:
+  pka_tool: propka
+  pka_tool_version: 3.5.1
+  ambiguity_window_ph: 1.0
+  unreliable_within_angstrom: 6.0
+  hydrogen_tool: openmm_modeller
+  platform: Reference
+  seed: 20260927
+residue_definitions:
+  DDZ:
+    bonds: [[-C, N], [N, CA], [CA, C], [C, O], [C, OXT], [CA, CB], [CB, OG1], [CB, OG2],
+            [N, H], [N, H2], [N, H3], [CA, HA], [CB, HB], [OG1, HG1], [OG2, HG2]]
+    hydrogens:
+      - {name: H, parent: N}
+      - {name: H2, parent: N, terminal: N}
+      - {name: H3, parent: N, terminal: N}
+      - {name: HA, parent: CA}
+      - {name: HB, parent: CB}
+      - {name: HG1, parent: OG1}
+      - {name: HG2, parent: OG2}
+references:
+  - citation: "Olsson MHM, Søndergaard CR, Rostkowski M, Jensen JH. PROPKA3: Consistent Treatment of Internal and Surface Residues in Empirical pKa Predictions. J Chem Theory Comput 2011;7:525-37."
+    doi: "10.1021/ct100578z"
+    pmid: "26596171"
+    note: "pKa method and its RMSD against experiment (read in PubMed in the TASK-009 session)."
+verify_flags: []

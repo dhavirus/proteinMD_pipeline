@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:simprep:schema:protonation_record",
+  "x-schema-version": "0.1.0",
+  "title": "simprep protonation record (protonation_record.json)",
+  "description": "What the protonation stage did (TASK-009): the study's pH, the method, and per system the files, record accounting against the input, every titratable residue's state with its pKa and the reason for the state, the protonation findings, and the states that differ from the wild type's.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "generated_at", "simprep", "knowledge_base", "input", "manifest_sha256",
+    "ph", "ph_rationale", "method", "propka_version", "systems", "work_order"
+  ],
+  "properties": {
+    "schema_version": {"const": "0.1.0"},
+    "generated_at": {"type": "string", "format": "date-time"},
+    "simprep": {"$ref": "urn:simprep:schema:manifest#/$defs/simprep"},
+    "knowledge_base": {"$ref": "urn:simprep:schema:manifest#/$defs/knowledge_base"},
+    "input": {"$ref": "urn:simprep:schema:manifest#/$defs/input"},
+    "manifest_sha256": {"$ref": "urn:simprep:schema:manifest#/$defs/sha256"},
+    "ph": {"type": "number", "minimum": 0, "maximum": 14},
+    "ph_rationale": {"type": "string", "minLength": 1},
+    "method": {"$ref": "urn:simprep:schema:protonation#/$defs/method"},
+    "propka_version": {"type": "string", "minLength": 1},
+    "systems": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/system"}},
+    "work_order": {"type": "array", "items": {"$ref": "urn:simprep:schema:prep_record#/$defs/work_item"}}
+  },
+  "$defs": {
+    "residue": {
+      "type": "object",
+      "required": ["chain", "seq_num", "ins_code", "res_name"],
+      "properties": {
+        "chain": {"type": "string", "minLength": 1},
+        "seq_num": {"type": "integer"},
+        "ins_code": {"type": "string"},
+        "res_name": {"type": "string", "minLength": 1}
+      }
+    },
+    "system": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "directory", "source", "files", "counts", "states", "findings", "differs_from_wild_type"],
+      "properties": {
+        "name": {"type": "string", "pattern": "^[A-Za-z0-9_-]+$"},
+        "directory": {"type": "string", "minLength": 1},
+        "source": {"description": "Directory of the system that was protonated.", "type": "string", "minLength": 1},
+        "files": {"$ref": "urn:simprep:schema:prep_record#/$defs/system/properties/files"},
+        "counts": {"type": "array", "minItems": 1, "items": {"$ref": "urn:simprep:schema:prep_record#/$defs/count"}},
+        "states": {"type": "array", "items": {"$ref": "#/$defs/state"}},
+        "findings": {"type": "array", "items": {"$ref": "urn:simprep:schema:finding"}},
+        "differs_from_wild_type": {"type": "array", "items": {"$ref": "#/$defs/difference"}}
+      }
+    },
+    "state": {
+      "allOf": [
+        {"$ref": "#/$defs/residue"},
+        {
+          "type": "object",
+          "required": ["variant", "pka", "basis"],
+          "properties": {
+            "chain": true, "seq_num": true, "ins_code": true, "res_name": true,
+            "variant": {"description": "OpenMM variant (ASH, ASP, GLH, GLU, HID, HIE, HIP, LYS, LYN, CYS, CYX); null for neutral His whose tautomer OpenMM chose by hydrogen bonding (the hydrogens in the file show which).", "type": ["string", "null"]},
+            "pka": {"type": ["number", "null"]},
+            "basis": {"type": "string", "minLength": 1}
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "difference": {
+      "allOf": [
+        {"$ref": "#/$defs/residue"},
+        {
+          "type": "object",
+          "required": ["wild_type_variant", "variant"],
+          "properties": {
+            "chain": true, "seq_num": true, "ins_code": true, "res_name": true,
+            "wild_type_variant": {"type": ["string", "null"]},
+            "variant": {"type": ["string", "null"]}
+          },
+          "additionalProperties": false
+        }
+      ]
+    }
+  }
+}

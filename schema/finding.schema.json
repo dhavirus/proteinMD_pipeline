@@ -115,7 +115,8 @@
         "unrecognized",
         "variant_build",
         "relaxation",
-        "modelling"
+        "modelling",
+        "protonation"
       ]
     },
     "severity": {
@@ -355,7 +356,8 @@
             "modelling",
             "chemistry",
             "parameterization",
-            "topology"
+            "topology",
+            "protonation"
           ]
         }
       }

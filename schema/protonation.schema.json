@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:simprep:schema:protonation",
+  "x-schema-version": "0.1.0",
+  "title": "simprep protonation defaults (knowledge/protonation.yaml)",
+  "description": "Method defaults for protonation (TASK-009): PROPKA pKa estimates, state rules, OpenMM hydrogens, and hydrogen/bond definitions for non-standard polymer residues. The pH is never a default: the manifest's `protonation` states it.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "method", "residue_definitions", "references", "verify_flags"],
+  "properties": {
+    "schema_version": {"const": "0.1.0"},
+    "method": {"$ref": "#/$defs/method"},
+    "residue_definitions": {
+      "type": "object",
+      "propertyNames": {"pattern": "^[A-Z0-9]{1,5}$"},
+      "additionalProperties": {"$ref": "#/$defs/residue_definition"}
+    },
+    "references": {"type": "array", "items": {"$ref": "urn:simprep:schema:finding#/$defs/reference"}},
+    "verify_flags": {"type": "array", "items": {"type": "string", "pattern": "^\\[VERIFY\\]"}}
+  },
+  "$defs": {
+    "method": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["pka_tool", "pka_tool_version", "ambiguity_window_ph", "unreliable_within_angstrom", "hydrogen_tool", "platform", "seed"],
+      "properties": {
+        "pka_tool": {"const": "propka"},
+        "pka_tool_version": {"const": "3.5.1", "description": "Checked against the installed PROPKA."},
+        "ambiguity_window_ph": {"type": "number", "exclusiveMinimum": 0},
+        "unreliable_within_angstrom": {"type": "number", "exclusiveMinimum": 0},
+        "hydrogen_tool": {"const": "openmm_modeller"},
+        "platform": {"const": "Reference"},
+        "seed": {"type": "integer", "minimum": 0}
+      }
+    },
+    "manifest_protonation": {
+      "description": "The study's protonation choice (TASK-009 decision 1): the pH with its rationale; optionally the method (defaults from knowledge/protonation.yaml).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ph", "ph_rationale"],
+      "properties": {
+        "ph": {"type": "number", "minimum": 0, "maximum": 14},
+        "ph_rationale": {"type": "string", "minLength": 1},
+        "method": {"$ref": "#/$defs/method"}
+      }
+    },
+    "residue_definition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["bonds", "hydrogens"],
+      "properties": {
+        "bonds": {"type": "array", "minItems": 1, "items": {"type": "array", "minItems": 2, "maxItems": 2, "items": {"type": "string", "pattern": "^[-+]?[A-Z0-9']{1,4}$"}}},
+        "hydrogens": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["name", "parent"],
+            "properties": {
+              "name": {"type": "string", "pattern": "^H[A-Z0-9']{0,3}$"},
+              "parent": {"type": "string", "pattern": "^[A-Z0-9']{1,4}$"},
+              "terminal": {"enum": ["N", "C"]}
+            }
+          }
+        }
+      }
+    }
+  }
+}

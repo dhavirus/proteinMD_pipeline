@@ -24,6 +24,8 @@ SCHEMA_NAMES = (
     "relaxation",
     "modelling",
     "model_record",
+    "protonation",
+    "protonation_record",
 )
 __all__ = ["SCHEMA_NAMES", "SCHEMA_VERSION", "validate", "validation_errors"]
 

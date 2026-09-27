@@ -1,0 +1,37 @@
+# Protonation method defaults (TASK-009, ADR-0009). The pH is not here: every study states
+# it in the manifest's `protonation` (TASK-009 decision 1). A study may copy this method
+# into `protonation.method` and edit it there; the method used is recorded.
+schema_version: 0.1.0
+method:
+  pka_tool: propka
+  pka_tool_version: 3.5.1
+  # About the PROPKA3 pKa RMSD against experiment (0.65-1.00 by residue type, Olsson et
+  # al. 2011): a residue closer than this to the pH gets an ambiguous_state finding.
+  ambiguity_window_ph: 1.0
+  # PROPKA ignores metal ions and non-standard residues: titratable residues with a heavy
+  # atom this close to one get an unreliable_estimate finding (metal ligands excepted).
+  unreliable_within_angstrom: 6.0
+  hydrogen_tool: openmm_modeller
+  platform: Reference
+  seed: 20260927
+# Hydrogens and bonds for polymer residues OpenMM's own definitions do not cover. Names
+# from the CCD entry read from RCSB in the TASK-008 session (DDZ: H, H2, HA, HB, HG1,
+# HG2); H2 / H3 on N only at an N-terminus, as in OpenMM's hydrogens.xml.
+residue_definitions:
+  DDZ:
+    bonds: [[-C, N], [N, CA], [CA, C], [C, O], [C, OXT], [CA, CB], [CB, OG1], [CB, OG2],
+            [N, H], [N, H2], [N, H3], [CA, HA], [CB, HB], [OG1, HG1], [OG2, HG2]]
+    hydrogens:
+      - {name: H, parent: N}
+      - {name: H2, parent: N, terminal: N}
+      - {name: H3, parent: N, terminal: N}
+      - {name: HA, parent: CA}
+      - {name: HB, parent: CB}
+      - {name: HG1, parent: OG1}
+      - {name: HG2, parent: OG2}
+references:
+  - citation: "Olsson MHM, Søndergaard CR, Rostkowski M, Jensen JH. PROPKA3: Consistent Treatment of Internal and Surface Residues in Empirical pKa Predictions. J Chem Theory Comput 2011;7:525-37."
+    doi: "10.1021/ct100578z"
+    pmid: "26596171"
+    note: "pKa method and its RMSD against experiment (read in PubMed in the TASK-009 session)."
+verify_flags: []
