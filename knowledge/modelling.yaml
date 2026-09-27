@@ -17,11 +17,16 @@ protocol:
     # Every heavy atom of the loop moves unrestrained; every heavy atom of the two
     # flanking residues moves under the positional restraint; everything else is fixed.
     mobile_atoms: loop_and_flanks
-    restraint_kj_per_mol_nm2: 10000.0
-    # Bonded-only pre-stage: omega of every peptide bond from flank to flank restrained to
-    # 180 degrees, and the CA-N-C-CB improper of every non-glycine loop residue to
-    # `l_chirality_improper_degree`. PDBFixer 1.12.0 placed four of the ten 5FQL linker
-    # residues as D (improper about -30 degrees) in the TASK-007 session.
+    # 10,000 held Pro454 so stiffly that the Leu453-Pro454 junction strained to CA-CA
+    # 3.90 A (ideal trans X-Pro 3.81 A); at 1,000 the flanks move at most 0.9 A (backbone
+    # at most 0.53 A; their deposited B is 108-150 A^2) and every junction passes (TASK-008
+    # session, numpy 2.4.6).
+    restraint_kj_per_mol_nm2: 1000.0
+    # Pass 1 (bonded-only pre-stage, then the final stage), with omega of every peptide
+    # bond from flank to flank restrained to 180 degrees and the CA-N-C-CB improper of
+    # every non-glycine loop residue to `l_chirality_improper_degree`: PDBFixer 1.12.0
+    # places some linker residues as D. Pass 2 re-adds hydrogens to the corrected heavy
+    # atoms and repeats the final stage without torsion restraints (ADR-0007, amended).
     torsion_restraint_kj_per_mol_rad2: 1000.0
     # CA-N-C-CB improper of the observed flanks A:440-443 and A:454-457 of 5FQL: +34 to
     # +38 degrees, median +34 (measured in the TASK-007 session). Positive = L.
@@ -37,8 +42,8 @@ protocol:
     sterics_switch_nm: 0.5
     # Lennard-Jones partners: atoms within the sterics cutoff plus this margin of a mobile
     # atom's start. A mobile atom moving farther stops the stage (the 5FQL linker moved
-    # at most about 1 nm in the TASK-007 session).
-    sterics_margin_nm: 1.5
+    # up to 1.53 nm with numpy 2.4.6 in the TASK-008 session; 1.5 was too small).
+    sterics_margin_nm: 2.0
     tolerance_kj_per_mol_nm: 1.0
     max_iterations: 5000
     nonbonded_cutoff_nm: 1.0
@@ -46,11 +51,14 @@ protocol:
     hydrogen_ph: 7.0
     seed: 20260926
   checks:
-    # TASK-007 acceptance: every peptide bond from flank to flank.
+    # TASK-007 acceptance: every peptide bond from flank to flank. CA-CA tolerance 0.15 A
+    # (maintainer, 2026-09-27; was 0.1): 5FQL's refined trans CA-CA already spans
+    # 3.76-3.86 A and minimizing observed segments lengthens X-Pro bonds by up to 0.04 A
+    # (ADR-0007 amendment); cis (about 2.9 A) is still rejected.
     peptide_bond_angstrom: 1.33
     peptide_bond_tolerance_angstrom: 0.05
     ca_ca_trans_angstrom: 3.8
-    ca_ca_trans_tolerance_angstrom: 0.1
+    ca_ca_trans_tolerance_angstrom: 0.15
   marking:
     # Modelled atoms carry no experimental information (TASK-007 decision 3).
     occupancy: 0.0

@@ -27,7 +27,7 @@ expected:
     heavy_atoms: 91
   checks:  # TASK-007 acceptance, every peptide bond from A:443 to A:454
     c_n_angstrom: [1.28, 1.38]
-    ca_ca_angstrom: [3.7, 3.9]
+    ca_ca_angstrom: [3.65, 3.95]  # 3.8 +/- 0.15 (maintainer, 2026-09-27)
   marking: {occupancy: 0.0}
   accounting:
     polymer_residues_added: 10

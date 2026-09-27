@@ -23,6 +23,9 @@ dev = [
 relax = [
     "openmm==8.6.1",
     "pdbfixer==1.12.0",
+    # PDBFixer places loops with numpy linear algebra: pin it so builds agree across
+    # machines (numpy 2.4.6 and 2.5.3 gave different loops; ADR-0007, amended).
+    "numpy==2.4.6",
 ]
 
 [project.scripts]

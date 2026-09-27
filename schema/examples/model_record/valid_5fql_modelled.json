@@ -1,105 +1,105 @@
 {
   "findings": [],
-  "generated_at": "2026-09-26T09:07:20Z",
+  "generated_at": "2026-09-27T01:43:06Z",
   "input": {
     "format": "mmcif",
     "path": "tests/panel/5FQL.cif.gz",
     "sha256": "ac5ffc6fed697e7b2659f6747ad4d0638eb949220cd7ca7c8c3b372ce183f8d5"
   },
   "knowledge_base": {
-    "sha256": "3f75fcd41d9d4b27faa59436e8a5c979ebdc5b951e244ca030cd0b3547430797",
+    "sha256": "a22263da8b6e465b9537ad2c0d704ef9745cd84de07a18f0cc3c911740c52ae9",
     "version": "0.6.0"
   },
   "loops": [
     {
       "backbone": [
         {
-          "ca_improper_degree": 34.9,
+          "ca_improper_degree": 30.1,
           "chain": "A",
           "ins_code": "",
-          "phi_degree": -154.6,
-          "psi_degree": 41.7,
+          "phi_degree": 61.8,
+          "psi_degree": 155.8,
           "res_name": "PHE",
           "seq_num": 444
         },
         {
-          "ca_improper_degree": 30.2,
+          "ca_improper_degree": 28.0,
           "chain": "A",
           "ins_code": "",
-          "phi_degree": 54.1,
-          "psi_degree": 38.4,
+          "phi_degree": 48.7,
+          "psi_degree": 30.4,
           "res_name": "ARG",
           "seq_num": 445
         },
         {
-          "ca_improper_degree": 20.0,
+          "ca_improper_degree": 35.3,
           "chain": "A",
           "ins_code": "",
-          "phi_degree": -4.8,
-          "psi_degree": 128.9,
+          "phi_degree": -71.2,
+          "psi_degree": 160.6,
           "res_name": "ASP",
           "seq_num": 446
         },
         {
-          "ca_improper_degree": 31.6,
+          "ca_improper_degree": 31.5,
           "chain": "A",
           "ins_code": "",
-          "phi_degree": -145.4,
-          "psi_degree": -133.6,
+          "phi_degree": -150.6,
+          "psi_degree": 163.0,
           "res_name": "LEU",
           "seq_num": 447
         },
         {
-          "ca_improper_degree": 34.3,
+          "ca_improper_degree": 35.1,
           "chain": "A",
           "ins_code": "",
-          "phi_degree": -63.3,
-          "psi_degree": -23.5,
+          "phi_degree": -83.9,
+          "psi_degree": 126.0,
           "res_name": "GLU",
           "seq_num": 448
-        },
-        {
-          "ca_improper_degree": 19.1,
-          "chain": "A",
-          "ins_code": "",
-          "phi_degree": 69.3,
-          "psi_degree": -6.1,
-          "res_name": "GLU",
-          "seq_num": 449
-        },
-        {
-          "ca_improper_degree": 33.2,
-          "chain": "A",
-          "ins_code": "",
-          "phi_degree": 61.2,
-          "psi_degree": -179.2,
-          "res_name": "ASP",
-          "seq_num": 450
-        },
-        {
-          "ca_improper_degree": 21.0,
-          "chain": "A",
-          "ins_code": "",
-          "phi_degree": -58.2,
-          "psi_degree": -131.3,
-          "res_name": "PRO",
-          "seq_num": 451
         },
         {
           "ca_improper_degree": 31.2,
           "chain": "A",
           "ins_code": "",
-          "phi_degree": 47.4,
-          "psi_degree": 38.9,
+          "phi_degree": 50.7,
+          "psi_degree": -118.5,
+          "res_name": "GLU",
+          "seq_num": 449
+        },
+        {
+          "ca_improper_degree": 30.5,
+          "chain": "A",
+          "ins_code": "",
+          "phi_degree": 65.5,
+          "psi_degree": 165.8,
+          "res_name": "ASP",
+          "seq_num": 450
+        },
+        {
+          "ca_improper_degree": 37.5,
+          "chain": "A",
+          "ins_code": "",
+          "phi_degree": -67.5,
+          "psi_degree": -175.7,
+          "res_name": "PRO",
+          "seq_num": 451
+        },
+        {
+          "ca_improper_degree": 30.7,
+          "chain": "A",
+          "ins_code": "",
+          "phi_degree": 66.2,
+          "psi_degree": 15.6,
           "res_name": "TYR",
           "seq_num": 452
         },
         {
-          "ca_improper_degree": 20.3,
+          "ca_improper_degree": 32.1,
           "chain": "A",
           "ins_code": "",
-          "phi_degree": -109.1,
-          "psi_degree": 7.4,
+          "phi_degree": -90.4,
+          "psi_degree": 1.7,
           "res_name": "LEU",
           "seq_num": 453
         }
@@ -123,15 +123,15 @@
       "note": "Modelled: no experimental support (occupancy 0.00). Analyses that rely on the experimental structure (contact maps, native-structure models) should treat these residues as modelled.",
       "peptide_bonds": [
         {
-          "c_n_angstrom": 1.334,
-          "ca_ca_angstrom": 3.804,
+          "c_n_angstrom": 1.341,
+          "ca_ca_angstrom": 3.846,
           "first": {
             "chain": "A",
             "ins_code": "",
             "res_name": "ARG",
             "seq_num": 443
           },
-          "omega_degree": 179.7,
+          "omega_degree": -178.7,
           "second": {
             "chain": "A",
             "ins_code": "",
@@ -140,15 +140,15 @@
           }
         },
         {
-          "c_n_angstrom": 1.344,
-          "ca_ca_angstrom": 3.831,
+          "c_n_angstrom": 1.34,
+          "ca_ca_angstrom": 3.822,
           "first": {
             "chain": "A",
             "ins_code": "",
             "res_name": "PHE",
             "seq_num": 444
           },
-          "omega_degree": -177.2,
+          "omega_degree": -169.8,
           "second": {
             "chain": "A",
             "ins_code": "",
@@ -157,15 +157,15 @@
           }
         },
         {
-          "c_n_angstrom": 1.339,
-          "ca_ca_angstrom": 3.812,
+          "c_n_angstrom": 1.337,
+          "ca_ca_angstrom": 3.818,
           "first": {
             "chain": "A",
             "ins_code": "",
             "res_name": "ARG",
             "seq_num": 445
           },
-          "omega_degree": -179.0,
+          "omega_degree": -177.4,
           "second": {
             "chain": "A",
             "ins_code": "",
@@ -175,116 +175,116 @@
         },
         {
           "c_n_angstrom": 1.334,
-          "ca_ca_angstrom": 3.79,
+          "ca_ca_angstrom": 3.799,
           "first": {
             "chain": "A",
             "ins_code": "",
             "res_name": "ASP",
             "seq_num": 446
           },
-          "omega_degree": 179.8,
+          "omega_degree": 177.7,
           "second": {
             "chain": "A",
             "ins_code": "",
             "res_name": "LEU",
             "seq_num": 447
-          }
-        },
-        {
-          "c_n_angstrom": 1.337,
-          "ca_ca_angstrom": 3.854,
-          "first": {
-            "chain": "A",
-            "ins_code": "",
-            "res_name": "LEU",
-            "seq_num": 447
-          },
-          "omega_degree": -179.8,
-          "second": {
-            "chain": "A",
-            "ins_code": "",
-            "res_name": "GLU",
-            "seq_num": 448
-          }
-        },
-        {
-          "c_n_angstrom": 1.346,
-          "ca_ca_angstrom": 3.862,
-          "first": {
-            "chain": "A",
-            "ins_code": "",
-            "res_name": "GLU",
-            "seq_num": 448
-          },
-          "omega_degree": 179.4,
-          "second": {
-            "chain": "A",
-            "ins_code": "",
-            "res_name": "GLU",
-            "seq_num": 449
-          }
-        },
-        {
-          "c_n_angstrom": 1.339,
-          "ca_ca_angstrom": 3.826,
-          "first": {
-            "chain": "A",
-            "ins_code": "",
-            "res_name": "GLU",
-            "seq_num": 449
-          },
-          "omega_degree": -179.8,
-          "second": {
-            "chain": "A",
-            "ins_code": "",
-            "res_name": "ASP",
-            "seq_num": 450
-          }
-        },
-        {
-          "c_n_angstrom": 1.341,
-          "ca_ca_angstrom": 3.851,
-          "first": {
-            "chain": "A",
-            "ins_code": "",
-            "res_name": "ASP",
-            "seq_num": 450
-          },
-          "omega_degree": 179.5,
-          "second": {
-            "chain": "A",
-            "ins_code": "",
-            "res_name": "PRO",
-            "seq_num": 451
-          }
-        },
-        {
-          "c_n_angstrom": 1.343,
-          "ca_ca_angstrom": 3.85,
-          "first": {
-            "chain": "A",
-            "ins_code": "",
-            "res_name": "PRO",
-            "seq_num": 451
-          },
-          "omega_degree": 179.9,
-          "second": {
-            "chain": "A",
-            "ins_code": "",
-            "res_name": "TYR",
-            "seq_num": 452
           }
         },
         {
           "c_n_angstrom": 1.335,
-          "ca_ca_angstrom": 3.804,
+          "ca_ca_angstrom": 3.803,
+          "first": {
+            "chain": "A",
+            "ins_code": "",
+            "res_name": "LEU",
+            "seq_num": 447
+          },
+          "omega_degree": -178.2,
+          "second": {
+            "chain": "A",
+            "ins_code": "",
+            "res_name": "GLU",
+            "seq_num": 448
+          }
+        },
+        {
+          "c_n_angstrom": 1.34,
+          "ca_ca_angstrom": 3.832,
+          "first": {
+            "chain": "A",
+            "ins_code": "",
+            "res_name": "GLU",
+            "seq_num": 448
+          },
+          "omega_degree": -178.5,
+          "second": {
+            "chain": "A",
+            "ins_code": "",
+            "res_name": "GLU",
+            "seq_num": 449
+          }
+        },
+        {
+          "c_n_angstrom": 1.342,
+          "ca_ca_angstrom": 3.854,
+          "first": {
+            "chain": "A",
+            "ins_code": "",
+            "res_name": "GLU",
+            "seq_num": 449
+          },
+          "omega_degree": -176.4,
+          "second": {
+            "chain": "A",
+            "ins_code": "",
+            "res_name": "ASP",
+            "seq_num": 450
+          }
+        },
+        {
+          "c_n_angstrom": 1.346,
+          "ca_ca_angstrom": 3.858,
+          "first": {
+            "chain": "A",
+            "ins_code": "",
+            "res_name": "ASP",
+            "seq_num": 450
+          },
+          "omega_degree": -171.3,
+          "second": {
+            "chain": "A",
+            "ins_code": "",
+            "res_name": "PRO",
+            "seq_num": 451
+          }
+        },
+        {
+          "c_n_angstrom": 1.339,
+          "ca_ca_angstrom": 3.817,
+          "first": {
+            "chain": "A",
+            "ins_code": "",
+            "res_name": "PRO",
+            "seq_num": 451
+          },
+          "omega_degree": -180.0,
+          "second": {
+            "chain": "A",
+            "ins_code": "",
+            "res_name": "TYR",
+            "seq_num": 452
+          }
+        },
+        {
+          "c_n_angstrom": 1.337,
+          "ca_ca_angstrom": 3.815,
           "first": {
             "chain": "A",
             "ins_code": "",
             "res_name": "TYR",
             "seq_num": 452
           },
-          "omega_degree": -179.7,
+          "omega_degree": 174.3,
           "second": {
             "chain": "A",
             "ins_code": "",
@@ -293,15 +293,15 @@
           }
         },
         {
-          "c_n_angstrom": 1.348,
-          "ca_ca_angstrom": 3.879,
+          "c_n_angstrom": 1.355,
+          "ca_ca_angstrom": 3.9,
           "first": {
             "chain": "A",
             "ins_code": "",
             "res_name": "LEU",
             "seq_num": 453
           },
-          "omega_degree": -179.7,
+          "omega_degree": -180.0,
           "second": {
             "chain": "A",
             "ins_code": "",
@@ -499,52 +499,52 @@
   "manifest_sha256": "93525cb6b9eaff8969b3deab2b84a5d92b9a0a69c825ad5a6c986a7a70ec0ce3",
   "minimization": {
     "clashes_after": 0,
-    "clashes_before": 42,
+    "clashes_before": 41,
     "energy_kj_per_mol": {
-      "final": 250025.1,
-      "initial": 791868.7,
+      "final": 264444.5,
+      "initial": 269823.2,
       "note": "Total potential energy of the calculation, dominated by fixed-fixed terms; not comparable between systems. Only the change and the final force on mobile atoms are meaningful."
     },
     "frozen": [],
     "left_out": [
       {
         "chain": "A",
-        "distance_angstrom": 29.51,
+        "distance_angstrom": 29.52,
         "ins_code": "",
         "res_name": "ALS",
         "seq_num": 84
       },
       {
         "chain": "A",
-        "distance_angstrom": 30.7,
+        "distance_angstrom": 30.71,
         "ins_code": "",
         "res_name": "CA",
         "seq_num": 1551
       },
       {
         "chain": "A",
-        "distance_angstrom": 34.17,
+        "distance_angstrom": 34.84,
         "ins_code": "",
         "res_name": "CL",
         "seq_num": 1567
       },
       {
         "chain": "A",
-        "distance_angstrom": 54.72,
+        "distance_angstrom": 54.89,
         "ins_code": "",
         "res_name": "CL",
         "seq_num": 1568
       },
       {
         "chain": "A",
-        "distance_angstrom": 34.77,
+        "distance_angstrom": 34.75,
         "ins_code": "",
         "res_name": "CL",
         "seq_num": 1569
       }
     ],
-    "max_displacement_angstrom": 9.312,
-    "max_mobile_force_kj_per_mol_nm": 18.75,
+    "max_displacement_angstrom": 14.049,
+    "max_mobile_force_kj_per_mol_nm": 19.12,
     "mobile_atoms": 109,
     "moved_atoms": 109,
     "moved_residues": [
@@ -610,7 +610,7 @@
       }
     ],
     "openmm_version": "8.6.1",
-    "rms_displacement_angstrom": 5.044,
+    "rms_displacement_angstrom": 5.552,
     "shell_residues": 12,
     "sites": [
       {
@@ -668,7 +668,7 @@
   "protocol": {
     "checks": {
       "ca_ca_trans_angstrom": 3.8,
-      "ca_ca_trans_tolerance_angstrom": 0.1,
+      "ca_ca_trans_tolerance_angstrom": 0.15,
       "peptide_bond_angstrom": 1.33,
       "peptide_bond_tolerance_angstrom": 0.05
     },
@@ -689,10 +689,10 @@
       "nonbonded": "sterics_only",
       "nonbonded_cutoff_nm": 1.0,
       "platform": "Reference",
-      "restraint_kj_per_mol_nm2": 10000.0,
+      "restraint_kj_per_mol_nm2": 1000.0,
       "seed": 20260926,
       "sterics_cutoff_nm": 0.6,
-      "sterics_margin_nm": 1.5,
+      "sterics_margin_nm": 2.0,
       "sterics_switch_nm": 0.5,
       "tolerance_kj_per_mol_nm": 1.0,
       "torsion_restraint_kj_per_mol_rad2": 1000.0
@@ -706,7 +706,7 @@
   },
   "schema_version": "0.1.0",
   "simprep": {
-    "git_commit": "debb899fa858913b96aec925514022a8aa6f3cb3-dirty",
+    "git_commit": "2e1cb4e25dd997b81c9ba474b317f2f8dd57d922-dirty",
     "version": "0.1.0"
   },
   "status": "modelled",
@@ -790,18 +790,18 @@
       {
         "format": "mmcif",
         "path": "system.cif",
-        "sha256": "e5f2b1ab8f73a43c0f52bacb4c6c958075836ccfb08e415491c7ea5b5d0cb10d"
+        "sha256": "48ef34101f8efdfa5668bdb9a8635b8055724bf7577cb3ac0d22c60380a9cc61"
       },
       {
         "format": "pdb",
         "path": "system.pdb",
-        "sha256": "9fa9bc5c6248230e3fdbadaac6633f8386483d4d840e2370d1222848f0573d40"
+        "sha256": "e08063f070688585f5dd4f46441abf100f2c2d690765bdf349807e3fa96a8639"
       }
     ]
   },
   "wild_type": {
     "directory": "wt",
-    "prep_record_sha256": "50cdb55ff7a8c98d516c84926e4fde258226de974938210cb11f0fab930438c1"
+    "prep_record_sha256": "aad2e50d3b46feb5930642b796a89be74e4f7a52a52052bbbb9bd798b70f2fab"
   },
   "work_order": [
     {

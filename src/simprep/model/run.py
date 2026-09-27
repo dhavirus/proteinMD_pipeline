@@ -11,7 +11,8 @@ type alone.
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+import math
+from dataclasses import dataclass, replace
 from importlib.metadata import version as installed_version
 from pathlib import Path
 
@@ -43,7 +44,7 @@ from simprep.prep.run import RECORD_FILE as PREP_RECORD_FILE
 from simprep.prep.run import PrepInputs, PrepRequest, load_inputs, write_prep
 from simprep.prep.write import write_system
 from simprep.provenance import sha256_file, simprep_provenance, utc_now
-from simprep.relax.openmm_run import relax
+from simprep.relax.openmm_run import MOVED_ANGSTROM, RelaxOutcome, relax
 from simprep.schemas import validate
 from simprep.severity import apply_context
 from simprep.structure.model import Structure
@@ -115,18 +116,43 @@ def model_wild_type(inputs: PrepInputs, plan: PrepPlan, wild_type: Structure) ->
 
 
 def _minimize(built: Structure, gaps: tuple[Gap, ...], context: tuple) -> Relaxed:
+    """Pass 1: restrained (bonded pre-stage, trans-omega and L-chirality torsion
+    restraints). Pass 2: hydrogens added afresh to the corrected heavy atoms, no torsion
+    restraints. Hydrogens placed on a D placement stay on the D side when the pre-stage
+    flips CB, and pull the centre back once the restraints go (ADR-0007, amended)."""
     protocol, ruleset = context
     settings = protocol["minimization"]
     shell = loop_shell(built, gaps)
     torsions = torsion_restraints(built, gaps, settings["l_chirality_improper_degree"])
-    outcome = relax(built, shell, settings, torsions)
+    restrained = relax(built, shell, settings, torsions)
+    final = relax(restrained.structure, loop_shell(restrained.structure, gaps), settings)
     criterion = clash_criterion(ruleset)
     return Relaxed(
         MODELLED_DIR,
-        outcome,
+        _against(built, final),
         shell,
         tuple(c for gap in gaps for _, c in loop_clashes(built, gap, criterion)),
-        tuple(c for gap in gaps for _, c in loop_clashes(outcome.structure, gap, criterion)),
+        tuple(c for gap in gaps for _, c in loop_clashes(final.structure, gap, criterion)),
+    )
+
+
+def _against(built: Structure, final: RelaxOutcome) -> RelaxOutcome:
+    """``final`` with what moved measured from the placed loop (``built``), not from pass 1."""
+    shifts, moved = [], []
+    index = final.structure.residue_index
+    for residue in built.residues:
+        after = {a.name: a.position for a in index[residue.id].heavy_atoms}
+        mine = [math.dist(a.position, after[a.name]) for a in residue.heavy_atoms]
+        shifts += mine
+        if any(d >= MOVED_ANGSTROM for d in mine):
+            moved.append(residue.id)
+    moving = [d for d in shifts if d >= MOVED_ANGSTROM]
+    return replace(
+        final,
+        moved_residues=tuple(moved),
+        moved_atoms=len(moving),
+        max_displacement_angstrom=max(shifts, default=0.0),
+        rms_displacement_angstrom=math.sqrt(sum(d * d for d in moving) / max(1, len(moving))),
     )
 
 
