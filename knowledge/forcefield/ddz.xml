@@ -1,0 +1,78 @@
+<ForceField>
+  <Info>
+    <Source>tools/parameterize_ddz.py (see ddz_provenance.yaml)</Source>
+  </Info>
+  <AtomTypes>
+    <Type name="ddz-CB" class="ddz-c3" element="C" mass="12.010" />
+    <Type name="ddz-HB" class="ddz-h2" element="H" mass="1.008" />
+    <Type name="ddz-OG" class="ddz-oh" element="O" mass="16.000" />
+    <Type name="ddz-HG" class="ddz-ho" element="H" mass="1.008" />
+  </AtomTypes>
+  <Residues>
+    <Residue name="DDZ">
+      <Atom name="N" type="protein-N" charge="-0.415700" />
+      <Atom name="H" type="protein-H" charge="0.271900" />
+      <Atom name="CA" type="protein-CX" charge="-0.024900" />
+      <Atom name="HA" type="protein-H1" charge="0.084300" />
+      <Atom name="C" type="protein-C" charge="0.597300" />
+      <Atom name="O" type="protein-O" charge="-0.567900" />
+      <Atom name="CB" type="ddz-CB" charge="0.328067" />
+      <Atom name="HB" type="ddz-HB" charge="0.084867" />
+      <Atom name="OG1" type="ddz-OG" charge="-0.624133" />
+      <Atom name="OG2" type="ddz-OG" charge="-0.624133" />
+      <Atom name="HG1" type="ddz-HG" charge="0.445167" />
+      <Atom name="HG2" type="ddz-HG" charge="0.445167" />
+      <Bond atomName1="N" atomName2="H" />
+      <Bond atomName1="N" atomName2="CA" />
+      <Bond atomName1="CA" atomName2="HA" />
+      <Bond atomName1="CA" atomName2="CB" />
+      <Bond atomName1="CA" atomName2="C" />
+      <Bond atomName1="C" atomName2="O" />
+      <Bond atomName1="CB" atomName2="HB" />
+      <Bond atomName1="CB" atomName2="OG1" />
+      <Bond atomName1="CB" atomName2="OG2" />
+      <Bond atomName1="OG1" atomName2="HG1" />
+      <Bond atomName1="OG2" atomName2="HG2" />
+      <ExternalBond atomName="N" />
+      <ExternalBond atomName="C" />
+    </Residue>
+  </Residues>
+  <HarmonicBondForce>
+    <Bond type1="ddz-CB" type2="ddz-HB" length="0.1095" k="290386.336" />
+    <Bond type1="ddz-CB" type2="ddz-OG" length="0.14242" k="238613.52" />
+    <Bond type1="ddz-CB" type2="protein-CX" length="0.15354" k="191535.152" />
+    <Bond type1="ddz-HG" type2="ddz-OG" length="0.09725" k="448114.768" />
+  </HarmonicBondForce>
+  <HarmonicAngleForce>
+    <Angle type1="ddz-CB" type2="ddz-OG" type3="ddz-HG" angle="1.87431" k="545.00784" />
+    <Angle type1="ddz-CB" type2="protein-CX" type3="protein-C" angle="1.944821" k="505.09248" />
+    <Angle type1="ddz-CB" type2="protein-CX" type3="protein-H1" angle="1.912707" k="362.16704" />
+    <Angle type1="ddz-CB" type2="protein-CX" type3="protein-N" angle="1.949359" k="547.51824" />
+    <Angle type1="ddz-HB" type2="ddz-CB" type3="ddz-OG" angle="1.90241" k="474.13088" />
+    <Angle type1="ddz-HB" type2="ddz-CB" type3="protein-CX" angle="1.927193" k="360.91184" />
+    <Angle type1="ddz-OG" type2="ddz-CB" type3="ddz-OG" angle="1.9155" k="818.55776" />
+    <Angle type1="ddz-OG" type2="ddz-CB" type3="protein-CX" angle="1.913929" k="642.57872" />
+  </HarmonicAngleForce>
+  <PeriodicTorsionForce>
+    <Proper type1="ddz-CB" type2="protein-CX" type3="protein-C" type4="protein-N" periodicity1="3" phase1="3.141594" k1="4.3932" />
+    <Proper type1="ddz-CB" type2="protein-CX" type3="protein-C" type4="protein-O" periodicity1="1" phase1="0.0" k1="2.84512" periodicity2="2" phase2="3.141594" k2="0.8368" periodicity3="3" phase3="3.141594" k3="1.84096" />
+    <Proper type1="ddz-CB" type2="protein-CX" type3="protein-N" type4="protein-C" periodicity1="1" phase1="3.141594" k1="4.8116" />
+    <Proper type1="ddz-CB" type2="protein-CX" type3="protein-N" type4="protein-H" periodicity1="2" phase1="0.0" k1="0.0" />
+    <Proper type1="ddz-HB" type2="ddz-CB" type3="ddz-OG" type4="ddz-HG" periodicity1="3" phase1="0.0" k1="0.697333" />
+    <Proper type1="ddz-HB" type2="ddz-CB" type3="protein-CX" type4="protein-C" periodicity1="3" phase1="0.0" k1="0.650844" />
+    <Proper type1="ddz-HB" type2="ddz-CB" type3="protein-CX" type4="protein-H1" periodicity1="3" phase1="0.0" k1="0.650844" />
+    <Proper type1="ddz-HB" type2="ddz-CB" type3="protein-CX" type4="protein-N" periodicity1="3" phase1="0.0" k1="0.650844" />
+    <Proper type1="ddz-HG" type2="ddz-OG" type3="ddz-CB" type4="ddz-OG" periodicity1="2" phase1="0.0" k1="6.86176" />
+    <Proper type1="ddz-HG" type2="ddz-OG" type3="ddz-CB" type4="protein-CX" periodicity1="3" phase1="0.0" k1="0.25104" />
+    <Proper type1="ddz-OG" type2="ddz-CB" type3="protein-CX" type4="protein-C" periodicity1="1" phase1="3.141594" k1="1.96648" />
+    <Proper type1="ddz-OG" type2="ddz-CB" type3="protein-CX" type4="protein-H1" periodicity1="1" phase1="0.0" k1="1.046" periodicity2="3" phase2="0.0" k2="0.0" />
+    <Proper type1="ddz-OG" type2="ddz-CB" type3="protein-CX" type4="protein-N" periodicity1="1" phase1="0.0" k1="4.35136" periodicity2="2" phase2="3.141594" k2="2.55224" periodicity3="3" phase3="0.0" k3="0.12552" />
+  </PeriodicTorsionForce>
+  <NonbondedForce coulomb14scale="0.8333333333333334" lj14scale="0.5">
+    <UseAttributeFromResidue name="charge" />
+    <Atom type="ddz-CB" sigma="0.339771" epsilon="0.451035" />
+    <Atom type="ddz-HB" sigma="0.224382" epsilon="0.087027" />
+    <Atom type="ddz-HG" sigma="0.053792" epsilon="0.019665" />
+    <Atom type="ddz-OG" sigma="0.324287" epsilon="0.389112" />
+  </NonbondedForce>
+</ForceField>
