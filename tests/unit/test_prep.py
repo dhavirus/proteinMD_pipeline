@@ -12,10 +12,10 @@ from simprep.paths import KNOWLEDGE_DIR, SCHEMA_DIR
 from simprep.prep.apply import apply_plan
 from simprep.prep.plan import OPERATIONS, PrepError, build_plan
 from simprep.prep.record import system_counts
-from simprep.structure.model import ResidueId
+from simprep.structure.model import ModifiedResidue, ResidueId
 from simprep.variants.findings import FAMILY as VARIANT_FAMILY
 from simprep.variants.run import APPLIED_OPTIONS
-from tests.unit.builders import BR, P, W, atom, link, residue, structure
+from tests.unit.builders import BR, NP, P, W, atom, link, residue, structure
 
 A1, A2, A3, L1, L2 = (ResidueId("A", n) for n in (1, 2, 3, 901, 902))
 OPTION_ACTIONS = {
@@ -26,6 +26,7 @@ OPTION_ACTIONS = {
     "exclude_group": ("apply", None),
     "add_link": ("apply", None),
     "revert_to_parent": ("apply", None),
+    "model_gem_diol": ("apply", None),
     "treat_noncovalent": ("record", "topology"),
     "parameterize_manually": ("defer", "parameterization"),
     "expert_review": ("unresolved", None),
@@ -299,3 +300,71 @@ def test_every_apply_option_in_the_knowledge_base_has_an_operation():
     assert apply_options(prep_families=True) and apply_options(True) <= set(OPERATIONS)
     assert apply_options(prep_families=True, stage="modelling") == set(MODEL_OPTIONS)
     assert apply_options(prep_families=False) == set(APPLIED_OPTIONS)
+
+
+def gem_diol_site():
+    """VAL A:83 - ALS A:84 (sulfate on OS1) - CA A:1551 bound to OS1 and OS4."""
+    als = residue(
+        "A",
+        84,
+        "ALS",
+        P,
+        [
+            atom(name, element, (float(i), 0, 0))
+            for i, (name, element) in enumerate(
+                [
+                    ("N", "N"),
+                    ("CA", "C"),
+                    ("C", "C"),
+                    ("O", "O"),
+                    ("CB", "C"),
+                    ("OG", "O"),
+                    ("OS1", "O"),
+                    ("S", "S"),
+                    ("OS2", "O"),
+                    ("OS3", "O"),
+                    ("OS4", "O"),
+                ]
+            )
+        ],
+        label_seq=2,
+    )
+    val = residue("A", 83, "VAL", P, [atom("C", "C", (-1, 0, 0))], label_seq=1)
+    ca = residue("A", 1551, "CA", NP, [atom("CA", "CA", (6, 2, 0))])
+    rid, metal = ResidueId("A", 84), ResidueId("A", 1551)
+    return structure(
+        [val, als, ca],
+        links=[
+            link("covale1", "covale", ((ResidueId("A", 83), "VAL", "C"), (rid, "ALS", "N"))),
+            link("metalc3", "metalc", ((rid, "ALS", "OS1"), (metal, "CA", "CA"))),
+            link("metalc5", "metalc", ((rid, "ALS", "OS4"), (metal, "CA", "CA"))),
+        ],
+        modified_residues=(ModifiedResidue(rid, "ALS", "ALA"),),
+        polymer_sequences=(("A", ("VAL", "ALS")),),
+    )
+
+
+def test_model_gem_diol_turns_als_into_ddz_with_links_record_and_sequence(ruleset):
+    site, rid = gem_diol_site(), ResidueId("A", 84)
+    manifest_ = manifest([finding("fgly", [rid])], [("fgly", "model_gem_diol", None)])
+    plan = build_plan(site, manifest_, ruleset)
+    assert "link metalc5 to CA A:1551 removed (metal coordination changed" in plan.actions[0].note
+    (system,) = apply_plan(site, plan)
+    out = system.structure
+    ddz = out.residue_index[rid]
+    assert ddz.name == "DDZ"
+    assert [a.name for a in ddz.atoms] == ["N", "CA", "C", "O", "CB", "OG1", "OG2"]
+    assert [a.position for a in ddz.atoms] == [
+        a.position
+        for a in site.residue_index[rid].atoms
+        if a.name not in ("S", "OS2", "OS3", "OS4")
+    ]
+    links = {k.conn_id: k for k in out.links}
+    assert set(links) == {"covale1", "metalc3"}
+    assert (links["metalc3"].partner1.res_name, links["metalc3"].partner1.atom_name) == (
+        "DDZ",
+        "OG2",
+    )
+    assert links["covale1"].partner2.res_name == "DDZ"
+    assert out.modified_residues == (ModifiedResidue(rid, "DDZ", "ALA"),)
+    assert out.polymer_sequences == (("A", ("VAL", "DDZ")),)

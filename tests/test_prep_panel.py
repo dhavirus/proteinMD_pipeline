@@ -5,6 +5,7 @@ with gemmi.cif, never from prep's own output."""
 from __future__ import annotations
 
 import json
+import math
 from collections import Counter, defaultdict
 from functools import cache
 from pathlib import Path
@@ -14,7 +15,7 @@ import pytest
 import yaml
 
 from simprep.prep.run import RECORD_FILE, PrepRequest, run_prep
-from simprep.structure.model import ResidueClass
+from simprep.structure.model import ResidueClass, ResidueId
 from simprep.structure.parse import read_structure
 from tests.prep_helpers import audited_manifest, decided_manifest
 
@@ -75,7 +76,8 @@ def raw_atom_rows(path: Path) -> list[dict]:
 def expected_atoms_out(rows: list[dict], entry: dict, ensemble_altloc: str | None) -> int:
     """Atom records a system must keep: everything outside excluded residues, and for a
     residue with altlocs only the chosen one (fixture altloc, ensemble altloc, or the
-    highest mean occupancy with ties by id, which is what the other fixture decisions ask)."""
+    highest mean occupancy with ties by id, which is what the other fixture decisions ask),
+    minus atoms a residue mapping deletes (fixture ``deleted_atoms``)."""
     excluded = excluded_residue_labels(entry, rows)
     by_residue = defaultdict(list)
     for row in rows:
@@ -86,7 +88,8 @@ def expected_atoms_out(rows: list[dict], entry: dict, ensemble_altloc: str | Non
             continue
         altloc = chosen_altloc(label, atoms, entry, ensemble_altloc)
         kept += sum(1 for a in atoms if a["altloc"] in ("", altloc))
-    return kept
+    deleted = entry["expected"].get("deleted_atoms", {})  # by a mapping (model_gem_diol)
+    return kept - sum(len(names) for names in deleted.values())
 
 
 def chosen_altloc(label: str, atoms: list[dict], entry: dict, ensemble_altloc) -> str | None:
@@ -254,3 +257,31 @@ def test_prep_is_deterministic(runs, tmp_path):
             ).read_bytes()
     strip = lambda doc: {k: v for k, v in doc.items() if k != "generated_at"}  # noqa: E731
     assert strip(json.loads((out_dir / RECORD_FILE).read_text())) == strip(again)
+
+
+def test_formylglycine_becomes_the_gem_diol(runs):
+    """TASK-008 acceptance: ALS A:84 -> DDZ at the deposited coordinates of N CA C O CB OG
+    OS1; the sulfate and its Ca2+ links gone; record, sequence and links say DDZ."""
+    record, out_dir = runs("5FQL")
+    site = ResidueId("A", 84)
+    chain = gemmi.read_structure(str(PANEL_DIR / "5FQL.cif.gz"))[0]["A"]
+    deposited = {a.name: a.pos for r in chain if r.seqid.num == 84 for a in r}
+    renamed = {"N": "N", "CA": "CA", "C": "C", "O": "O", "CB": "CB", "OG": "OG1", "OS1": "OG2"}
+    structure = read_structure(out_dir / "system.cif")
+    ddz = structure.residue(site)
+    written = {a.name: a.position for a in ddz.atoms}
+    assert ddz.name == "DDZ" and set(written) == set(renamed.values())
+    for old, new in renamed.items():
+        pos = deposited[old]
+        assert math.dist(written[new], (pos.x, pos.y, pos.z)) < 1e-3
+    to_site = [k for k in structure.links if site in (k.partner1.residue, k.partner2.residue)]
+    metal = [
+        (k.partner1.res_name, k.partner1.atom_name) for k in to_site if k.conn_type == "metalc"
+    ]
+    assert metal == [("DDZ", "OG2")]
+    assert all("ALS" not in (k.partner1.res_name, k.partner2.res_name) for k in to_site)
+    records = [(m.res_name, m.parent_res_name) for m in structure.modified_residues]
+    assert ("DDZ", "ALA") in records and not [r for r in records if r[0] == "ALS"]
+    assert structure.sequence("A")[ddz.label_seq - 1] == "DDZ"
+    note = next(a["note"] for a in record["actions"] if a["option_id"] == "model_gem_diol")
+    assert "metal coordination changed" in note

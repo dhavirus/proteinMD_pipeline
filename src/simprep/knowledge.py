@@ -52,10 +52,10 @@ def load_ruleset(knowledge_dir: Path = KNOWLEDGE_DIR) -> RuleSet:
 
 
 def load_residue_mappings(path: Path) -> tuple[dict, ...]:
-    """Schema-validated revert_to_parent atom mappings; one entry per source component."""
+    """Schema-validated atom mappings; one entry per (source component, option)."""
     data = yaml.safe_load(path.read_text())
     validate(data, "residue_mappings")
-    sources = [mapping["from"] for mapping in data["mappings"]]
+    sources = [(mapping["from"], mapping["option"]) for mapping in data["mappings"]]
     duplicates = sorted({name for name in sources if sources.count(name) > 1})
     if duplicates:
         raise RuleConsistencyError(f"{path.name}: more than one mapping for {duplicates}")

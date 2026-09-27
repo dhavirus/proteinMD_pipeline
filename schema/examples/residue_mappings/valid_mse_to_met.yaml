@@ -3,6 +3,7 @@ schema_version: 0.1.0
 mappings:
   - from: MSE
     to: MET
+    option: revert_to_parent
     rename: {SE: SD}
     rename_elements: {SD: S}
     delete: []

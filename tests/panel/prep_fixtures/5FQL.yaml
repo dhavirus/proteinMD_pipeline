@@ -28,4 +28,7 @@ expected:
   excluded_by_class: {branched: 13, nonpolymer: 2, polymer: 0, water: 0}
   collapsed_altloc_residues: {"A:294": B, "A:421": B}
   added_links: []
-  work_order: {parameterization: 4, chemistry: 1, modelling: 2}
+  # TASK-008: model_gem_diol is applied by prep (ALS A:84 -> DDZ), so no chemistry item;
+  # the mapping deletes the sulfate atoms S, OS2, OS3, OS4 (5FQL atom_site, ALS A:84).
+  work_order: {parameterization: 4, modelling: 2}
+  deleted_atoms: {"A:84": [S, OS2, OS3, OS4]}

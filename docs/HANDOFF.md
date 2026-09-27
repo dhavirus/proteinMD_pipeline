@@ -10,7 +10,8 @@ Written at the end of the cloud session so work can continue from a local checko
 | `main` | `0fc1f0e`: TASK-001 to TASK-006 merged (PRs #1-#6), CI green |
 | branch `claude/quirky-mayer-t7x0sl` | `main` + the accepted TASK-007 spec + this file + `spikes/task007_loop/` (not merged yet) |
 | branch `task-007-modelling` | TASK-007 implemented, PR #8 (CI green): `simprep model`, ADR-0007 accepted |
-| next task | merge PR #8, then TASK-008 chemistry |
+| branch `task-008-chemistry` | TASK-008 implemented on top of TASK-007: ALS A:84 -> DDZ in prep, ADR-0008 |
+| next task | merge PR #8 and the TASK-008 PR, then TASK-009 protonation |
 
 Done so far:
 
@@ -71,9 +72,9 @@ The panel structures are committed (`tests/panel/*.cif.gz`); no test needs the n
 
 | # | stage | notes |
 |---|---|---|
-| 008 | chemistry: FGly (ALS A:84) -> gem-diol (FGH, CCD `DDZ` per the paper, `[VERIFY]` in CCD) | work-order item `nonstandard_residues/A:84` |
+| 008 | done: FGly (ALS A:84) -> gem-diol DDZ (CCD read; "FGH" is only the paper's abbreviation, CCD `FGH` is unrelated) | ADR-0008 |
 | 009 | protonation / pKa | the paper: lysosomal pH ~4.8; modelled and moved residues have no H |
-| 010 | parameterization | Ca2+ (12-6-4 per the manifest decision), Cl-, FGH |
+| 010 | parameterization | Ca2+ (12-6-4 per the manifest decision; now 5 protein ligands), Cl-, DDZ |
 | 011 | system assembly | solvation, ions, full topology: MD-ready WT and variants |
 | 012 | equilibration / MD on Colab | GPU, checkpoint/resume, Colab conventions in CLAUDE.md |
 | 013+ | comparative free-energy study | CVs, sampling method (WSME-L / enhanced MD / FEP): study decisions |
@@ -93,7 +94,7 @@ About six more tasks after TASK-007, give or take one or two.
   repository settings), and one smoke run against the live CDN.
 - **`[VERIFY]` items** in the knowledge base (not read in a session): `metals.yaml`
   (Harding 2006 shell cutoffs, open-site heuristics, 12-6-4 for Na+/K+),
-  `nonstandard_residues.yaml` (DDZ / ALS identity in the CCD, gem-diol as default),
+  `nonstandard_residues.yaml` (ALS as FGly sulfate in other entries, gem-diol as default; DDZ read in the CCD in TASK-008),
   `missing_residues.yaml` (3.8 A CA-CA), `side_chains.yaml` (Engh & Huber geometry,
   Lovell rotamer table), `variant_build.yaml` (Bondi radii, 0.4 A on heavy atoms),
   `relaxation.yaml` (TIP3P reference, amber14-all.xml = ff14SB), and the 1HZH Asn297

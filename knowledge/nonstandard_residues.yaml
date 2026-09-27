@@ -43,8 +43,9 @@ rules:
       # ALS: (3S)-3-(sulfooxy)-L-serine, i.e. the FGly sulfate ester; the component used
       # for residue 84 in 5FQL (checked in the file's chem_comp and
       # pdbx_struct_mod_residue records). The paper calls this residue "FGS84".
-      # DDZ: 3,3-dihydroxy-alanine, the aldehyde-hydrate (gem-diol) form, named in
-      # Demydchuk et al. 2017. No component ID for the free aldehyde until verified.
+      # DDZ: 3,3-dihydroxy-L-alanine, the aldehyde-hydrate (gem-diol) form, named in
+      # Demydchuk et al. 2017 and read in the CCD (TASK-008 session). No component ID for
+      # the free aldehyde until verified.
       comp_ids: [ALS, DDZ]
       residue_classes: [polymer]
       modeled_forms:
@@ -53,15 +54,15 @@ rules:
     base_severity: blocking
     options:
       - id: model_gem_diol
-        prep_action: defer
-        prep_stage: chemistry
-        label: Model FGly as the aldehyde hydrate (gem-diol, FGH)
+        prep_action: apply
+        label: Model FGly as the aldehyde hydrate (gem-diol, CCD DDZ; the paper's "FGH")
         cost_hint: medium
         trade_offs:
           - The species proposed to perform the nucleophilic attack in the
             transesterification-elimination mechanism (Demydchuk et al. 2017).
-          - Needs a parameterized non-standard residue; replaces the deposited sulfate
-            ester, so the covalent sulfate is removed (record that decision too).
+          - Needs a parameterized non-standard residue; prep removes the deposited
+            sulfate (atoms and links) per knowledge/residue_mappings.yaml, and the metal
+            site loses the sulfate oxygen it was bound to.
       - id: model_aldehyde
         prep_action: defer
         prep_stage: chemistry
@@ -117,7 +118,6 @@ rules:
         doi: 10.1016/s0092-8674(03)00347-7
         pmid: "12757705"
     verify_flags:
-      - "[VERIFY] DDZ is taken from Demydchuk et al. 2017 ('Protein Data Bank code DDZ: 3,3-dihydroxy-alanine'); not checked against the wwPDB Chemical Component Dictionary in this session. ALS was checked only against the 5FQL file's own chem_comp record."
       - "[VERIFY] Treating ALS as formylglycine sulfate ester is a chemical identification ((3S)-3-(sulfooxy)-L-serine = C-alpha-formylglycine hydrate monosulfate); ALS in another entry could be a genuine sulfated serine, so check the context when another structure matches."
       - "[VERIFY] No component ID for free formylglycine aldehyde is included; add one only after checking the CCD."
       - "[VERIFY] Recommending the gem-diol follows the paper's statement that FGly acts catalytically as the aldehyde hydrate; whether that is the right state for a given free-energy question is a study decision."
