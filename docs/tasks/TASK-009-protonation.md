@@ -7,7 +7,7 @@ hydrogens), mutated residues, residues moved in relaxation, and DDZ A:84's two h
 This task gives every system one consistent, recorded set of protonation states and all
 its hydrogens.
 
-Status: **draft** (open questions below, each with a default, for the maintainer).
+Status: **accepted** (maintainer, 2026-09-27: every default accepted; see the end of this file).
 
 ## What the sources say (read in this session)
 
@@ -111,3 +111,12 @@ Constant-pH MD, tautomers beyond His, Ca2+/DDZ/Cl- parameters (TASK-010), solvat
 
 ## [VERIFY] introduced
 - ER lumen and lysosomal pH values (decision 1).
+
+## Resolved decisions (maintainer, 2026-09-27)
+Every default is accepted: (1) the manifest must state the pH; the IDS study uses pH 7.2
+(ER lumen, `[VERIFY]`); (2) PROPKA 3.5.1 for pKa, OpenMM `Modeller` for hydrogens with
+explicit variants; (3) all deposited hydrogens are stripped and every hydrogen is added
+by one method; (4) metal ligands follow the metal rule, other titratable residues within
+6.0 A of a metal ion or non-standard residue become findings defaulting to the standard
+state; (5) PROPKA runs per system and the record lists states that differ from the wild
+type's.

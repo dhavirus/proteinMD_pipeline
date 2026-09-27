@@ -10,8 +10,8 @@ Written at the end of the cloud session so work can continue from a local checko
 | `main` | `0fc1f0e`: TASK-001 to TASK-006 merged (PRs #1-#6), CI green |
 | branch `claude/quirky-mayer-t7x0sl` | `main` + the accepted TASK-007 spec + this file + `spikes/task007_loop/` (not merged yet) |
 | branch `task-007-modelling` | TASK-007 implemented, PR #8 (CI green): `simprep model`, ADR-0007 accepted |
-| branch `task-008-chemistry` | TASK-008 implemented on top of TASK-007: ALS A:84 -> DDZ in prep, ADR-0008 |
-| next task | merge PR #8 and the TASK-008 PR, then TASK-009 protonation |
+| branch `task-009-protonation` | TASK-009 implemented: `simprep protonate`, ADR-0009 (TASK-007 fix #10 and TASK-008 #9 merged) |
+| next task | TASK-010 parameterization (DDZ, Ca2+ 12-6-4, Cl-) |
 
 Done so far:
 
@@ -73,7 +73,7 @@ The panel structures are committed (`tests/panel/*.cif.gz`); no test needs the n
 | # | stage | notes |
 |---|---|---|
 | 008 | done: FGly (ALS A:84) -> gem-diol DDZ (CCD read; "FGH" is only the paper's abbreviation, CCD `FGH` is unrelated) | ADR-0008 |
-| 009 | protonation / pKa | the paper: lysosomal pH ~4.8; modelled and moved residues have no H |
+| 009 | done: protonation at the study pH (IDS: 7.2, ER), PROPKA + metal/disulfide rules + OpenMM hydrogens | ADR-0009 |
 | 010 | parameterization | Ca2+ (12-6-4 per the manifest decision; now 5 protein ligands), Cl-, DDZ |
 | 011 | system assembly | solvation, ions, full topology: MD-ready WT and variants |
 | 012 | equilibration / MD on Colab | GPU, checkpoint/resume, Colab conventions in CLAUDE.md |
