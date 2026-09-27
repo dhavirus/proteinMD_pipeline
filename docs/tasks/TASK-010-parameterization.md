@@ -10,7 +10,7 @@ the work order holds the parameterization items of 5FQL:
 | `unrecognized/group/A:1567-1569` Cl- | `parameterize_manually` |
 | DDZ A:84 (gem-diol FGly) | no template in any shipped force field |
 
-Status: **draft** (open questions below, each with a default, for the maintainer).
+Status: **accepted** (maintainer, 2026-09-27: every default accepted; see the end of this file).
 
 ## What the tools ship (read in this session)
 
@@ -78,3 +78,11 @@ nothing is left unparameterized.
 
 ## [VERIFY] introduced
 - The three ion/polarizability references above (read from AmberTools files, not papers).
+
+## Resolved decisions (maintainer, 2026-09-27)
+Every default is accepted: (1) OpenMM force-field XML with committed data generated once
+by a `tools/` script with AmberTools, and the C4 term added by simprep, validated against
+ParmEd; (2) DDZ charges from AM1-BCC on ACE-DDZ-NME, backbone from ff14SB serine, side
+chain shifted to neutrality; (3) GAFF2 side-chain types, parmchk2 for missing terms;
+(4) Li-Merz 12-6-4 TIP3P Ca2+, C4 for every atom by polarizability (tuning factor 1.0),
+Cl- Joung-Cheatham 12-6; (5) TIP3P.

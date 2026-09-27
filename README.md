@@ -77,6 +77,17 @@ every hydrogen (deposited ones are replaced). Outputs: `*_protonated/` systems,
 `protonation_record.json` (pH, method, per-residue state and why, differences from the
 wild type) and `protonation_report.md`. See ADR-0009.
 
+## Parameterization
+
+`simprep parameterize DIR --manifest M` takes a directory written by `simprep protonate`
+or `simprep variants` (with a pH) and builds an OpenMM System per protonated system:
+Amber ff14SB + TIP3P as shipped with OpenMM, DDZ from `knowledge/forcefield/ddz.xml`, and
+the ion models the manifest decided (`nonbonded_12_6_4`: the Li-Merz 12-6-4 Ca2+ model,
+`knowledge/forcefield/lj1264.yaml`). It stops on any residue, bond or angle without
+parameters and writes `<name>_parameterized/system.xml` and `parameterization_record.json`.
+The DDZ and 12-6-4 data are generated once with AmberTools by `tools/parameterize_ddz.py`
+and `tools/lj1264_data.py` (not needed at runtime). See ADR-0010.
+
 ## Variants
 
 List variants in the manifest (`"variants"`, or the review page's variant editor, e.g.
